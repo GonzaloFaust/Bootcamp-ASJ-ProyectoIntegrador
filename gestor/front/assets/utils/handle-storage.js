@@ -32,15 +32,15 @@ function insertOrdenCompra(item){
 }
 
 function deleteOrden(id){
-    const ordenes = getOrdenes().filter(o=>o.numeroOrdenCompra!==id)
+    const ordenes = getOrdenesCompra().filter(o=>o.numeroOrdenCompra!==id)
     localStorage.setItem("ordenes", JSON.stringify(ordenes))
 }
 function deleteProducto(id){
     const productos = getProductos().filter(prod=>prod.codigoSKU!==id)
-    localStorage.setItem("productos", JSON.stringify(productos))
+    localStorage.setItem("productos", JSON.stringify(productos))//no se borran porque no hay ordenes en el localStorage, vienen del archivo mock de ordenes
 }
 function deleteProveedor(id){
-    const proveedores = getProductos().filter(prov=>prov.codigo!==id)
+    const proveedores = getProveedores().filter(prov=>prov.codigo!==id)
     localStorage.setItem("proveedores", JSON.stringify(proveedores))
 }
 

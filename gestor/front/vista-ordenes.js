@@ -1,7 +1,7 @@
 import { ordenItem } from "./assets/utils/utils.js";
 
-// import { getOrdenes } from "./assets/utils/handle-storage";
-import ordenCompra from './assets/data/ordenes.js'
+// import { getOrdenesCompra } from "./assets/utils/handle-storage";
+import ordenCompra from './assets/data/ordenes.js' //aca queda con esto por que se dificulto mucho agregar cosas al storage
 
 const ordenes = ordenCompra
 

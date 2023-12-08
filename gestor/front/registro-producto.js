@@ -1,7 +1,7 @@
 import { insertProducto } from "./assets/utils/handle-storage.js";
 
 
-const guardar = document.getElementById("guardar-proveedor")
+const guardar = document.getElementById("guardar-producto")
 
 
 guardar.addEventListener("click", (event) => {

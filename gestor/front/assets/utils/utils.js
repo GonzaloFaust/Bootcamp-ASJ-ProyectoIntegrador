@@ -1,4 +1,4 @@
-
+import { deleteOrden,deleteProducto,deleteProveedor } from "./handle-storage.js";
 
 function productCard(producto) {
     const card = document.createElement('div');
@@ -25,6 +25,10 @@ function productCard(producto) {
     cardPrice.innerHTML = '<strong>Precio: $' + producto.precio.toFixed(2) + '</strong>';
 
     const [btnEdit, btnDelete] = actionButtons()
+    btnDelete.addEventListener("click",()=> {
+        deleteProducto(producto.codigoSKU)
+        window.location.reload()
+    })
 
     cardBody.appendChild(cardTitle);
     cardBody.appendChild(cardSubtitle);
@@ -57,6 +61,10 @@ function proveedorItem(orden) {
     tableColumnFis.textContent = `${orden.datosFiscales.cuit}, ${orden.datosFiscales.condicionIva}`
 
     const [btnEdit, btnDelete] = actionButtons()
+    btnDelete.addEventListener("click",()=> {
+        deleteProveedor(proveedor.codigo)
+        window.location.reload()
+    })
 
     tableColumnAcc.appendChild(btnEdit)
     tableColumnAcc.appendChild(btnDelete)
@@ -83,13 +91,17 @@ const tableRow = document.createElement('tr')
 
     const tableColumnAcc = document.createElement('td')
 
-    tableColumnNroOrden.textContent = orden.cnumeroOrdenCompra
+    tableColumnNroOrden.textContent = orden.numeroOrdenCompra
     tableColumnFechaEmit.textContent = orden.fechaEmision
     tableColumnProv.textContent = orden.codProveedor
     tableColumnItems.textContent = orden.productos.reduce((acc,p) => acc+= p.cantidad,0)
     tableColumnTotal.textContent = "$900223"//texto de prueba xq tendria que relacionar con los productos y el precio y no me da el tiempo
 
     const [btnEdit, btnDelete] = actionButtons()
+    btnDelete.addEventListener("click",()=> {
+        deleteOrden(orden.numeroOrdenCompra)
+        window.location.reload()
+    })
 
     tableColumnAcc.appendChild(btnEdit)
     tableColumnAcc.appendChild(btnDelete)
