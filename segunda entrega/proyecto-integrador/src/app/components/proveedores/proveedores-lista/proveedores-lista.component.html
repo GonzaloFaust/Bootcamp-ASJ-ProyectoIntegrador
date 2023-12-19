@@ -1,0 +1,42 @@
+<div class="container mt-5">
+    <div class="card shadow mb-4">
+        <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
+            <h6 class="m-0 font-weight-bold text-primary">Proveedores</h6>
+            <button [routerLink]= "['new']" class="btn btn-primary">Nuevo Proveedor</button>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Razón social</th>
+                            <th>Sitio web</th>
+                            <th>email</th>
+                            <th>teléfono</th>
+                            <th>Dirección</th>
+                            <th>Datos fiscales</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="proveedores-container">
+                        <tr *ngFor="let prov of proveedores">
+                            <td>{{prov.codigo}}</td>
+                            <td>{{prov.razonSocial}}</td>
+                            <td>{{prov.sitioWeb}}</td>
+                            <td>{{prov.email}}</td>
+                            <td>{{prov.telefono}}</td>
+                            <td>{{prov.direccion.calleNumero}}, {{prov.direccion.localidad}}, {{prov.direccion.provincia}}</td>
+                            <td>{{prov.datosFiscales.cuit}}, ({{prov.datosFiscales.condicionIva}})</td>
+                            <td>
+                                <button class="btn btn-warning" [routerLink]="['edit/'+prov.codigo]" >Editar</button><button (click)="delete(prov.codigo)" class="btn btn-danger">Borrar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <router-outlet></router-outlet>
+            </div>
+        </div>
+    </div>
+   
+</div>
