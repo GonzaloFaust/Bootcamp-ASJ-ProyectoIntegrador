@@ -22,14 +22,14 @@
                     <tbody id="proveedores-container">
                         <tr *ngFor="let prov of proveedores">
                             <td>{{prov.codigo}}</td>
-                            <td>{{prov.razonSocial}}</td>
-                            <td>{{prov.sitioWeb}}</td>
+                            <td>{{prov.razon_social}}</td>
+                            <td>{{prov.sitio_web}}</td>
                             <td>{{prov.email}}</td>
                             <td>{{prov.telefono}}</td>
-                            <td>{{prov.direccion.calleNumero}}, {{prov.direccion.localidad}}, {{prov.direccion.provincia}}</td>
-                            <td>{{prov.datosFiscales.cuit}}, ({{prov.datosFiscales.condicionIva}})</td>
+                            <td>{{prov.direccion.calle_numero}}, {{prov.direccion.localidad}}, {{prov.direccion.provincia}}</td>
+                            <td>{{prov.datos_fiscales.cuit}}, ({{prov.datos_fiscales.condicion_iva}})</td>
                             <td>
-                                <button class="btn btn-warning" [routerLink]="['edit/'+prov.codigo]" >Editar</button><button (click)="delete(prov.codigo)" class="btn btn-danger">Borrar</button>
+                                <button class="btn btn-warning" [routerLink]="['edit/'+prov.codigo]" >Editar</button><button (click)="deleteProveedor(prov.codigo)" class="btn btn-danger">Borrar</button>
                             </td>
                         </tr>
                     </tbody>

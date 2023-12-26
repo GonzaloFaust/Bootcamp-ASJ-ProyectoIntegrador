@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { ServiceProveedoresService } from 'src/app/services/service-proveedores.service';
+import { Component, OnInit} from '@angular/core';
+import { ProveedoresService } from 'src/app/services/proveedores.service';
 
 @Component({
   selector: 'app-proveedores-lista',
@@ -8,19 +8,20 @@ import { ServiceProveedoresService } from 'src/app/services/service-proveedores.
 })
 export class ProveedoresListaComponent implements OnInit{
   proveedores:any[]=[]
-  constructor( public service:ServiceProveedoresService){
+  constructor( public service:ProveedoresService){
 
   }
   ngOnInit(): void {
     this.updateLista()
   }
-  delete(id:string){
+
+  deleteProveedor(id:string){
     this.service.deleteProveedor(id)
     this.updateLista();
   }
   
   private updateLista(){
-    this.proveedores= this.service.getProveedores()
+    this.proveedores = this.service.getProveedores()
     console.log(this.proveedores)
   }
 }

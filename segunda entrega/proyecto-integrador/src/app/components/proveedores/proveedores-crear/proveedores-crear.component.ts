@@ -1,54 +1,60 @@
 import { Component, OnInit } from '@angular/core';
-import { ServiceProveedoresService } from 'src/app/services/service-proveedores.service';
+import { ProveedoresService, blankProvider } from 'src/app/services/proveedores.service';
 import { ActivatedRoute } from '@angular/router';
-
+import { NgForm } from '@angular/forms';
+import { Rubro} from 'src/app/models/rubro';
+import { CondicionIva } from 'src/app/models/condicionIva';
+import { LocalizationService } from 'src/app/services/localization.service';
 
 @Component({
   selector: 'app-proveedores-crear',
   templateUrl: './proveedores-crear.component.html',
   styleUrls: ['./proveedores-crear.component.css']
 })
-export class ProveedoresCrearComponent {
+export class ProveedoresCrearComponent implements OnInit {
 
-  idParam = this.route.snapshot.paramMap.get("idProveedor");
-  isEditSession: boolean = this.idParam === null;
+  idParam = this.route.snapshot.paramMap.get("id-proveedor");
 
-  proveedorTemplate = this.service.getProveedorById(this.idParam!)|| {
-    razonSocial: "",
-    rubro: "Mayorista",
-    sitioWeb: "",
-    email: "",
-    telefono: "",
-    direccion: {
-      calleNumero: "",
-      cp: "",
-      localidad: "",
-      provincia: "",
-      pais: "Cuba"
-    },
-    datosFiscales: {
-      cuit: "",
-      condicionIva: ""
-    },
-    datosContacto: {
-      nombre: "",
-      apellido: "",
-      telefonoContacto: "",
-      emailContacto: "",
-      rol: ""
-    }
+  isEditSession: boolean = this.idParam !== null;
+
+  rubrosPermitidos= Object.values(Rubro)
+  condicionesIVA= Object.values(CondicionIva)
+
+  constructor(public service: ProveedoresService, private route: ActivatedRoute, public geo:LocalizationService) { }
+
+  countries:any[]=[]
+  states:any[]=[]
+  cities:any[]=[]
+
+  ngOnInit(): void {
+    if (this.isEditSession) { this.service.getProveedorById(this.idParam!.toString()) }
+    else this.service.proveedorTemplate = {...blankProvider}
+    this.getCountries()
+  }
+  updateProveedor() {
+    this.service.editProveedor(this.idParam!)
+  }
+
+  createProveedor(form: NgForm) {
+
+    this.service.addProveedor(form)
+    
   }
   
-
-  constructor(private service: ServiceProveedoresService, private route: ActivatedRoute) {}
-
-
-  editarProveedor() { 
-    this.service.editProveedor(this.idParam!,this.proveedorTemplate)
+  // ojo aca con el editar
+  getCountries(){
+    this.states=[];
+    
+    this.geo.getCountries().subscribe((data:any)=>this.countries=data)
+  }
+  
+  getStates(){
+    this.cities=[];
+    this.geo.getStates().subscribe((data:any)=>this.states=data.filter((s:any)=>s.country_name===this.service.proveedorTemplate.direccion.pais))
   }
 
-  agregarProveedor() {
-
-    this.service.addProveedor(this.proveedorTemplate)
+  getCities(){
+    this.geo.getCities().subscribe((data:any)=>this.cities=data.filter((c:any)=>c.country_name===this.service.proveedorTemplate.direccion.pais && c.state_name===this.service.proveedorTemplate.direccion.provincia))
   }
 }
+

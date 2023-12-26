@@ -19,10 +19,13 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { HeaderComponent } from './shared/header/header.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { ServiceOrdenesService } from './services/service-ordenes.service';
-import { ServiceProductosService } from './services/service-productos.service';
-import { ServiceProveedoresService } from './services/service-proveedores.service';
+import { OrdenesService } from './services/ordenes.service';
+import { ProductosService } from './services/productos.service';
+import { ProveedoresService } from './services/proveedores.service';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { LocalizationService } from './services/localization.service';
+import { ValidationsService } from './services/validations.service';
 
 @NgModule({
   declarations: [
@@ -47,9 +50,11 @@ import { FormsModule } from '@angular/forms';
     AppRoutingModule,
     NgbModule,
     FontAwesomeModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
+    
   ],
-  providers: [ServiceOrdenesService,ServiceProductosService, ServiceProveedoresService],
+  providers: [OrdenesService,ProductosService, ProveedoresService,LocalizationService, ValidationsService ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

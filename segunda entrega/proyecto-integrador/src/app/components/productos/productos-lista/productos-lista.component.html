@@ -1,1 +1,19 @@
-<p>productos-lista works!</p>
+<div class="container">
+
+    <div class="row m-2">
+
+        <div *ngFor="let prod of products" class="col-4">
+            <div class="card d-flex flex-row" >
+                <div class="card-img ">
+                    <img class=" img-fluid h-100 object-fit-cover " src={{prod.image}}
+                        alt='{{prod.descripcion}} product photo'>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{prod.nombre_producto}} - <sub >{{prod.codigo_SKU}}</sub></h5> 
+                    <p class="card-text">{{prod.descripcion}}</p>
+                    <a [routerLink]="['/']" class="btn btn-primary">Mas detalles</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

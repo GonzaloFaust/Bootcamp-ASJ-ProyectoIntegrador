@@ -1,70 +1,111 @@
 <div class="container mt-5">
     <h2>Registro de Proveedor</h2>
-    <div id="proveedor-form">
+    <form #proveedor_form="ngForm" (ngSubmit)="createProveedor(proveedor_form)">
         <div class="form-group">
             <label for="razon_social">Razón Social:</label>
-            <input [(ngModel)]="proveedorTemplate.razonSocial" type="text" class="form-control" id="razon_social" name="razon_social" required>
+            <input [(ngModel)]="this.service.proveedorTemplate.razon_social" type="text" class="form-control"
+                id="razon_social" name="razon_social" required>
+            <!-- <div class="alert alert-danger" role="alert"
+                *ngIf="proveedor_form.controls['razon_social'].invalid && proveedor_form.controls['razon_social'].touched">
+                La razón social es obligatoria.
+            </div> -->
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="rubro">Rubro:</label>
+                <select [(ngModel)]="this.service.proveedorTemplate.rubro" class="form-control" id="rubro" name="rubro"
+                    required>
+                    <option *ngFor="let rubro of rubrosPermitidos" value={{rubro}}>{{rubro}}</option>
+                </select>
+                <!-- <div *ngIf="proveedor_form.controls['rubro'].invalid && proveedor_form.controls['rubro'].touched"
+                    class="error-message">
+                    El rubro es obligatoria.
+                </div> -->
+            </div>
         </div>
 
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="sitio_web">Sitio web:</label>
-                <input [(ngModel)]="proveedorTemplate.sitioWeb" type="url" classproveedorTemplate.razonSocial="form-control" id="sitio_web" name="sitio_web">
+                <input [(ngModel)]="this.service.proveedorTemplate.sitio_web" type="url" data-container="body"
+                    data-toggle="popover" data-placement="right"
+                    data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." class="form-control"
+                    id="sitio_web" name="sitio_web">
             </div>
 
             <div class="form-group col-md-4">
                 <label for="email">Email:</label>
-                <input [(ngModel)]="proveedorTemplate.email" type="email" class="form-control" id="email" name="email" required>
+                <input [(ngModel)]="this.service.proveedorTemplate.email" type="email" class="form-control" id="email"
+                    name="email" required>
             </div>
 
             <div class="form-group col-md-4">
                 <label for="telefono">Teléfono:</label>
-                <input [(ngModel)]="proveedorTemplate.telefono" type="tel" class="form-control" id="telefono" name="telefono">
+                <input [(ngModel)]="this.service.proveedorTemplate.telefono" type="tel" class="form-control"
+                    id="telefono" name="telefono">
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="calle_numero">Calle y Número:</label>
-                <input [(ngModel)]="proveedorTemplate.direccion.calleNumero" type="text" class="form-control" id="calle_numero" name="calle_numero"
-                    required>
+                <input [(ngModel)]="this.service.proveedorTemplate.direccion.calle_numero" type="text"
+                    class="form-control" id="calle_numero" name="calle_numero" required>
             </div>
 
             <div class="form-group col-md-3">
                 <label for="cp">Código Postal:</label>
-                <input [(ngModel)]="proveedorTemplate.direccion.cp" type="text" class="form-control" id="cp" name="cp" required>
+                <input [(ngModel)]="this.service.proveedorTemplate.direccion.cp" type="text" class="form-control"
+                    id="cp" name="cp" required>
             </div>
 
-            <div class="form-group col-md-3">
-                <label for="localidad">Localidad:</label>
-                <input [(ngModel)]="proveedorTemplate.direccion.localidad" type="text" class="form-control" id="localidad" name="localidad" required>
+            <!-- -----------------------------OJO ACA CON EL EDITAR----------------------------------- -->
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="pais">Pais:</label>
+                    <select (change)="getStates()" [(ngModel)]="this.service.proveedorTemplate.direccion.pais"
+                        class="form-control" id="pais" name="pais" required>
+                        <option *ngFor="let c of countries" value={{c.name}}>{{c.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <!-- -----------------------------OJO ACA CON EL EDITAR----------------------------------- -->
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="provincia">Provincia:</label>
+                    <select (change)="getCities()" [(ngModel)]="this.service.proveedorTemplate.direccion.provincia"
+                        class="form-control" id="provincia" name="provincia" required>
+
+                        <option *ngFor="let s of states" value={{s.name}}>{{s.name}}</option>
+                    </select>
+                </div>
+            </div>
+            <!-- -----------------------------OJO ACA CON EL EDITAR----------------------------------- -->
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="localidad">Ciudad:</label>
+                    <select [(ngModel)]="this.service.proveedorTemplate.direccion.localidad" class="form-control"
+                        id="localidad" name="localidad" required>
+                        <option *ngFor="let c of cities" value={{c.name}}>{{c.name}}</option>
+                    </select>
+                </div>
             </div>
         </div>
 
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="provincia">Provincia:</label>
-                <select [(ngModel)]="proveedorTemplate.direccion.provincia" class="form-control" id="provincia" name="provincia" required>
-                    <option value="Buenos Aires">Buenos Aires</option>
-                    <option value="Córdoba">Córdoba</option>
-                    
-                </select>
-            </div>
-        </div>
 
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="cuit">CUIT:</label>
-                <input [(ngModel)]="proveedorTemplate.datosFiscales.cuit" type="text" class="form-control" id="cuit" name="cuit" required>
+                <input [(ngModel)]="this.service.proveedorTemplate.datos_fiscales.cuit" type="text" class="form-control"
+                    id="cuit" name="cuit" required>
             </div>
 
             <div class="form-group col-md-6">
                 <label for="condicion_iva">Condición IVA:</label>
-                <select [(ngModel)]="proveedorTemplate.datosFiscales.condicionIva" class="form-control" id="condicion_iva" name="condicion_iva" required>
-                    <option value="Responsable Inscripto">Responsable Inscripto</option>
-                    <option value="Monotributista">Monotributista</option>
-                    <option value="Exento">Exento</option>
-                    
+                <select [(ngModel)]="this.service.proveedorTemplate.datos_fiscales.condicion_iva" class="form-control"
+                    id="condicion_iva" name="condicion_iva" required>
+                    <option *ngFor="let cond of condicionesIVA" value="{{cond}}">{{cond}}</option>
                 </select>
             </div>
         </div>
@@ -72,40 +113,43 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="nombre_contacto">Nombre de Contacto:</label>
-                <input [(ngModel)]="proveedorTemplate.datosContacto.nombre" type="text" class="form-control" id="nombre_contacto" name="nombre_contacto"
-                    required>
+                <input [(ngModel)]="this.service.proveedorTemplate.datos_contacto.nombre" type="text"
+                    class="form-control" id="nombre_contacto" name="nombre_contacto" required>
             </div>
 
             <div class="form-group col-md-6">
                 <label for="apellido_contacto">Apellido de Contacto:</label>
-                <input [(ngModel)]="proveedorTemplate.datosContacto.apellido" type="text" class="form-control" id="apellido_contacto"
-                    name="apellido_contacto" required>
+                <input [(ngModel)]="this.service.proveedorTemplate.datos_contacto.apellido" type="text"
+                    class="form-control" id="apellido_contacto" name="apellido_contacto" required>
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="telefono_contacto">Teléfono de Contacto:</label>
-                <input [(ngModel)]="proveedorTemplate.datosContacto.telefonoContacto" type="tel" class="form-control" id="telefono_contacto"
-                    name="telefono_contacto">
+                <input [(ngModel)]="this.service.proveedorTemplate.datos_contacto.telefono_contacto" type="tel"
+                    class="form-control" id="telefono_contacto" name="telefono_contacto">
             </div>
 
             <div class="form-group col-md-4">
                 <label for="email_contacto">Email de Contacto:</label>
-                <input [(ngModel)]="proveedorTemplate.datosContacto.emailContacto" type="email" class="form-control" id="email_contacto" name="email_contacto"
-                    required>
+                <input [(ngModel)]="this.service.proveedorTemplate.datos_contacto.email_contacto" type="email"
+                    class="form-control" id="email_contacto" name="email_contacto" required>
             </div>
 
             <div class="form-group col-md-4">
                 <label for="rol_contacto">Rol de Contacto:</label>
-                <input [(ngModel)]="proveedorTemplate.datosContacto.rol" type="text" class="form-control" id="rol_contacto" name="rol_contacto"
-                    required>
+                <input [(ngModel)]="this.service.proveedorTemplate.datos_contacto.rol" type="text" class="form-control"
+                    id="rol_contacto" name="rol_contacto" required>
             </div>
         </div>
 
-        <button type="submit" *ngIf="isEditSession" (click)="agregarProveedor()" class="btn btn-primary" id="guardar-proveedor">Registrar Proveedor</button>
-        <button type="submit" *ngIf="!isEditSession" (click)="editarProveedor()" class="btn btn-primary" id="editar-proveedor">Editar Proveedor</button>
-    </div>
+        <button type="submit" [disabled]="!proveedor_form.valid" *ngIf="!isEditSession" class="btn btn-primary"
+            id="guardar-proveedor">Registrar Proveedor</button>
+        <button type="submit" [disabled]="!proveedor_form.valid" *ngIf="isEditSession" class="btn btn-primary"
+            id="editar-proveedor">Editar Proveedor</button>
+        <div [hidden]="!proveedor_form.submitted" class="alert alert-success">
+            <h2>Proveedor Agregado con exito!</h2>
+        </div>
+    </form>
 </div>
-
-
