@@ -1,4 +1,28 @@
-<p>ordenes-lista works!</p>
-<div>
-    <p>DLAE FUNCIONA MUGRE</p>
-</div>
+<div class="container mt-5">
+    <div class="card shadow mb-4">
+        <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
+            <h6 class="m-0 font-weight-bold text-primary">Ordenes</h6>
+            <button [routerLink]= "['new']" class="btn btn-primary">Nueva Orden</button>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nro Orden</th>
+                            <th>Fecha Emision</th>
+                            <th>Proveedor</th>
+                            <th>cantidad items</th>
+                            <th>Total</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordenes-container">
+                        <tr>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

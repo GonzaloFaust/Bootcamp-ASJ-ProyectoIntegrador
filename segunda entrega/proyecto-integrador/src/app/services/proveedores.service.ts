@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { proveedor } from '../../assets/data/proveedores'
 import { NgForm } from '@angular/forms';
 import { Supplier } from '../models/supplier';
-import { Rubro } from '../models/rubro';
+import { supplierCategory } from '../models/supplierCategory';
 
 @Injectable({
   providedIn: 'root'
@@ -10,29 +10,33 @@ import { Rubro } from '../models/rubro';
 export class ProveedoresService {
   proveedoresData: Array<Supplier> = []
 
-  proveedorTemplate: Supplier = {...blankProvider}
-  
+  PREFIX: string = "PROV";
+  counter: number = 1;
+  proveedorTemplate: Supplier = structuredClone(blankProvider);
+
   constructor() {
-    this.proveedoresData= [...proveedor]
-   }
-   
-  public getProveedores():Supplier[] {
+    this.proveedoresData = [...proveedor]
+  }
+
+  public getProveedores(): Supplier[] {
     return this.proveedoresData;
   }
 
-  public getProveedorById(id: string) {
-    const prov= this.proveedoresData.filter(p => p.codigo == id)[0] 
-    this.proveedorTemplate =prov;
-    return  prov;
+  public getProveedorById(id: string):Supplier {
+    const prov = this.proveedoresData.filter(p => p.codigo == id)[0]
+    this.proveedorTemplate = prov;
+    return prov;
   }
 
   public addProveedor(form: NgForm) {
-    this.proveedoresData.push({ ...this.proveedorTemplate, codigo: (this.getProveedores().length + 1).toString()});
-    this.proveedorTemplate = {...blankProvider}
+    this.proveedoresData.push({ ...this.proveedorTemplate, codigo: this.PREFIX+this.counter++});
+    this.proveedorTemplate = structuredClone(blankProvider)
   }
 
   public editProveedor(id: string) {
-
+    let prov = this.getProveedorById(id)
+    prov = { ...structuredClone(this.proveedorTemplate), codigo: id }
+    this.proveedorTemplate = structuredClone(blankProvider)
   }
 
   public deleteProveedor(id: string) {
@@ -42,19 +46,19 @@ export class ProveedoresService {
 }
 
 
-export const blankProvider = {
+export const blankProvider: Supplier = {
   codigo: "",
   razon_social: "",
-  rubro: "" as Rubro,
+  rubro: "" as supplierCategory,
   sitio_web: "",
   email: "",
   telefono: "",
   direccion: {
     calle_numero: "",
     cp: "",
-    localidad: "",
+    pais: "",
     provincia: "",
-    pais: ""
+    localidad: "",
   },
   datos_fiscales: {
     cuit: "",
@@ -66,5 +70,6 @@ export const blankProvider = {
     telefono_contacto: "",
     email_contacto: "",
     rol: ""
-  }
+  },
+  active: true
 }

@@ -11,9 +11,7 @@
                         <tr>
                             <th>Código</th>
                             <th>Razón social</th>
-                            <th>Sitio web</th>
-                            <th>email</th>
-                            <th>teléfono</th>
+                            <th>Sitio web / e-mail / teléfono</th>
                             <th>Dirección</th>
                             <th>Datos fiscales</th>
                             <th>Acciones</th>
@@ -23,18 +21,22 @@
                         <tr *ngFor="let prov of proveedores">
                             <td>{{prov.codigo}}</td>
                             <td>{{prov.razon_social}}</td>
-                            <td>{{prov.sitio_web}}</td>
-                            <td>{{prov.email}}</td>
-                            <td>{{prov.telefono}}</td>
+                            <td>
+                                <a class="d-block " [href]="['http://'+prov.sitio_web]" target="_blank">{{prov.sitio_web}}</a>
+                            <a class="d-block " [href]="['mailto: '+prov.email]">{{prov.email}}</a>
+                                <span class="d-block">{{prov.telefono}}</span>
+                            </td>
+                            
                             <td>{{prov.direccion.calle_numero}}, {{prov.direccion.localidad}}, {{prov.direccion.provincia}}</td>
                             <td>{{prov.datos_fiscales.cuit}}, ({{prov.datos_fiscales.condicion_iva}})</td>
                             <td>
-                                <button class="btn btn-warning" [routerLink]="['edit/'+prov.codigo]" >Editar</button><button (click)="deleteProveedor(prov.codigo)" class="btn btn-danger">Borrar</button>
+                                <button class="btn btn-warning" [routerLink]="['edit/'+prov.codigo]" >Editar</button>
+                                <button (click)="deleteProveedor(prov.codigo)" class="btn btn-danger">Borrar</button>
                             </td>
                         </tr>
                     </tbody>
                 </table>
-                <router-outlet></router-outlet>
+                
             </div>
         </div>
     </div>

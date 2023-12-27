@@ -22,6 +22,5 @@ export class ProveedoresListaComponent implements OnInit{
   
   private updateLista(){
     this.proveedores = this.service.getProveedores()
-    console.log(this.proveedores)
   }
 }

@@ -1,10 +1,10 @@
-import { Rubro } from "../../app/models/rubro";
+import { supplierCategory } from "../../app/models/supplierCategory";
 
 const proveedor = [
     {
-        codigo: "1",
+        codigo: "PROV0",
         razon_social: "Proveedor ABC S.A.",
-        rubro: "Electrónica" as Rubro,
+        rubro: "Electrónica" as supplierCategory,
         sitio_web: "http://www.proveedorabc.com",
         email: "info@proveedorabc.com",
         telefono: "123-456-789",
@@ -25,6 +25,7 @@ const proveedor = [
             telefono_contacto: "987-654-321",
             email_contacto: "juan.perez@proveedorabc.com",
             rol: "Gerente de Ventas"
-        }
+        },
+        active:true
     }]
 export { proveedor };

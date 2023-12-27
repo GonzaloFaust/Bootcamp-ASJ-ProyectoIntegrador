@@ -5,10 +5,7 @@
             <label for="razon_social">Razón Social:</label>
             <input [(ngModel)]="this.service.proveedorTemplate.razon_social" type="text" class="form-control"
                 id="razon_social" name="razon_social" required>
-            <!-- <div class="alert alert-danger" role="alert"
-                *ngIf="proveedor_form.controls['razon_social'].invalid && proveedor_form.controls['razon_social'].touched">
-                La razón social es obligatoria.
-            </div> -->
+
         </div>
 
         <div class="form-row">
@@ -18,19 +15,13 @@
                     required>
                     <option *ngFor="let rubro of rubrosPermitidos" value={{rubro}}>{{rubro}}</option>
                 </select>
-                <!-- <div *ngIf="proveedor_form.controls['rubro'].invalid && proveedor_form.controls['rubro'].touched"
-                    class="error-message">
-                    El rubro es obligatoria.
-                </div> -->
             </div>
         </div>
 
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="sitio_web">Sitio web:</label>
-                <input [(ngModel)]="this.service.proveedorTemplate.sitio_web" type="url" data-container="body"
-                    data-toggle="popover" data-placement="right"
-                    data-content="Vivamus sagittis lacus vel augue laoreet rutrum faucibus." class="form-control"
+                <input [(ngModel)]="this.service.proveedorTemplate.sitio_web" type="url" class="form-control"
                     id="sitio_web" name="sitio_web">
             </div>
 
@@ -59,8 +50,6 @@
                 <input [(ngModel)]="this.service.proveedorTemplate.direccion.cp" type="text" class="form-control"
                     id="cp" name="cp" required>
             </div>
-
-            <!-- -----------------------------OJO ACA CON EL EDITAR----------------------------------- -->
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="pais">Pais:</label>
@@ -70,7 +59,6 @@
                     </select>
                 </div>
             </div>
-            <!-- -----------------------------OJO ACA CON EL EDITAR----------------------------------- -->
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="provincia">Provincia:</label>
@@ -81,8 +69,7 @@
                     </select>
                 </div>
             </div>
-            <!-- -----------------------------OJO ACA CON EL EDITAR----------------------------------- -->
-            <div class="form-row">
+             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="localidad">Ciudad:</label>
                     <select [(ngModel)]="this.service.proveedorTemplate.direccion.localidad" class="form-control"

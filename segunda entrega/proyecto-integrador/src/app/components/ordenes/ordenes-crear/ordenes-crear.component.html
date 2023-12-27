@@ -1,1 +1,48 @@
-<p>ordenes-crear works!</p>
+<div class="container mt-5">
+    <h2>Registro de Orden de Compra</h2>
+    <form id="orden-form">
+        <div class="form-group">
+            <label for="fechaEmision">Fecha de Emisión:</label>
+            <input type="date" class="form-control" id="fechaEmision" name="fechaEmision" required>
+        </div>
+
+        <div class="form-group">
+            <label for="fechaEntregaEsperada">Fecha de Entrega Esperada:</label>
+            <input type="date" class="form-control" id="fechaEntregaEsperada" name="fechaEntregaEsperada" required>
+        </div>
+
+        <div class="form-group">
+            <label for="codProveedor">Código de Proveedor:</label>
+            <select class="form-control" id="codProveedor" name="codProveedor" required>
+                <option value="PROV001">PROV001</option>
+                
+            </select>
+        </div>
+
+        <div class="form-group" id="productosContainer">
+            <label>Productos:</label>
+            <div class="form-row producto-agregado">
+                <div class="form-group col-md-6">
+                    <label for="codigoSKU1">Código SKU:</label>
+                    <input type="text" class="form-control" id="codigoSKU1" name="codigoSKU" required>
+                </div>
+                <div class="form-group col-md-5">
+                    <label for="cantidad1">Cantidad:</label>
+                    <input type="number" class="form-control" id="cantidad1" name="cantidad" required>
+                </div>
+                <div class="form-group col-md-1">
+                    <button type="button" class="btn btn-danger" style="position:absolute;bottom:0" id="btn-eliminar-producto">Eliminar</button>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-6">    
+                    <button type="button" class="btn btn-success" id="btn-agregar-producto">Agregar Producto</button>
+                </div>
+            </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary" id="guardar-orden">Registrar Orden de Compra</button>
+    </form>
+
+</div>

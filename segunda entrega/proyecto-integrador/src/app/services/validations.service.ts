@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 
-import { Rubro } from '../models/rubro';
+import { supplierCategory } from '../models/supplierCategory';
 import { CondicionIva } from '../models/condicionIva';
 
 
@@ -36,7 +36,7 @@ export class ValidationsService {
     return { 'validEmail': true }
   }
 
-  // Función para validar un CUIT
+ 
   private validateCuit(control: any) {
     const cuitPattern = /\d{2}-\d{8}-\d{1}/;
 
@@ -52,7 +52,7 @@ export class ValidationsService {
   }
 
   private isValidRubro(control:FormControl){
-    return {validRubro: Object.values(Rubro).includes(control.value)}
+    return {validRubro: Object.values(supplierCategory).includes(control.value)}
   }
 
   private isValidCondicionIva(control:FormControl){

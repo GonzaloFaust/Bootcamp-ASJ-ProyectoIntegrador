@@ -1,9 +1,9 @@
 
-import { Rubro } from "./rubro"
+import { supplierCategory } from "./supplierCategory"
 export interface Supplier {
     codigo: string,
     razon_social: string,
-    rubro: Rubro,
+    rubro: supplierCategory,
     sitio_web: string,
     email: string,
     telefono: string,
@@ -24,5 +24,6 @@ export interface Supplier {
       telefono_contacto: string,
       email_contacto: string,
       rol: string
-    }
+    },
+    active:boolean
   }

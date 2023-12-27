@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProveedoresService, blankProvider } from 'src/app/services/proveedores.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { Rubro} from 'src/app/models/rubro';
+import { supplierCategory } from 'src/app/models/supplierCategory';
 import { CondicionIva } from 'src/app/models/condicionIva';
 import { LocalizationService } from 'src/app/services/localization.service';
 
@@ -17,44 +17,49 @@ export class ProveedoresCrearComponent implements OnInit {
 
   isEditSession: boolean = this.idParam !== null;
 
-  rubrosPermitidos= Object.values(Rubro)
-  condicionesIVA= Object.values(CondicionIva)
+  rubrosPermitidos = Object.values(supplierCategory)
+  condicionesIVA = Object.values(CondicionIva)
 
-  constructor(public service: ProveedoresService, private route: ActivatedRoute, public geo:LocalizationService) { }
+  constructor(public service: ProveedoresService, private route: ActivatedRoute, public geo: LocalizationService) { }
 
-  countries:any[]=[]
-  states:any[]=[]
-  cities:any[]=[]
+  countries: any[] = []
+  states: any[] = []
+  cities: any[] = []
 
   ngOnInit(): void {
-    if (this.isEditSession) { this.service.getProveedorById(this.idParam!.toString()) }
-    else this.service.proveedorTemplate = {...blankProvider}
     this.getCountries()
-  }
-  updateProveedor() {
-    this.service.editProveedor(this.idParam!)
+    if (this.isEditSession) {
+      let prov = this.service.getProveedorById(this.idParam!);
+      this.service.proveedorTemplate.direccion.pais = prov.direccion.pais;
+      this.getStates()
+      this.service.proveedorTemplate.direccion.provincia = prov.direccion.provincia;
+      this.getCities()
+      this.service.proveedorTemplate.direccion.localidad = prov.direccion.localidad;
+
+
+    }
+    else this.service.proveedorTemplate = structuredClone(blankProvider)
   }
 
   createProveedor(form: NgForm) {
+    if (this.isEditSession) this.service.editProveedor(this.idParam!)
+    else this.service.addProveedor(form)
 
-    this.service.addProveedor(form)
-    
-  }
-  
-  // ojo aca con el editar
-  getCountries(){
-    this.states=[];
-    
-    this.geo.getCountries().subscribe((data:any)=>this.countries=data)
-  }
-  
-  getStates(){
-    this.cities=[];
-    this.geo.getStates().subscribe((data:any)=>this.states=data.filter((s:any)=>s.country_name===this.service.proveedorTemplate.direccion.pais))
   }
 
-  getCities(){
-    this.geo.getCities().subscribe((data:any)=>this.cities=data.filter((c:any)=>c.country_name===this.service.proveedorTemplate.direccion.pais && c.state_name===this.service.proveedorTemplate.direccion.provincia))
+  getCountries() {
+    this.states = [];
+
+    this.geo.getCountries().subscribe((data: any) => this.countries = data)
+  }
+
+  getStates() {
+    this.cities = [];
+    this.geo.getStates().subscribe((data: any) => this.states = data.filter((s: any) => s.country_name === this.service.proveedorTemplate.direccion.pais))
+  }
+
+  getCities() {
+    this.geo.getCities().subscribe((data: any) => this.cities = data.filter((c: any) => c.country_name === this.service.proveedorTemplate.direccion.pais && c.state_name === this.service.proveedorTemplate.direccion.provincia))
   }
 }
 
