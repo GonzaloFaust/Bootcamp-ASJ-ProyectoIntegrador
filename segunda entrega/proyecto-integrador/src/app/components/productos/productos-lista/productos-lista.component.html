@@ -8,18 +8,22 @@
             <button [routerLink]="['new']" class="btn btn-primary">Nuevo Producto</button>
         </div>
     </div>
-    <div class="row m-2">
+    <div class="row m-2" >
 
         <div *ngFor="let prod of products" class="col-4">
-            <div class="card d-flex flex-row">
+            <div class="card d-flex flex-row mb-3" style="max-height:12em;overflow:hidden;">
                 <div class="card-img ">
-                    <img class=" img-fluid h-100 object-fit-cover " src={{prod.image}}
+                    <img class=" img-fluid w-100 h-100 object-fit-cover " src={{prod.image}}
                         alt='{{prod.descripcion}} product photo'>
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{prod.nombre_producto}} - <sub>{{prod.codigo_SKU}}</sub></h5>
                     <p class="card-text">{{prod.descripcion}}</p>
-                    <a [routerLink]="[prod.id]" class="btn btn-primary">Mas detalles</a>
+                    <div class="d-flex ">
+
+                        <button class="btn btn-warning me-2 text-light " [routerLink]="['/productos/edit/'+prod.id]" ><fa-icon [icon]="faEdit"></fa-icon></button>
+                        <a [routerLink]="[prod.id]" class="btn btn-primary h-25">Detalle</a>
+                    </div>
                 </div>
             </div>
         </div>

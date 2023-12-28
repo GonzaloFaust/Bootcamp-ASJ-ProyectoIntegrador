@@ -30,6 +30,8 @@
                             <td>{{prov.direccion.calle_numero}}, {{prov.direccion.localidad}}, {{prov.direccion.provincia}}</td>
                             <td>{{prov.datos_fiscales.cuit}}, ({{prov.datos_fiscales.condicion_iva}})</td>
                             <td>
+                                
+                                <button class="btn btn-warning" routerLink={{prov.codigo}} >Ver </button>
                                 <button class="btn btn-warning" [routerLink]="['edit/'+prov.codigo]" >Editar</button>
                                 <button (click)="deleteProveedor(prov.codigo)" class="btn btn-danger">Borrar</button>
                             </td>

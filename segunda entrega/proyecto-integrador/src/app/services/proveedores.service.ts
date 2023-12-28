@@ -15,34 +15,47 @@ export class ProveedoresService {
   proveedorTemplate: Supplier = structuredClone(blankProvider);
 
   constructor() {
-    this.proveedoresData = [...proveedor]
+    this.proveedoresData = JSON.parse(localStorage.getItem('suppliers')!) || [...proveedor]
   }
 
   public getProveedores(): Supplier[] {
     return this.proveedoresData;
   }
 
-  public getProveedorById(id: string):Supplier {
+  public getProveedorById(id: string): Supplier {
     const prov = this.proveedoresData.filter(p => p.codigo == id)[0]
     this.proveedorTemplate = prov;
     return prov;
   }
 
-  public addProveedor(form: NgForm) {
-    this.proveedoresData.push({ ...this.proveedorTemplate, codigo: this.PREFIX+this.counter++});
+  public addProveedor(): void {
+    let newId = this.PREFIX + this.counter;
+    while (this.proveedoresData.some(p => p.codigo === newId)) {
+      this.counter++;
+      newId = this.PREFIX + this.counter;
+    }
+    this.proveedoresData.push({ ...this.proveedorTemplate, codigo: newId });
+    this.proveedorTemplate = structuredClone(blankProvider)
+    this.saveData()
+  }
+
+  public editProveedor(id:string): void {
+    this.proveedorTemplate = { ...structuredClone(this.proveedorTemplate), codigo:id }
+
+    this.saveData()
     this.proveedorTemplate = structuredClone(blankProvider)
   }
 
-  public editProveedor(id: string) {
-    let prov = this.getProveedorById(id)
-    prov = { ...structuredClone(this.proveedorTemplate), codigo: id }
-    this.proveedorTemplate = structuredClone(blankProvider)
+  public deleteProveedor(id: string): void {
+    let prov= this.getProveedorById(id)
+    prov.active=false;
+    this.saveData()
   }
 
-  public deleteProveedor(id: string) {
-    this.proveedoresData = this.proveedoresData.filter(p => p.codigo !== id)
-  }
 
+  private saveData() {
+    localStorage.setItem('suppliers', JSON.stringify(this.proveedoresData))
+  }
 }
 
 

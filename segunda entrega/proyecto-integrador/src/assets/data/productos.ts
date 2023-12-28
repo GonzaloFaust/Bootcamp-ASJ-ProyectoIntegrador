@@ -1,7 +1,7 @@
 const producto =
     [
         {
-            id:"1",
+            id:"PROV0SKU123",
             cod_proveedor: "PROV0",
             codigo_SKU: "SKU123",
             categoria: "Electrónica",
@@ -11,7 +11,7 @@ const producto =
             precio: 99.99
         },
         {
-            id:"2",
+            id:"PROV0SKU456",
             cod_proveedor: "PROV0",
             codigo_SKU: "SKU456",
             categoria: "Electrónica",

@@ -1,48 +1,99 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page"><a routerLink="ordenes"
+                routerLinkActive="router-link-active">Home</a></li>
+        <li class="breadcrumb-item"><a routerLink="ordenes" routerLinkActive="router-link-active">Ordenes de Compra</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">{{isEditSession?'Editar':'Nuevo'}}</li>
+    </ol>
+</nav>
+
 <div class="container mt-5">
     <h2>Registro de Orden de Compra</h2>
-    <form id="orden-form">
+    <form #orden_form="ngForm" (ngSubmit)="createOrden(orden_form)">
         <div class="form-group">
             <label for="fechaEmision">Fecha de Emisión:</label>
-            <input type="date" class="form-control" id="fechaEmision" name="fechaEmision" required>
+            <input [disabled]="isEditSession" type="date" class="form-control" id="fechaEmision" name="fecha_emision"
+                required [(ngModel)]="this.service.orderTemplate.fecha_emision">
         </div>
 
         <div class="form-group">
             <label for="fechaEntregaEsperada">Fecha de Entrega Esperada:</label>
-            <input type="date" class="form-control" id="fechaEntregaEsperada" name="fechaEntregaEsperada" required>
+            <input [disabled]="isEditSession" type="date" class="form-control" id="fechaEntregaEsperada" name="fecha_entrega_esperada" required
+                [(ngModel)]="this.service.orderTemplate.fecha_entrega_esperada">
         </div>
 
         <div class="form-group">
-            <label for="codProveedor">Código de Proveedor:</label>
-            <select class="form-control" id="codProveedor" name="codProveedor" required>
-                <option value="PROV001">PROV001</option>
-                
+            <label for="codProveedor">Proveedor:</label>
+            <select (change)="getProductosProveedor()" [disabled]="isEditSession" class="form-control" id="codProveedor"
+                name="cod_proveedor" required [(ngModel)]="this.service.orderTemplate.cod_proveedor">
+                <option *ngFor="let prov of proveedores" value={{prov.cod_proveedor}}>{{prov.razon_social}}</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="estadoOrden">Estado:</label>
+            <select [disabled]="this.service.orderTemplate.state=='cancelado'" class="form-control" id="state" name="state" required
+                [(ngModel)]="this.service.orderTemplate.state">
+                <option *ngFor="let est of estadosOrden" value="{{est}}">{{est}}</option>
             </select>
         </div>
 
         <div class="form-group" id="productosContainer">
-            <label>Productos:</label>
-            <div class="form-row producto-agregado">
-                <div class="form-group col-md-6">
-                    <label for="codigoSKU1">Código SKU:</label>
-                    <input type="text" class="form-control" id="codigoSKU1" name="codigoSKU" required>
-                </div>
-                <div class="form-group col-md-5">
-                    <label for="cantidad1">Cantidad:</label>
-                    <input type="number" class="form-control" id="cantidad1" name="cantidad" required>
-                </div>
-                <div class="form-group col-md-1">
-                    <button type="button" class="btn btn-danger" style="position:absolute;bottom:0" id="btn-eliminar-producto">Eliminar</button>
+            <div *ngIf="!isEditSession">
+
+                <label>Productos:</label>
+                <div class="row producto-agregado">
+                    <div class=" col-md-6">
+                        <label for="codigoSKU1">Producto:</label>
+                        <select #selected_item [disabled]="isEditSession" class="form-control">
+                            <option *ngFor="let item of productosDisponibles" value="{{item.codigo_SKU}}">
+                                {{item.nombre_producto}}</option>
+                            </select>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label for="cantidad1">Cantidad:</label>
+                        <input #selected_quantity [disabled]="isEditSession" type="number" class="form-control"
+                           >
+                    </div>
+
+                    <div class="row">
+                        <div class="form-group col-md-6">
+                            <button [disabled]="isEditSession" type="button" class="btn btn-success"
+                               (click)="agregarProducto(selected_item.value, selected_quantity.value)" id="btn-agregar-producto">Agregar Producto</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">    
-                    <button type="button" class="btn btn-success" id="btn-agregar-producto">Agregar Producto</button>
-                </div>
-            </div>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio unitario</th>
+                        <th>Precio total</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let prod of productosAgregados">
+                        <td>{{prod.nombre_producto}}</td>
+                        <td>{{prod.cantidad}}</td>
+                        <td>{{prod.precio | currency:"USD"}}</td>
+                        <td>{{prod.precio*prod.cantidad | currency:"USD"}}</td>
+                        <td>
+                            <button (click)="deleteProduct(prod.codigo_SKU)" [disabled]="isEditSession" class="btn btn-danger">Borrar</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
-
-
-        <button type="submit" class="btn btn-primary" id="guardar-orden">Registrar Orden de Compra</button>
+        <button type="submit" *ngIf="!isEditSession" class="btn btn-primary" id="guardar-orden">Crear Orden de
+            Compra</button>
+        <button type="submit" *ngIf="isEditSession" class="btn btn-primary" id="editar-orden">Editar Orden de
+            Compra</button>
+        <!-- <button type="submit" class="btn btn-primary" id="guardar-orden">Registrar Orden de Compra</button> -->
     </form>
 
 </div>

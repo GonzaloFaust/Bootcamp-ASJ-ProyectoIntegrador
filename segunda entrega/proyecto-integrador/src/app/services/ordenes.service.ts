@@ -1,53 +1,92 @@
 import { Injectable } from '@angular/core';
 import { ordenCompra } from '../../assets/data/ordenes';
+import { Order } from '../models/order';
+import { OrderState } from '../models/orderState';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrdenesService {
 
+  PREFIX: string = "OC";
+  counter: number = 1;
 
+  ordersData: Array<Order> = []
 
-  constructor() { }
+  orderTemplate: Order = structuredClone(blankOrder);
 
-  public getOrdenesCompra() {
-    return ordenCompra;
+  constructor() {
+    this.ordersData = JSON.parse(localStorage.getItem('orders')!) || [...ordenCompra]
   }
 
-  public getOrdenesById(id: string) {
-    return ordenCompra.filter(p => p.numero_orden_compra == id)[0]
+  public getOrdenesCompra(): Order[] {
+    return this.ordersData;
   }
 
-  public addOrden(orden: any) {
-    ordenCompra.push(orden);
+  public getOrdenById(id: string): Order {
+    const ord= this.ordersData.filter(o => o.numero_orden_compra == id)[0]
+    this.orderTemplate = ord;
+    console.log(this.orderTemplate)
+    return ord;
   }
 
-  public editOrdenCompra(id: string, orden: any) {
-
+  public addOrden(): void {
+    let newId = this.PREFIX + this.counter;
+    while (this.ordersData.some(p => p.numero_orden_compra === newId)) {
+      this.counter++;
+      newId = this.PREFIX + this.counter;
+    }
+    this.ordersData.push({ ...this.orderTemplate, numero_orden_compra: this.PREFIX+this.counter++ });
+    this.orderTemplate = structuredClone(blankOrder)
+    this.saveData()
   }
-  public deleteOrden(id: string) {
-    // ordenCompra = ordenCompra.filter(p=>p.numeroOrdenCompra!==id)
+
+  public editOrdenCompra(id:string): void {
+  this.orderTemplate = { ...structuredClone(this.orderTemplate), numero_orden_compra:id }
+  this.saveData()
+  this.orderTemplate = structuredClone(blankOrder)
+}
+
+  public deleteOrden(id: string): void {
+    let ord= this.getOrdenById(id);
+    ord.state= OrderState.cancelado
+    this.saveData()
+  }
+
+
+  private saveData() {
+    localStorage.setItem('orders', JSON.stringify(this.ordersData))
   }
 }
 
-interface Order {
-  numero_orden_compra:string,
-  fecha_emision: string,
-  fecha_entrega_esperada: string,
+export const blankOrder: Order = {
+  numero_orden_compra: "",
+  state: "pendiente" as OrderState,
+  fecha_emision: "",
+  fecha_entrega_esperada: "",
   informacion_recepcion: {
-      direccion: {
-          calle_numero: string,
-          cp: string,
-          localidad: string,
-          provincia: string,
-          pais: string
-      }
+    direccion: {
+      calle_numero: "",
+      cp: "",
+      localidad: "",
+      provincia: "",
+      pais: ""
+    }
   },
-  cod_proveedor: string,
+  cod_proveedor: "",
   productos: [
-      {
-          codigo_SKU: string,
-          cantidad: number
-      } 
+    {
+      codigo_SKU: "",
+      cantidad: 0
+    }
   ]
 }
+
+
+//   public deleteProducto() {
+//   this.productosData = this.productosData.filter(p => p.id !== this.productTemplate.id)
+//   this.saveData()
+// }
+
+
+

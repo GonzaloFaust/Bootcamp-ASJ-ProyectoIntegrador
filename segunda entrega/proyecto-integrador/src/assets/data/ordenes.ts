@@ -1,9 +1,11 @@
+
 const ordenCompra =
     [
         {
             numero_orden_compra: "OC001",
             fecha_emision: "2023-01-15",
             fecha_entrega_esperada: "2023-02-01",
+            state:"confirmado",
             informacion_recepcion: {
                 direccion: {
                     calle_numero: "Calle Principal 456",
@@ -13,7 +15,7 @@ const ordenCompra =
                     pais: "Pais"
                 }
             },
-            cod_proveedor: "PROD001",
+            cod_proveedor: "PROV0",
             productos: [
                 {
                     codigo_SKU: "SKU123",

@@ -31,7 +31,7 @@ const routes: Routes = [
   { path: 'productos/:id-producto', component: ProductosVerComponent }
   ,
   { path: 'ordenes', component: OrdenesListaComponent },
-  { path: 'ordenes/edit/:id-producto', component: OrdenesCrearComponent },
+  { path: 'ordenes/edit/:id-orden', component: OrdenesCrearComponent },
   { path: 'ordenes/new', pathMatch: "full", component: OrdenesCrearComponent },
   { path: 'ordenes/:id-orden', component: OrdenesVerComponent }
   ,

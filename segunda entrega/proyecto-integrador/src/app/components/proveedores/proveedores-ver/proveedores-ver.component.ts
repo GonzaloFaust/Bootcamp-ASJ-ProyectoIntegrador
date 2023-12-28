@@ -10,6 +10,6 @@ import { ActivatedRoute } from '@angular/router';
 export class ProveedoresVerComponent {
 constructor(private proveedorService: ProveedoresService, private ruta: ActivatedRoute){}
 
-  proveedor= this.proveedorService.getProveedorById(this.ruta.snapshot.paramMap.get("id-proveedor")!)
+  supplier= this.proveedorService.getProveedorById(this.ruta.snapshot.paramMap.get("id-proveedor")!)
 
 }

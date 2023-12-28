@@ -21,7 +21,7 @@ export class ProductosVerComponent implements OnInit{
   }
   
   deleteProducto() {
-    this.productoService
+    this.productoService.deleteProducto()
   }
 }
 

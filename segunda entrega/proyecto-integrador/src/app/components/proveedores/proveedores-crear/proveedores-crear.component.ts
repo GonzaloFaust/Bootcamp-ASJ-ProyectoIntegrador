@@ -41,10 +41,9 @@ export class ProveedoresCrearComponent implements OnInit {
     else this.service.proveedorTemplate = structuredClone(blankProvider)
   }
 
-  createProveedor(form: NgForm) {
+  createProveedor(form:NgForm) {
     if (this.isEditSession) this.service.editProveedor(this.idParam!)
-    else this.service.addProveedor(form)
-
+    else this.service.addProveedor()
   }
 
   getCountries() {
