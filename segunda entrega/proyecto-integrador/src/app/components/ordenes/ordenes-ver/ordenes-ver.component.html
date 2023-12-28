@@ -1,5 +1,19 @@
-<div class="container my-5" *ngIf="order">
-    <h2 class="mb-4">Detalles de la Orden</h2>
+<div class="container my-5" >
+  <nav aria-label="breadcrumb ms-3">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item active" aria-current="page"><a routerLink="/"
+                routerLinkActive="router-link-active">Home</a></li>
+        <li class="breadcrumb-item"><a routerLink="/ordenes">Ordenes de Compra</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">Orden: {{order.numero_orden_compra}}</li>
+    </ol>
+</nav>
+    
+    <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
+      <h6 class="m-0 font-weight-bold text-primary">Detalles de la Orden {{order.numero_orden_compra}}</h6>
+
+      <button routerLink='../'   class="btn btn-outline-primary">Volver</button>
+  </div>
   
     <div class="card">
       <div class="card-body">
@@ -10,6 +24,7 @@
   
         <div>
           <h3 class="mt-4">Información de Recepción</h3>
+          
           <p><strong>Calle y Número:</strong> {{ order.informacion_recepcion.direccion.calle_numero }}</p>
           <p><strong>CP:</strong> {{ order.informacion_recepcion.direccion.cp }}</p>
           <p><strong>Localidad:</strong> {{ order.informacion_recepcion.direccion.localidad }}</p>

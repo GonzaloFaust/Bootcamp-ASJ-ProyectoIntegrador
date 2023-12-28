@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { NgForm, FormControl} from '@angular/forms';
 import { OrdenesService, blankOrder } from 'src/app/services/ordenes.service';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 import { ProductosService } from 'src/app/services/productos.service';
@@ -24,6 +24,10 @@ export class OrdenesCrearComponent implements OnInit {
 
   productosDisponibles: any[] = []
 
+  minFechaEmision: string = '2000-01-01'; 
+  maxFechaActual: string = new Date().toISOString().split('T')[0]; 
+  estadoOrden: FormControl=new FormControl()
+
   constructor(private route: ActivatedRoute, public service: OrdenesService, private provService: ProveedoresService, private productService: ProductosService) { }
 
   ngOnInit(): void {
@@ -39,8 +43,12 @@ export class OrdenesCrearComponent implements OnInit {
   }
 
   createOrden(form: NgForm) {
+    if (this.isEditSession) this.service.editOrdenCompra(this.idParam!)
+    else this.service.addOrden()
 
-
+  }
+  cancelarOrden(){
+    this.service.orderTemplate.state=OrderState.cancelado
   }
 
   cleanTemplate(){
@@ -79,6 +87,7 @@ export class OrdenesCrearComponent implements OnInit {
 
   deleteProduct(id:string){
     this.productosAgregados= this.productosAgregados.filter(p=>p.codigo_SKU!==id)
+    this.cleanTemplate();
     this.updateProductosAgregados()
   }
 }
