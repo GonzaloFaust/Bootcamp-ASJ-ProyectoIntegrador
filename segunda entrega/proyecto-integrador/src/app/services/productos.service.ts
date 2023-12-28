@@ -62,7 +62,7 @@ export const blankProduct: Product = {
   cod_proveedor: "",
   codigo_SKU: "",
   categoria: "" as productCategory,
-  image: "",
+  image: '../../assets/image/imagen-producto-mock.jpg',
   nombre_producto: "",
   descripcion: "",
   precio: 0

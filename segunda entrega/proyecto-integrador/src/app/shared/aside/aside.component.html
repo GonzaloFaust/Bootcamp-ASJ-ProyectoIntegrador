@@ -2,7 +2,7 @@
     <div class="container h-100 d-flex flex-column flex-shrink-0 p-3 border-end ">
         <ul class="nav nav-pills flex-column mb-auto">
             <li class="nav-item">
-                <a class="nav-link active" [routerLink]="['']" routerLinkActive="router-link-active" >Inicio</a>
+                <a class="nav-link active" [routerLink]="['']" routerLinkActive="router-link-active" (click)="laRuta()" >Inicio</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link link-dark" [routerLink]="['/proveedores']" routerLinkActive="router-link-active" >Proveedores</a>
