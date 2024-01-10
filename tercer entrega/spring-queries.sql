@@ -38,7 +38,9 @@ FROM   products p
 WHERE  p.prod_id = 2
 
 -- 4 -Listar todo los proveedores cuyo teléfono tenga la característica de Córdoba o que la provincia sea igual a alguna de las 3 con más proveedores.
--- 5 -Traer un listado de todos los proveedores que no hayan sido eliminados , y ordenados por razon social, codigo proveedor y fecha en que se dió de alta ASC. De este listado mostrar los datos que correspondan con su tabla del front.
+-- 5 -Traer un listado de todos los proveedores 
+--que no hayan sido eliminados , y ordenados por razon social, codigo proveedor y 
+--fecha en que se dió de alta ASC. De este listado mostrar los datos que correspondan con su tabla del front.
 SELECT s.sup_code                                                   AS
        'Codigo de Proveedor',
        s.sup_bussiness_name                                         AS
@@ -57,6 +59,10 @@ FROM   suppliers s
                ON con.sup_contact_id = s.sup_contact_id
        INNER JOIN tax_conditions tax
                ON tax.tax_id = s.tax_id
+WHERE  s.sup_isdeleted = 0
+ORDER  BY s.sup_bussiness_name ASC,
+          s.sup_code ASC,
+          s.created_at ASC
 
 -- 6 -Obtener razon social, codigo proveedor, imagen, web, email, teléfono y los datos del contacto del proveedor con más ordenes de compra cargadas
 --todos tienen una orden, inserto una mas para el ejercicio
