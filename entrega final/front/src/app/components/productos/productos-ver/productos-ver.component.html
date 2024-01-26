@@ -1,0 +1,56 @@
+<div class="container mt-5 mb-5">
+
+    <nav aria-label="breadcrumb ms-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page"><a routerLink="/"
+                    routerLinkActive="router-link-active">Home</a></li>
+            <li class="breadcrumb-item"><a routerLink="/productos">Productos</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Producto: {{producto.id}}</li>
+        </ol>
+    </nav>
+
+    <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
+        <h6 class="m-0 font-weight-bold text-primary">Detalle de Producto</h6>
+        <button routerLink='../'   class="btn btn-outline-primary">Volver</button>
+    </div>
+
+    <div class="row d-flex justify-content-center">
+        
+            <div class="card">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="images p-3">
+                            <div class="text-center"> <img id="main-image" src={{producto.image}} width="100%" /> </div>
+                            
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="product p-4">
+                            <div class="d-flex justify-content-between align-items-center">
+                                
+                            </div>
+                            <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand">{{razonSocial}}</span>
+                                <h5 class="text-uppercase">{{producto.nombre_producto}}</h5>
+                                <div class="price d-flex flex-row align-items-center"> <span class="act-price">{{producto.precio | currency:'USD'}}</span>
+                                   
+                                </div>
+                            </div>
+                            <p class="about">{{producto.descripcion}}</p>
+
+                            <div class="container py-3 d-flex gap-2  align-items-baseline">
+                                <button class="btn btn-warning" [routerLink]="['/productos/edit/'+producto.id]" >Editar</button>
+                                <button class="btn btn-danger" (click)="deleteProducto()" >Borrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+    </div>
+</div>
+
+
+<!-- -----------------------------------MAS PRODUCTOS DEL PROVEEDOR--------------------------------------------- -->
+
+<!-- -----------------------------------PRODUCTOS SIMILARES--------------------------------------------- -->
