@@ -13,7 +13,7 @@
     <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
         <h6 class="m-0 font-weight-bold text-primary">Registro de Proveedor</h6>
 
-        <button (click)="getBack()" class="btn btn-outline-primary">Volver</button>
+        <button routerLink='../' class="btn btn-outline-primary">Volver</button>
     </div>
 
 
@@ -133,11 +133,10 @@
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="cuit">CUIT:</label>
-                <input [disabled]="isEditSession" #cuit="ngModel" [(ngModel)]="service.proveedorTemplate.datos_fiscales.cuit" type="text" class="form-control"
+                <input #cuit="ngModel" [(ngModel)]="service.proveedorTemplate.datos_fiscales.cuit" type="text" class="form-control"
                        id="cuit" name="cuit"
                        pattern="^[0-9]{11}$"  
-                       maxLength="11"
-                       required>
+                       maxlength="11">
                 <div *ngIf="cuit?.errors?.['required'] && (cuit.dirty || cuit.touched)">
                     <div class="text-danger">CUIT es obligatorio.</div>
                 </div>
@@ -216,8 +215,8 @@
             id="guardar-proveedor">Registrar Proveedor</button>
         <button type="submit" [disabled]="!proveedor_form.valid" *ngIf="isEditSession" class="btn btn-primary"
             id="editar-proveedor">Editar Proveedor</button>
-        <div [hidden]="!proveedor_form.submitted" class="alert alert-success position-absolute bottom-0 end-0">
-            <h2>Proveedor {{isEditSession?'Modificado':'Agregado'}} con exito!</h2>
+        <div [hidden]="!proveedor_form.submitted" class="alert alert-success position-absolute top-0 end-0">
+            <h2>Proveedor Agregado con éxito!</h2>
         </div>
     </form>
 </div>

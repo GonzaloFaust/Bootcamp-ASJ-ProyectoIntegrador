@@ -19,7 +19,7 @@ export class ProductosCrearComponent implements OnInit {
   proveedores= this.servProv.getProveedores().map(prov=>{return {codigo:prov.codigo, razon_social:prov.razon_social}})
   categorias=Object.values(productCategory)
 
-  constructor(private route:ActivatedRoute, public service:ProductosService, public servProv: ProveedoresService, private router:Router){}
+  constructor(private route:ActivatedRoute, public service:ProductosService, public servProv: ProveedoresService){}
   
   ngOnInit(): void {
     if (this.isEditSession){
@@ -33,7 +33,6 @@ export class ProductosCrearComponent implements OnInit {
   createProduct(form:NgForm){
     if (this.isEditSession) this.service.editProducto(this.idParam!)
     else this.service.addProducto(form)
-    setTimeout(()=>this.router.navigateByUrl('/productos'),1000)
   }
   
 }

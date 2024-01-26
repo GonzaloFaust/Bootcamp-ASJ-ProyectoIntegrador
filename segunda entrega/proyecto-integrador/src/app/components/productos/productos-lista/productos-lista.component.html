@@ -23,13 +23,12 @@
     <div class="row m-2" >
 
         <div *ngFor="let prod of products" class="col-4">
-            <div class="card d-flex flex-row mb-3" style="height:13em;overflow:hidden;">
+            <div class="card d-flex flex-row mb-3" style="max-height:12em;overflow:hidden;">
                 <div class="card-img ">
                     <img class=" img-fluid w-100 h-100 object-fit-cover " src={{prod.image}}
                         alt='{{prod.descripcion}} product photo'>
                 </div>
                 <div class="card-body">
-                    <sub>{{prod.cod_proveedor}}</sub>
                     <h5 class="card-title">{{prod.nombre_producto}} - <sub>{{prod.codigo_SKU}}</sub></h5>
                     <p class="card-text">{{prod.descripcion}}</p>
                     <div class="d-flex ">

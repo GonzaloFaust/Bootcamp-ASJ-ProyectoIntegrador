@@ -3,7 +3,7 @@ import { NgForm, FormControl} from '@angular/forms';
 import { OrdenesService, blankOrder } from 'src/app/services/ordenes.service';
 import { ProveedoresService } from 'src/app/services/proveedores.service';
 import { ProductosService } from 'src/app/services/productos.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { OrderState } from 'src/app/models/orderState';
 
 @Component({
@@ -28,7 +28,7 @@ export class OrdenesCrearComponent implements OnInit {
   maxFechaActual: string = new Date().toISOString().split('T')[0]; 
   estadoOrden: FormControl=new FormControl()
 
-  constructor(private route: ActivatedRoute, public service: OrdenesService, private provService: ProveedoresService, private productService: ProductosService, private router:Router) { }
+  constructor(private route: ActivatedRoute, public service: OrdenesService, private provService: ProveedoresService, private productService: ProductosService) { }
 
   ngOnInit(): void {
 
@@ -45,14 +45,10 @@ export class OrdenesCrearComponent implements OnInit {
   createOrden(form: NgForm) {
     if (this.isEditSession) this.service.editOrdenCompra(this.idParam!)
     else this.service.addOrden()
-  for(let prov of this.proveedores){
-    localStorage.removeItem(prov.cod_proveedor)
-  }
-    setTimeout(()=>this.router.navigateByUrl('/ordenes'),1000)
+
   }
   cancelarOrden(){
     this.service.orderTemplate.state=OrderState.cancelado
-    setTimeout(()=>this.router.navigateByUrl('/ordenes'),1000)
   }
 
   cleanTemplate(){

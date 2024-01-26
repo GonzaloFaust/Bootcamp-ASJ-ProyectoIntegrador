@@ -19,8 +19,8 @@
     
     <form #producto_form="ngForm" (ngSubmit)="createProduct(producto_form)">
         <div class="form-group">
-            <label for="codProveedor">Proveedor:</label>
-            <select [disabled]="isEditSession" class="form-control" id="codProveedor" name="cod_proveedor" required
+            <label for="codProveedor">Código de Proveedor:</label>
+            <select class="form-control" id="codProveedor" name="cod_proveedor" required
                 [(ngModel)]="service.productTemplate.cod_proveedor" #codProveedor="ngModel">
                 <option *ngFor="let prov of proveedores" [value]="prov.codigo">{{prov.razon_social}}</option>
             </select>
@@ -31,7 +31,7 @@
     
         <div class="form-group">
             <label for="codigoSKU">Código SKU:</label>
-            <input [disabled]="isEditSession" type="text" class="form-control" id="codigoSKU" name="codigo_SKU" required
+            <input type="text" class="form-control" id="codigoSKU" name="codigo_SKU" required
                 [(ngModel)]="service.productTemplate.codigo_SKU" #codigoSKU="ngModel">
             <div *ngIf="codigoSKU?.errors?.['required'] && (codigoSKU.dirty || codigoSKU.touched)">
                 <div class="text-danger">Código SKU es obligatorio.</div>
@@ -94,7 +94,7 @@
         <button type="submit" [disabled]="!producto_form.valid" *ngIf="isEditSession" class="btn btn-primary my-2" id="editar-producto">Editar Producto</button>
     
         <div [hidden]="!producto_form.submitted" class="alert alert-success position-absolute bottom-0 end-0">
-            <h2>Producto {{isEditSession?'Modificado':'Agregado'}} con exito!</h2>
+            <h2>Producto Agregado con éxito!</h2>
         </div>
     </form>
     

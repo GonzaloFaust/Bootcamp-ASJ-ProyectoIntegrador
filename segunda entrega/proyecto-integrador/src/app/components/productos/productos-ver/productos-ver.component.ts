@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Product } from 'src/app/models/product';
 import { Supplier } from 'src/app/models/supplier';
 import { ProductosService, blankProduct } from 'src/app/services/productos.service';
@@ -11,7 +11,7 @@ import { ProveedoresService, blankProvider } from 'src/app/services/proveedores.
 })
 export class ProductosVerComponent implements OnInit{
 
-  constructor(public productoService: ProductosService, public provServ: ProveedoresService, private ruta: ActivatedRoute, private router:Router) { }
+  constructor(public productoService: ProductosService, public provServ: ProveedoresService, private ruta: ActivatedRoute) { }
    producto:Product=blankProduct;
    razonSocial:string="";
 
@@ -22,7 +22,6 @@ export class ProductosVerComponent implements OnInit{
   
   deleteProducto() {
     this.productoService.deleteProducto()
-    setTimeout(()=>this.router.navigateByUrl('/proveedores'),1000)
   }
 }
 

@@ -18,7 +18,7 @@ import { HomeComponent } from './components/home/home.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent }
+  { path: '', component: HomeComponent }
   ,
   { path: 'proveedores', component: ProveedoresListaComponent },
   { path: 'proveedores/edit/:id-proveedor', component: ProveedoresCrearComponent },

@@ -35,8 +35,20 @@ INSERT INTO suppliers
              sup_contact_id,
              sup_isdeleted,
              created_at)
-VALUES      
-	('SUP52', 'El COrdobes', 1,'www.ibm.com','contacto@ibm.com','3514567890','Avenida Paseo Colón', 123, 1,'20301234567', 1, 1, 0, '2024-01-01')
+VALUES      ('SUP52',
+             'El COrdobes',
+             1,
+             'www.ibm.com',
+             'contacto@ibm.com',
+             '3514567890',
+             'Avenida Paseo Colón',
+             123,
+             1,
+             '20301234567',
+             1,
+             1,
+             0,
+             '2024-01-01')
 
 
 SELECT s.sup_bussiness_name FROM suppliers s
@@ -48,7 +60,7 @@ WHERE
 	s.sup_telephone LIKE '351%' OR st.state_id IN (
 													SELECT TOP 3 st.state_id FROM states st 
 													INNER JOIN 
-														cities ON st.state_id = cities.state_id
+														cities ON s.city_id = cities.city_id
 													INNER JOIN 
 														suppliers s ON cities.city_id = s.city_id
 													GROUP BY st.state_id

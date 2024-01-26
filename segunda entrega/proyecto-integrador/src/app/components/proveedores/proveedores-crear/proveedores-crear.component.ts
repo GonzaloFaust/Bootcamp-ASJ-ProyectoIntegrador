@@ -5,7 +5,6 @@ import { NgForm } from '@angular/forms';
 import { supplierCategory } from 'src/app/models/supplierCategory';
 import { CondicionIva } from 'src/app/models/condicionIva';
 import { LocalizationService } from 'src/app/services/localization.service';
-import { Location } from '@angular/common'
 
 @Component({
   selector: 'app-proveedores-crear',
@@ -21,15 +20,11 @@ export class ProveedoresCrearComponent implements OnInit {
   rubrosPermitidos = Object.values(supplierCategory)
   condicionesIVA = Object.values(CondicionIva)
 
-  constructor(public service: ProveedoresService, private route: ActivatedRoute, public geo: LocalizationService, private location:Location, private router:Router) { }
+  constructor(public service: ProveedoresService, private route: ActivatedRoute, public geo: LocalizationService) { }
 
   countries: any[] = []
   states: any[] = []
   cities: any[] = []
-
-  getBack(){
-    this.location.back()
-  }
 
   ngOnInit(): void {
     this.getCountries()
@@ -49,7 +44,6 @@ export class ProveedoresCrearComponent implements OnInit {
   createProveedor(form:NgForm) {
     if (this.isEditSession) this.service.editProveedor(this.idParam!)
     else this.service.addProveedor()
-    setTimeout(()=>this.router.navigateByUrl('/proveedores'),1000)
   }
 
   getCountries() {

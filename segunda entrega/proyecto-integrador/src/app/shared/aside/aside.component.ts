@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-aside',
@@ -8,11 +8,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class AsideComponent {
 
-  constructor(private route: Router){}
+  constructor(private route: ActivatedRoute){}
 
-  laRuta(word:string):boolean{
-    console.log()
-    
-    return this.route.routerState.snapshot.url.split('/').at(-1)!.includes(word); 
+  laRuta():boolean{
+    const params =   this.route.snapshot.params
+    console.log(params)
+    return false;
   }
 }

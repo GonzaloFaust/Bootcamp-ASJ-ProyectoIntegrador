@@ -28,7 +28,6 @@
                             <th>Nro Orden</th>
                             <th>Fecha Emision</th>
                             <th>Proveedor</th>
-                            <th>Estado</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
@@ -37,12 +36,11 @@
                             <td>{{orden.numero_orden_compra}}</td>
                             <td>{{orden.fecha_emision}}</td>
                             <td>{{orden.nombre_proveedor}}</td>
-                            <td>{{orden.state}}</td>
                             
                             <td> 
                                 <button class="btn btn-warning" routerLink={{orden.numero_orden_compra}}>Ver</button>
                                 <button class="btn btn-warning" [routerLink]="['edit/'+orden.numero_orden_compra]">Editar</button>
-                                <button *ngIf="orden.state!=='cancelado'" (click)="deleteOrder(orden.numero_orde_compra)" class="btn btn-danger">Cancelar</button>
+                                <button (click)="deleteOrder(orden.numero_orde_compra)" class="btn btn-danger">Cancelar</button>
                             </td>
                         </tr>
                     </tbody>
