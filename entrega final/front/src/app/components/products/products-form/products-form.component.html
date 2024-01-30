@@ -1,0 +1,133 @@
+<div class="container">
+
+    <nav aria-label="breadcrumb ms-3 ">
+        <ol class="breadcrumb ">
+            <li class="breadcrumb-item active" aria-current="page"><a routerLink="/"
+                    routerLinkActive="router-link-active">Home</a></li>
+            <li class="breadcrumb-item"><a routerLink="/productos">Productos</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">{{isEditSession?'Editar':'Nuevo'}}</li>
+        </ol>
+    </nav>
+</div>
+
+
+
+<div class="container w-75 w-md-75 mb-5 ">
+    <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
+        <h5 class="m-0 font-weight-bold text-primary">Registro de Producto</h5>
+        <button routerLink='../' class="btn btn-outline-primary">Volver</button>
+    </div>
+
+
+
+    <form #producto_form="ngForm" (ngSubmit)="createProduct(producto_form)">
+
+        <div class="row gy-4 mb-4 ">
+
+            <div class="form-group col-12 col-md-6 col-lg-4">
+                <label for="supplierCode" class="form-label">Proveedor:  <span *ngIf=" supplierCode.invalid"  class="warning-txt">✱</span></label>
+                <select [class.input-valid]="supplierCode.valid && supplierCode.touched"
+                    [class.input-invalid]="supplierCode.touched &&supplierCode.invalid" [disabled]="isEditSession"
+                    class="form-select" id="supplierCode" name="supplier_code" required
+                    [(ngModel)]="service.productTemplate.cod_proveedor" #supplierCode="ngModel">
+                    <option value="" disabled selected>Elige una Proveedor</option>
+                    <option *ngFor="let prov of proveedores" [value]="prov.codigo">{{prov.razon_social}}</option>
+                </select>
+                <div class="position-absolute ">
+                    <span *ngIf="supplierCode?.errors?.['required'] && (supplierCode.touched)" class="font-weight-light warning-txt">Código de Proveedor es obligatorio.</span>
+                </div>
+            </div>
+
+            <div class="form-group col-12 col-md-6 col-lg-4">
+                <label for="category" class="form-label">Categoría:  <span *ngIf="category.invalid"  class="warning-txt">✱</span></label>
+                <select [class.input-valid]="category.valid && category.touched"
+                    [class.input-invalid]="category.touched && category.invalid" 
+                    class="form-select" id="category"
+                    name="category" required [(ngModel)]="service.productTemplate.categoria" #category="ngModel">
+                    <option value="" disabled selected>Elige una categoría</option>
+                    <option *ngFor="let cat of categorias" [value]="cat">{{cat}}</option>
+                </select>
+                <div class="position-absolute ">
+                    <span *ngIf="category?.errors?.['required'] && (category.touched)" class="font-weight-light warning-txt">Categoría es obligatoria.</span>
+                </div>
+            </div>
+
+            <div class="form-group col-12 col-md-12 col-lg-4">
+                <label for="SKUCode" class="form-label">Código SKU:  <span *ngIf="SKUCode.invalid"  class="warning-txt">✱</span></label>
+                <input [class.input-valid]="SKUCode.valid && SKUCode.touched"
+                    [class.input-invalid]="SKUCode.touched && SKUCode.invalid" [disabled]="isEditSession"
+                    type="text" placeholder="Ingresa el SKU del producto" class="form-control" id="SKUCode"
+                    name="sku_code" required [(ngModel)]="service.productTemplate.codigo_SKU" #SKUCode="ngModel">
+                <div *ngIf="SKUCode?.errors?.['required'] && (SKUCode.touched)">
+                    <div class="font-weight-light warning-txt">Código SKU es obligatorio.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row gy-4 mb-4">
+            <div class="form-group col-12 col-md-6">
+                <label for="productName" class="form-label">Nombre del Producto:  <span *ngIf="productName.invalid"  class="warning-txt">✱</span></label>
+                <input [class.input-valid]="productName.valid && productName.touched" [class.input-invalid]="productName.touched && productName.invalid"
+                type="text" class="form-control" id="productName" name="product_name" required
+                    [(ngModel)]="service.productTemplate.nombre_producto" #productName="ngModel">
+                <div *ngIf="productName?.errors?.['required'] && (productName.touched)">
+                    <div class="font-weight-light warning-txt">Nombre del Producto es obligatorio.</div>
+                </div>
+            </div>
+
+            <div class="form-group col-12 col-md-6">
+                <label for="productImage" class="form-label">Imagen:</label>
+                <input type="text" class="form-control" id="productImage" name="image"
+                    [(ngModel)]="service.productTemplate.image" #productImage="ngModel">
+            </div>
+        </div>
+
+        <div class="row mb-4">
+
+            <div class="form-group col-sm-12">
+                <label for="description" class="form-label">Descripción:  <span *ngIf="description.invalid"  class="warning-txt">✱</span></label>
+                <textarea [class.input-valid]="description.valid && description.touched" [class.input-invalid]="description.touched && description.invalid"
+                class="form-control" id="description" name="description" rows="3" required
+                [(ngModel)]="service.productTemplate.descripcion" #description="ngModel"></textarea>
+                <div *ngIf="description?.errors?.['required'] && (description.touched)">
+                    <div class="font-weight-light warning-txt">Descripción es obligatoria.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mb-5">
+
+            <div class="form-group col-12 col-md-6 col-lg-4 col-xl-3">
+                <label for="price" class="form-label">Precio:  <span *ngIf="price.invalid"  class="warning-txt">✱</span></label>
+                <div class="input-group" >
+                    <span class="input-group-text">$</span>  
+                    <input [class.input-valid]="price.valid && price.touched" [class.input-invalid]="price.value < 1 && price.invalid && (price.touched)"
+                    type="number" class="form-control input-group-text " id="price" name="price" required
+                    [(ngModel)]="service.productTemplate.precio == 0? '':service.productTemplate.precio"  min="1" #price="ngModel" placeholder="0">
+                </div>
+                <div class="position-absolute " >
+                    <span *ngIf="price?.errors?.['required'] && price.touched" class="font-weight-light warning-txt">Precio es obligatorio. </span>
+                    <span *ngIf=" !price?.errors?.['required'] && price?.value <= 0 && price.touched"class="font-weight-light warning-txt">Precio debe ser mayor que 0. </span>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6 col-lg-8 col-xl-9 text-muted text-end ">
+                <p class="mt-5"><span class="warning-txt" style="font-size:1em">✱   </span> El campo es obligatorio</p>
+            </div>
+        </div>
+            
+        <div class="form-group">
+
+            <button type="submit" [disabled]="!producto_form.valid" *ngIf="!isEditSession" class="btn btn-primary"
+            id="guardar-producto">Registrar Producto</button>
+            <button type="submit" [disabled]="!producto_form.valid" *ngIf="isEditSession" class="btn btn-primary"
+            id="editar-producto">Editar Producto</button>
+            
+        </div>
+        <div [hidden]="!producto_form.submitted" class="alert alert-success position-absolute bottom-0 end-0">
+            <h2>Producto {{isEditSession?'Modificado':'Agregado'}} con exito!</h2>
+        </div>
+    </form>
+
+</div>

@@ -22,7 +22,7 @@ public class FieldModel {
     private Integer fieldId;
 
     @NotNull(message="Field name can't be null")
-    @NotBlank(message="Field name can't be empty")
+//    @NotBlank(message="Field name can't be empty")
     @Size(max = 20)
     @Column(name = "field_name", nullable = false, length = 20)
     private String fieldName;
@@ -33,12 +33,12 @@ public class FieldModel {
     private String fieldDetail;
 
     @NotNull(message="Creation date can't be null")
-    @NotBlank(message="Creation date can't be empty")
+//    @NotBlank(message="Creation date can't be empty")
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @NotNull(message="Updating date can't be null")
-    @NotBlank(message="Updating date can't be empty")
+//    @NotBlank(message="Updating date can't be empty")
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 

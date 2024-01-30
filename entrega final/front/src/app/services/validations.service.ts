@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 
 import { supplierCategory } from '../models/supplierCategory';
-import { CondicionIva } from '../models/condicionIva';
+import { CondicionIva } from '../models/taxCondition';
 
 
 @Injectable({

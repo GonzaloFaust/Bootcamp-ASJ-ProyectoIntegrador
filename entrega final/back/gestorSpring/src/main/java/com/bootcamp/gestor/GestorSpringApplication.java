@@ -8,6 +8,7 @@ public class GestorSpringApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(GestorSpringApplication.class, args);
+		System.out.println("Server iniciado");
 	}
 
 }

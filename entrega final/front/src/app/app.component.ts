@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { ProductosListaComponent } from './components/productos/productos-lista/productos-lista.component';
-import { ProveedoresListaComponent } from './components/proveedores/proveedores-lista/proveedores-lista.component';
-import { OrdenesListaComponent } from './components/ordenes/ordenes-lista/ordenes-lista.component';
-import { ProveedoresCrearComponent } from './components/proveedores/proveedores-crear/proveedores-crear.component';
+import { ProductsListComponent } from './components/productos/products-list/products-list.component';
+import { SuppliersListComponent } from './components/suppliers/suppliers-list/suppliers-list.component';
+import { OrdersListComponent } from './components/ordenes/orders-list/orders-list.component';
+import { SuppliersFormComponent } from './components/suppliers/suppliers-form/suppliers-form.component';
 
 @Component({
   selector: 'app-root',

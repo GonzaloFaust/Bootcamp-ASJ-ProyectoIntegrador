@@ -1,0 +1,52 @@
+<div class="container">
+    <nav aria-label="breadcrumb ms-3">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item" aria-current="page"><a routerLink="/"
+                    routerLinkActive="router-link-active">Home</a></li>
+            <li class="breadcrumb-item" aria-current="page">Ordenes de Compra</li>
+        </ol>
+    </nav>
+    <div class="card shadow mb-4">
+        <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
+            <h6 class="m-0 font-weight-bold text-primary">Ordenes</h6>
+            <div>
+                <button routerLink='../' class="btn btn-outline-primary me-2">Volver</button>
+                <button [routerLink]="['new']" class="btn btn-primary">Nueva Orden</button>
+            </div>
+
+          
+
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Nro Orden</th>
+                            <th>Fecha Emision</th>
+                            <th>Proveedor</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="ordenes-container">
+                        <tr *ngFor="let orden of ordenes">
+                            <td>{{orden.numero_orden_compra}}</td>
+                            <td>{{orden.fecha_emision}}</td>
+                            <td>{{orden.nombre_proveedor}}</td>
+                            <td>{{orden.state}}</td>
+
+                            <td>
+                                <button class="btn btn-warning" routerLink={{orden.numero_orden_compra}}>Ver</button>
+                                <button class="btn btn-warning"
+                                    [routerLink]="['edit/'+orden.numero_orden_compra]">Editar</button>
+                                <button *ngIf="orden.state!=='cancelado'"
+                                    (click)="deleteOrder(orden.numero_orde_compra)"
+                                    class="btn btn-danger">Cancelar</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

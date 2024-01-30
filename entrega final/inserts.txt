@@ -1,0 +1,53 @@
+INSERT INTO order_status (ordst_name)
+VALUES 
+('Creada'),
+('Enviada'),
+('Confirmada'),
+('Estimada'),
+('Recibida'),
+('Control'),
+('Aceptada'),
+('Rechazada'),
+('Completa'),
+('Cancelada');
+
+INSERT INTO countries (coun_name)
+VALUES 
+('Argentina'),
+('Brasil'),
+('Chile'),
+('Uruguay'),
+('Paraguay');
+
+
+INSERT INTO states (coun_id, state_name)
+VALUES 
+(1, 'Buenos Aires'),
+(1, 'Córdoba'),
+(1, 'Santa Fe'),
+(1, 'Entre Ríos'),
+(1, 'Mendoza'),
+
+(2, 'São Paulo'),
+(2, 'Rio de Janeiro'),
+(2, 'Bahia'),
+(2, 'Minas Gerais'),
+(2, 'Pernambuco'),
+
+(3, 'Santiago'),
+(3, 'Valparaíso'),
+(3, 'Bío Bío'),
+(3, 'Araucanía'),
+(3, 'Maule'),
+
+(4, 'Montevideo'),
+(4, 'Canelones'),
+(4, 'Maldonado'),
+(4, 'Rocha'),
+(4, 'Tacuarembó'),
+
+(5, 'Asunción'),
+(5, 'Alto Paraná'),
+(5, 'Central'),
+(5, 'Itapúa'),
+(5, 'Caaguaz');

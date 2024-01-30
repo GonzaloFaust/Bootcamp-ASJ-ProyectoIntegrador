@@ -1,1 +1,37 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --clr-red: #f09b93;
+    --clr-green: #90c290;
+    --font-small: 0.8em;
+}
+
+option {
+    color: #212529;
+}
+
+select:required:invalid {
+    color: #ccc;
+}
+
+option[disabled] {
+    display: none
+}
+
+::placeholder {
+    color: #ccc;
+    opacity: 1;
+}
+
+.input-valid {
+    outline: 2px solid var(--clr-green);
+}
+
+.input-invalid {
+    outline: 2px solid var(--clr-red);
+}
+
+.warning-txt {
+    font-size: var(--font-small);
+    color: var(--clr-red);
+    margin-top: 2px
+}

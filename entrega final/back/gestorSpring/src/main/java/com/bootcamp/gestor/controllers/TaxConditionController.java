@@ -1,9 +1,9 @@
 package com.bootcamp.gestor.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,38 +18,80 @@ import org.springframework.web.bind.annotation.RestController;
 import com.bootcamp.gestor.models.TaxConditionModel;
 import com.bootcamp.gestor.services.TaxConditionService;
 
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
+
 @RestController
 @RequestMapping("/tax-condition")
-@CrossOrigin(origins="http://localhost:4200")
+@CrossOrigin(origins = "http://localhost:4200")
 public class TaxConditionController {
 
-	@Autowired 
+	@Autowired
 	TaxConditionService taxCondService;
-	
+
 	@GetMapping()
-	public ResponseEntity<List<TaxConditionModel>> getTaxCondition()
-	{
+	public ResponseEntity<List<TaxConditionModel>> getTaxCondition() {
 		return ResponseEntity.ok(taxCondService.getAllTaxConditions());
 	}
 	
+	
+//	@GetMapping("/{id}")
+//	public ResponseEntity<Object> getCoso(@PathVariable String id) {
+//		if (id == null || id =="")return new ResponseEntity<>("la concha de tu madre sos gracioso", HttpStatus.NOT_FOUND);
+//		else return getTaxConditionById(0);
+//	}
+
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<TaxConditionModel>> getTaxConditionById(@PathVariable int id ){
-		return ResponseEntity.ok(taxCondService.getTaxConditionById(id));
+	public ResponseEntity<Object> getTaxConditionById(@PathVariable int id ) {
+		//if(Integer.parseInt(id) == null) return new ResponseEntity<String>("Invalid ID number provided", HttpStatus.BAD_REQUEST);
+		try {
+			return ResponseEntity.ok(taxCondService.getTaxConditionById(id));
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
-	
+
 	@PostMapping()
-	public ResponseEntity<List<TaxConditionModel>> createTaxCondition( @RequestBody TaxConditionModel taxCond){
-		return ResponseEntity.ok(taxCondService.createTaxCondition(taxCond));
+	public ResponseEntity<Object> createTaxCondition(@RequestBody TaxConditionModel taxCond) {
+		try {
+
+			return ResponseEntity.ok(taxCondService.createTaxCondition(taxCond));
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (EntityExistsException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<List<TaxConditionModel>> updateTaxCondition(@PathVariable int id, @RequestBody TaxConditionModel taxCond){
-		return ResponseEntity.ok(taxCondService.updateTaxCondition(id, taxCond));
+	public ResponseEntity<Object> updateTaxCondition(@PathVariable int id, @RequestBody TaxConditionModel taxCond) {
+		try {
+			return ResponseEntity.ok(taxCondService.updateTaxCondition(id, taxCond));
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (EntityExistsException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
-	
-	
-    @DeleteMapping("/{id}")
-    public ResponseEntity<List<TaxConditionModel>> deleteTaxCondition(@PathVariable int id) {
-        return ResponseEntity.ok(taxCondService.deleteTaxCondition(id));
-    }
+
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteTaxCondition(@PathVariable int id) {
+		try {
+			return ResponseEntity.ok(taxCondService.deleteTaxCondition(id));
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 }

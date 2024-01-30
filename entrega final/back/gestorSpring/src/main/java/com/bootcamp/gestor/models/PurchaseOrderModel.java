@@ -3,13 +3,15 @@ package com.bootcamp.gestor.models;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 
@@ -22,18 +24,19 @@ public class PurchaseOrderModel {
     @Column(name = "ord_id")
     private Integer ordId;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @NotNull(message="Order status id can't be null")
-    @NotBlank(message="Order status id can't be empty")
+//    @NotBlank(message="Order status id can't be empty")
     @Column(name = "ord_status_id", nullable = false)
-    private Integer ordStatusId;
+    private OrderStatusModel ordStatus;
 
     @NotNull(message="Order creation date can't be null")
-    @NotBlank(message="Order creation date can't be empty")
+//    @NotBlank(message="Order creation date can't be empty")
     @Column(name = "ord_issue_date", nullable = false)
     private LocalDate ordIssueDate;
 
     @NotNull(message="Expect delivery date can't be null")
-    @NotBlank(message="Expect delivery date can't be empty")
+//    @NotBlank(message="Expect delivery date can't be empty")
     @Column(name = "ord_exp_deliver_date", nullable = false)
     private LocalDate ordExpDeliverDate;
 
@@ -46,23 +49,25 @@ public class PurchaseOrderModel {
 //    @Column(name = "ord_address_num", nullable = false)
 //    private Integer ordAddressNum;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @NotNull(message="Address id can't be null")
-    @NotBlank(message="Address id can't be empty")
+//    @NotBlank(message="Address id can't be empty")
     @Column(name = "addr_id", nullable = false)
-    private Long addrId;
+    private AddressModel address;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @NotNull(message="Supplier id can't be null")
-    @NotBlank(message="Supplier id can't be empty")
+//    @NotBlank(message="Supplier id can't be empty")
     @Column(name = "sup_id", nullable = false)
-    private Integer supId;
+    private SupplierModel supplier;
 
     @NotNull(message="Creation date can't be null")
-    @NotBlank(message="Creation date can't be empty")
+//    @NotBlank(message="Creation date can't be empty")
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @NotNull(message="Updating date can't be null")
-    @NotBlank(message="Updating date can't be empty")
+//    @NotBlank(message="Updating date can't be empty")
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
@@ -71,26 +76,26 @@ public class PurchaseOrderModel {
 		
 	}
 
-	public PurchaseOrderModel(Integer ordId, @NotNull Integer ordStatusId, @NotNull LocalDate ordIssueDate,
-			@NotNull LocalDate ordExpDeliverDate,  @NotNull Long addrId, @NotNull Integer supId,
+	public PurchaseOrderModel(Integer ordId, @NotNull OrderStatusModel ordStatus, @NotNull LocalDate ordIssueDate,
+			@NotNull LocalDate ordExpDeliverDate,  @NotNull AddressModel address, @NotNull SupplierModel supplier,
 			@NotNull LocalDateTime createdAt, LocalDateTime updatedAt) {
 		super();
 		this.ordId = ordId;
-		this.ordStatusId = ordStatusId;
+		this.ordStatus = ordStatus;
 		this.ordIssueDate = ordIssueDate;
 		this.ordExpDeliverDate = ordExpDeliverDate;
-		this.addrId = addrId;
-		this.supId = supId;
+		this.address = address;
+		this.supplier = supplier;
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();
 	}
 	//-----getters y settres
-	public Integer getOrdStatusId() {
-		return ordStatusId;
+	public OrderStatusModel getOrdStatusId() {
+		return ordStatus;
 	}
 
-	public void setOrdStatusId(Integer ordStatusId) {
-		this.ordStatusId = ordStatusId;
+	public void setOrdStatusId(OrderStatusModel ordStatus) {
+		this.ordStatus = ordStatus;
 	}
 
 	public LocalDate getOrdExpDeliverDate() {
@@ -118,12 +123,12 @@ public class PurchaseOrderModel {
 	}
 
 
-	public Long getAddrId() {
-		return addrId;
+	public AddressModel getAddrId() {
+		return address;
 	}
 
-	public Integer getSupId() {
-		return supId;
+	public SupplierModel getSupId() {
+		return supplier;
 	}
 
 	public LocalDateTime getCreatedAt() {

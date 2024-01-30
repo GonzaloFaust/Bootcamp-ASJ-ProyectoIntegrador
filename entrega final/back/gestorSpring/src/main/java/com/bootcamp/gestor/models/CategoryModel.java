@@ -2,13 +2,15 @@ package com.bootcamp.gestor.models;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -22,7 +24,7 @@ public class CategoryModel {
     private Integer catId;
 
     @NotNull(message="Category name can't be null")
-    @NotBlank(message="Category name can't be empty")
+//    @NotBlank(message="Category name can't be empty")
     @Size(max = 40)
     @Column(name = "cat_name", nullable = false, length = 40)
     private String catName;
@@ -33,20 +35,20 @@ public class CategoryModel {
     private String catDetail;
 
     @NotNull(message="Creation date can't be null")
-    @NotBlank(message="Creation date can't be empty")
+//    @NotBlank(message="Creation date can't be empty")
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @NotNull(message="Updating date can't be null")
-    @NotBlank(message="Updating date can't be empty")
+//    @NotBlank(message="Updating date can't be empty")
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
     
-    
+    @JdbcTypeCode(SqlTypes.JSON)
     @NotNull(message="Field id can't be null")
-    @NotBlank(message="Field id can't be empty")
+//    @NotBlank(message="Field id can't be empty")
     @Column(name = "field_id")
-    private Integer fieldId;
+    private FieldModel field;
     
     
 
@@ -55,14 +57,14 @@ public class CategoryModel {
 		
 	}
 
-	public CategoryModel(Integer catId, String catName, String catDetail, Integer fieldId) {
+	public CategoryModel(Integer catId, String catName, String catDetail, FieldModel field) {
 		super();
 		this.catId = catId;
 		this.catName = catName;
 		this.catDetail = catDetail;
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();
-		this.fieldId= fieldId;
+		this.field= field;
 	}
 	
 	public String getCatName() {
@@ -97,12 +99,12 @@ public class CategoryModel {
 		return createdAt;
 	}
 
-	public Integer getFieldId() {
-		return this.fieldId;
+	public FieldModel getFieldId() {
+		return this.field;
 	}
 	
-	public void setFieldId(Integer fieldId) {
-		this.fieldId = fieldId;
+	public void setFieldId(FieldModel field) {
+		this.field = field;
 	}
 	
 

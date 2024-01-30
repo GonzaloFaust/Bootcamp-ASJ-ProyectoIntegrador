@@ -20,7 +20,7 @@ public class TaxConditionModel {
     private Integer taxId;
 
     @NotNull(message="Tax condition title can't be null")
-    @NotBlank(message="Tax condition title can't be empty")
+//    @NotBlank(message="Tax condition title can't be empty")
     @Size(max = 50)
     @Column(name = "tax_cond_title", nullable = false, length = 50)
     private String taxCondTitle;

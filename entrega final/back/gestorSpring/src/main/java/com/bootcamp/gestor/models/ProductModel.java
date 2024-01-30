@@ -2,13 +2,15 @@ package com.bootcamp.gestor.models;
 
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -22,55 +24,57 @@ public class ProductModel {
     private Integer prodId;
 
     @NotNull(message="Product SKU can't be null")
-    @NotBlank(message="Product SKU can't be empty")
+//    @NotBlank(message="Product SKU can't be empty")
     @Size(max = 13)
     @Column(name = "prod_sku", nullable = false, length = 13, unique=true)
     private String prodSku;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @NotNull(message="Supplier id can't be null")
-    @NotBlank(message="Supplier id can't be empty")
+//    @NotBlank(message="Supplier id can't be empty")
     @Column(name = "sup_id", nullable = false)
-    private Integer supId;
+    private SupplierModel supplier;
 
+    @JdbcTypeCode(SqlTypes.JSON)
     @NotNull(message="Category id can't be null")
-    @NotBlank(message="Category id can't be empty")
+//    @NotBlank(message="Category id can't be empty")
     @Column(name = "cat_id", nullable = false)
-    private Integer catId;
+    private CategoryModel category;
 
    
-    @NotBlank(message="Image url can't be empty")
+//    @NotBlank(message="Image url can't be empty")
     @Column(name = "prod_image")
     private String prodImage;
 
     @NotNull(message="Product name can't be null")
-    @NotBlank(message="Product name can't be empty")
+//    @NotBlank(message="Product name can't be empty")
     @Size(max = 30)
     @Column(name = "prod_name", nullable = false, length = 30)
     private String prodName;
 
     @NotNull(message="Product description can't be null")
-    @NotBlank(message="Product description can't be empty")
+//    @NotBlank(message="Product description can't be empty")
     @Column(name = "prod_description", nullable = false, columnDefinition = "TEXT")
     private String prodDescription;
 
     @NotNull(message="Product price can't be null")
-    @NotBlank(message="Product price can't be empty")
+//    @NotBlank(message="Product price can't be empty")
     @Column(name = "prod_price", nullable = false)
     private Float prodPrice;
 
     @NotNull(message="Creation date can't be null")
-    @NotBlank(message="Creation date can't be empty")
+//    @NotBlank(message="Creation date can't be empty")
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @NotNull(message="Updating date can't be null")
-    @NotBlank(message="Updating date can't be empty")
+//    @NotBlank(message="Updating date can't be empty")
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     @NotNull(message="Product availability can't be null")
-    @NotBlank(message="Product availability can't be empty")
-    @Column(name = "updated_at")
+//    @NotBlank(message="Product availability can't be empty")
+    @Column(name = "prod_available")
     private Boolean prodAvailable;
     
 	public ProductModel() {
@@ -79,14 +83,14 @@ public class ProductModel {
 	}
 	
 
-	public ProductModel(Integer prodId, @NotNull @Size(max = 13) String prodSku, @NotNull Integer supId,
-			@NotNull Integer catId, String prodImage, @NotNull @Size(max = 30) String prodName,
+	public ProductModel(Integer prodId, @NotNull @Size(max = 13) String prodSku, @NotNull SupplierModel supplier,
+			@NotNull CategoryModel category, String prodImage, @NotNull @Size(max = 30) String prodName,
 			@NotNull String prodDescription, @NotNull Float prodPrice) {
 		super();
 		this.prodId = prodId;
 		this.prodSku = prodSku;
-		this.supId = supId;
-		this.catId = catId;
+		this.supplier = supplier;
+		this.category = category;
 		this.prodImage = prodImage;
 		this.prodName = prodName;
 		this.prodDescription = prodDescription;
@@ -95,12 +99,12 @@ public class ProductModel {
 		this.createdAt = LocalDateTime.now();
 		this.updatedAt = LocalDateTime.now();
 	}
-	public Integer getCatId() {
-		return catId;
+	public CategoryModel getCatId() {
+		return this.category;
 	}
 
-	public void setCatId(Integer catId) {
-		this.catId = catId;
+	public void setCatId(CategoryModel category) {
+		this.category = category;
 	}
 
 	public String getProdImage() {
@@ -151,8 +155,8 @@ public class ProductModel {
 		return prodSku;
 	}
 
-	public Integer getSupId() {
-		return supId;
+	public SupplierModel getSupId() {
+		return supplier;
 	}
 
 	public LocalDateTime getCreatedAt() {

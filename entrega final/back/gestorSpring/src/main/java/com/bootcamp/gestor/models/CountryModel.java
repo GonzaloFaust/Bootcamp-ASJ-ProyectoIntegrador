@@ -14,36 +14,37 @@ import jakarta.validation.constraints.Size;
 @Table(name = "countries")
 public class CountryModel {
 
-	 @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "coun_id")
-    private Integer counId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(name = "coun_id")
+	private Integer counId;
 
-    @NotNull(message="Country name can't be null")
+	@NotNull(message = "Country name can't be null")
     @NotBlank(message="Country name can't be empty")
-    @Size(max = 40)
-    @Column(name = "coun_name", nullable = false, length = 40)
-    private String counName;
+	@Size(min = 4, max = 40)
+	@Column(name = "coun_name", nullable = false, length = 40)
+	private String counName;
 
-    public CountryModel() {
-    	super();
-    }
-	public CountryModel(Integer counId, @NotNull @Size(max = 40) String counName) {
-		this.counId = counId;
+	public CountryModel() {
+		super();
+	}
+
+	public CountryModel( @NotNull @Size(min = 4, max = 40) String counName) {
 		this.counName = counName;
 	}
-	
-	//-------getters y setters
-	
-	
+
+	// -------getters y setters
+
 	public String getCounName() {
 		return counName;
 	}
+
 	public void setCounName(String counName) {
 		this.counName = counName;
 	}
+
 	public Integer getCounId() {
 		return counId;
 	}
-	
+
 }

@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -19,10 +21,12 @@ public class StateModel {
     @Column(name = "state_id")
     private Integer stateId;
 
+
     @NotNull(message="Country id can't be null")
-    @NotBlank(message="Country id can't be empty")
-    @Column(name = "coun_id", nullable = false)
-    private Integer counId;
+ // @NotBlank(message="Country id can't be empty") //da problemas al crear un nuevo state
+    @ManyToOne
+	@JoinColumn(name="country_id")
+    private CountryModel country;
 
 
     @NotNull(message="State/Province name can't be null")
@@ -35,9 +39,8 @@ public class StateModel {
 		super();
 	}
 
-	public StateModel(Integer stateId, @NotNull Integer counId, @NotNull @Size(max = 30) String stateName) {
-		this.stateId = stateId;
-		this.counId = counId;
+	public StateModel( @NotNull CountryModel country, @NotNull @Size(max = 30) String stateName) {
+		this.country = country;
 		this.stateName = stateName;
 	}
 	
@@ -51,13 +54,22 @@ public class StateModel {
 		this.stateName = stateName;
 	}
 
+	public CountryModel getCountry() {
+		return country;
+	}
+
+	public void setCountry(CountryModel country) {
+		this.country = country;
+	}
+
+	public void setStateId(Integer stateId) {
+		this.stateId = stateId;
+	}
+
 	public Integer getStateId() {
 		return stateId;
 	}
 
-	public Integer getCounId() {
-		return counId;
-	}
     
 	
 }	
