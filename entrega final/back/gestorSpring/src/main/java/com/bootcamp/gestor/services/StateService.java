@@ -33,6 +33,7 @@ public class StateService {
 	}
 
 	public List<StateModel> createState(StateModel state) {
+//		try {
 		if (state.getStateName().isEmpty())
 			throw new IllegalArgumentException("Name of state is empty");
 		Optional<CountryModel> c = countryRepo.findById(state.getCountry().getCounId());
@@ -47,16 +48,15 @@ public class StateService {
 		} else {
 			throw new EntityNotFoundException();
 		}
-		try {
 
 			stateRepo.save(state);
 			return stateRepo.findAll();
 
-		} catch (
-
-		Exception e) {
-			throw new RuntimeException("Error creating state", e);
-		}
+//		} catch (
+//
+//		Exception e) {
+//			throw new RuntimeException("Error creating state", e);
+//		}
 	}
 
 	public String deleteState(int id) {

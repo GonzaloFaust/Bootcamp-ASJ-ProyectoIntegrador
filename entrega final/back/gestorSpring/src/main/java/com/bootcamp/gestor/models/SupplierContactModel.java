@@ -39,13 +39,13 @@ public class SupplierContactModel {
     private String supContactLastname;
 
     @NotNull(message="Contact phone number can't be null")
-//    @NotBlank(message="Contact phone number can't be empty")
+   @NotBlank(message="Contact phone number can't be empty")
     @Size(max = 11)
     @Column(name = "sup_contact_telephone", nullable = false, length = 11)
     private String supContactTelephone;
 
     @NotNull(message="Contact e-mail can't be null")
-//    @NotBlank(message="Contact e-mail can't be empty")
+   @NotBlank(message="Contact e-mail can't be empty")
     @Size(max = 40)
     @Column(name = "sup_contact_email", nullable = false, length = 40)
     private String supContactEmail;
@@ -73,9 +73,9 @@ public class SupplierContactModel {
 		
 	}
 
-	public SupplierContactModel( @NotNull @Size(max = 20) String supContactName,
-			@NotNull @Size(max = 20) String supContactLastname, @NotNull @Size(max = 11) String supContactTelephone,
-			@NotNull @Size(max = 40) String supContactEmail, @NotNull @Size(max = 30) String supContactRole) {	
+	public SupplierContactModel( String supContactName,
+			 String supContactLastname, String supContactTelephone,
+			String supContactEmail, String supContactRole) {	
 		this.supContactName = supContactName;
 		this.supContactLastname = supContactLastname;
 		this.supContactTelephone = supContactTelephone;

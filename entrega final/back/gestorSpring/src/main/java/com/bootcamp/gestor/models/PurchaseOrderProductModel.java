@@ -1,13 +1,13 @@
 package com.bootcamp.gestor.models;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -20,16 +20,18 @@ public class PurchaseOrderProductModel {
     @Column(name = "pop_id")
     private Long popId;
 
-    @JdbcTypeCode(SqlTypes.JSON)
+ 
     @NotNull(message="Order id can't be null")
 //    @NotBlank(message="Order id can't be empty")
-    @Column(name = "ord_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "ord_id")
     private PurchaseOrderModel order;
 
-    @JdbcTypeCode(SqlTypes.JSON)
+    
     @NotNull(message="Product id can't be null")
 //    @NotBlank(message="Product id can't be empty")
-    @Column(name = "prod_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "prod_id")
     private ProductModel product;
 
     @NotNull(message="Product quantity can't be null")
@@ -42,10 +44,9 @@ public class PurchaseOrderProductModel {
 		
 	}
 
-	public PurchaseOrderProductModel(Long popId, @NotNull PurchaseOrderModel order, @NotNull ProductModel product,
-			@NotNull Integer prodQuantity) {
-		super();
-		this.popId = popId;
+	public PurchaseOrderProductModel(PurchaseOrderModel order, ProductModel product,
+		 Integer prodQuantity) {
+		
 		this.order = order;
 		this.product = product;
 		this.prodQuantity = prodQuantity;

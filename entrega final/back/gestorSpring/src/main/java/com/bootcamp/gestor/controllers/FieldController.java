@@ -1,9 +1,10 @@
 package com.bootcamp.gestor.controllers;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.gestor.models.FieldModel;
 import com.bootcamp.gestor.services.FieldService;
+
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/field")
@@ -32,23 +36,56 @@ public class FieldController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<FieldModel>> getFieldById(@PathVariable int id ){
-		return ResponseEntity.ok(fieldService.getFieldById(id));
+	public ResponseEntity<Object> getFieldById(@PathVariable int id ){
+		try {
+			return ResponseEntity.ok(fieldService.getFieldById(id));
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@PostMapping()
-	public ResponseEntity<List<FieldModel>> createField( @RequestBody FieldModel field){
-		return ResponseEntity.ok(fieldService.createField(field));
+	public ResponseEntity<Object> createField( @RequestBody FieldModel field){
+		try {
+
+			return ResponseEntity.ok(fieldService.createField(field));
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (EntityExistsException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<List<FieldModel>> updateField(@PathVariable int id, @RequestBody FieldModel field){
-		return ResponseEntity.ok(fieldService.updateField(id, field));
+	public ResponseEntity<String> updateField(@PathVariable int id, @RequestBody FieldModel field){
+		try {
+			return ResponseEntity.ok(fieldService.updateField(id, field));
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (EntityExistsException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	
     @DeleteMapping("/{id}")
-    public ResponseEntity<List<FieldModel>> deleteField(@PathVariable int id) {
-        return ResponseEntity.ok(fieldService.deleteField(id));
+    public ResponseEntity<String> deleteField(@PathVariable int id) {
+    	try {
+			return ResponseEntity.ok(fieldService.deleteField(id));
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
     }
 }
