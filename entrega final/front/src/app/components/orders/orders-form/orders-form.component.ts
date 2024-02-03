@@ -5,13 +5,33 @@ import { SuppliersService } from 'src/app/services/suppliers.service';
 import { ProductsService } from 'src/app/services/products.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { OrderState } from 'src/app/models/orderState';
+import {NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
+
+
+const now = new Date();
 
 @Component({
   selector: 'app-orders-form',
   templateUrl: './orders-form.component.html',
-  styleUrls: ['./orders-form.component.css']
+  styleUrls: ['./orders-form.component.css'],
 })
 export class OrdersFormComponent implements OnInit {
+
+
+  model: NgbDateStruct | undefined;
+  formattedDate: string | null | undefined;
+  
+  constructor(private route: ActivatedRoute, public service: OrdersService, private provService: SuppliersService, private productService: ProductsService, private router:Router) { }
+
+
+ 
+
+
+
+
+
+
+
 
   idParam = this.route.snapshot.paramMap.get("id-orden");
   isEditSession: boolean = this.idParam !== null;
@@ -28,7 +48,6 @@ export class OrdersFormComponent implements OnInit {
   maxFechaActual: string = new Date().toISOString().split('T')[0]; 
   estadoOrden: FormControl=new FormControl()
 
-  constructor(private route: ActivatedRoute, public service: OrdersService, private provService: SuppliersService, private productService: ProductsService, private router:Router) { }
 
   ngOnInit(): void {
 

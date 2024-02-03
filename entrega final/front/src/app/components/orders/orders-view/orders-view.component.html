@@ -3,7 +3,7 @@
     <ol class="breadcrumb">
         <li class="breadcrumb-item active" aria-current="page"><a routerLink="/"
                 routerLinkActive="router-link-active">Home</a></li>
-        <li class="breadcrumb-item"><a routerLink="/ordenes">Ordenes de Compra</a>
+        <li class="breadcrumb-item"><a routerLink="/orders">Ordenes de Compra</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">Orden: {{order.numero_orden_compra}}</li>
     </ol>
@@ -42,7 +42,7 @@
             </li>
           </ul>
         </div>
-        <button class="btn btn-warning" [routerLink]="['../edit/'+order.numero_orden_compra]">Editar</button>
+        <button class="btn btn-warning" [routerLink]="['form/'+order.numero_orden_compra]">Editar</button>
       </div>
     </div>
   </div>

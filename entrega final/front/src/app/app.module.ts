@@ -28,6 +28,8 @@ import { LocalizationService } from './services/localization.service';
 import { ValidationsService } from './services/validations.service';
 import { LoginComponent } from './components/login/login.component';
 
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -53,8 +55,8 @@ import { LoginComponent } from './components/login/login.component';
     NgbModule,
     FontAwesomeModule,
     FormsModule,
-    HttpClientModule
-    
+    HttpClientModule,
+
   ],
   providers: [OrdersService,ProductsService, SuppliersService,LocalizationService, ValidationsService ],
   bootstrap: [AppComponent]

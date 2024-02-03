@@ -3,6 +3,9 @@
     --clr-red: #f09b93;
     --clr-green: #90c290;
     --font-small: 0.8em;
+    ::placeholder{
+        color:#ccc;
+    }
 }
 
 option {
@@ -17,10 +20,7 @@ option[disabled] {
     display: none
 }
 
-::placeholder {
-    color: #ccc;
-    opacity: 1;
-}
+
 
 .input-valid {
     outline: 2px solid var(--clr-green);
@@ -35,3 +35,8 @@ option[disabled] {
     color: var(--clr-red);
     margin-top: 2px
 }
+
+input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        display: none;
+      }

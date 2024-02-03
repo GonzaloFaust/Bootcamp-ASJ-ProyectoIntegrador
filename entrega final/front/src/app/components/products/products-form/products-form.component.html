@@ -4,7 +4,7 @@
         <ol class="breadcrumb ">
             <li class="breadcrumb-item active" aria-current="page"><a routerLink="/"
                     routerLinkActive="router-link-active">Home</a></li>
-            <li class="breadcrumb-item"><a routerLink="/productos">Productos</a>
+            <li class="breadcrumb-item"><a routerLink="/products">Productos</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">{{isEditSession?'Editar':'Nuevo'}}</li>
         </ol>
@@ -15,13 +15,13 @@
 
 <div class="container w-75 w-md-75 mb-5 ">
     <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
-        <h5 class="m-0 font-weight-bold text-primary">Registro de Producto</h5>
+        <h5 class="m-0 font-weight-bold text-primary">{{isEditSession?"Edición":"Registro"}} de Producto</h5>
         <button routerLink='../' class="btn btn-outline-primary">Volver</button>
     </div>
 
 
 
-    <form #producto_form="ngForm" (ngSubmit)="createProduct(producto_form)">
+    <form #product_form="ngForm" (ngSubmit)="createProduct(product_form)">
 
         <div class="row gy-4 mb-4 ">
 
@@ -59,8 +59,8 @@
                     [class.input-invalid]="SKUCode.touched && SKUCode.invalid" [disabled]="isEditSession"
                     type="text" placeholder="Ingresa el SKU del producto" class="form-control" id="SKUCode"
                     name="sku_code" required [(ngModel)]="service.productTemplate.codigo_SKU" #SKUCode="ngModel">
-                <div *ngIf="SKUCode?.errors?.['required'] && (SKUCode.touched)">
-                    <div class="font-weight-light warning-txt">Código SKU es obligatorio.</div>
+                <div class="position-absolute ">
+                    <span *ngIf="SKUCode?.errors?.['required'] && (SKUCode.touched)" class="font-weight-light warning-txt">Código SKU es obligatorio.</span>
                 </div>
             </div>
         </div>
@@ -69,17 +69,20 @@
             <div class="form-group col-12 col-md-6">
                 <label for="productName" class="form-label">Nombre del Producto:  <span *ngIf="productName.invalid"  class="warning-txt">✱</span></label>
                 <input [class.input-valid]="productName.valid && productName.touched" [class.input-invalid]="productName.touched && productName.invalid"
-                type="text" class="form-control" id="productName" name="product_name" required
+                type="text" class="form-control" id="productName" name="product_name" required placeholder="Ingrese un nombre para el producto"
                     [(ngModel)]="service.productTemplate.nombre_producto" #productName="ngModel">
-                <div *ngIf="productName?.errors?.['required'] && (productName.touched)">
-                    <div class="font-weight-light warning-txt">Nombre del Producto es obligatorio.</div>
+                <div class="position-absolute" *ngIf="productName?.errors?.['required'] && (productName.touched)">
+                    <span  *ngIf="productName?.errors?.['required'] && (productName.touched)" class="font-weight-light warning-txt">Nombre del Producto es obligatorio.</span>
                 </div>
             </div>
 
             <div class="form-group col-12 col-md-6">
                 <label for="productImage" class="form-label">Imagen:</label>
-                <input type="text" class="form-control" id="productImage" name="image"
+                <input type="text" class="form-control" id="productImage" name="image" placeholder="URL de la imagen"
                     [(ngModel)]="service.productTemplate.image" #productImage="ngModel">
+                     <div *ngIf="productName?.errors?.['required'] && (productName.touched)">
+                    
+                </div>
             </div>
         </div>
 
@@ -88,10 +91,10 @@
             <div class="form-group col-sm-12">
                 <label for="description" class="form-label">Descripción:  <span *ngIf="description.invalid"  class="warning-txt">✱</span></label>
                 <textarea [class.input-valid]="description.valid && description.touched" [class.input-invalid]="description.touched && description.invalid"
-                class="form-control" id="description" name="description" rows="3" required
+                class="form-control" id="description" name="description" rows="3" required placeholder="Ingrese un texto descriptivo para el producto"
                 [(ngModel)]="service.productTemplate.descripcion" #description="ngModel"></textarea>
-                <div *ngIf="description?.errors?.['required'] && (description.touched)">
-                    <div class="font-weight-light warning-txt">Descripción es obligatoria.</div>
+                <div class="position-absolute">
+                    <span *ngIf="description?.errors?.['required'] && (description.touched)" class="font-weight-light warning-txt">Descripción es obligatoria.</span>
                 </div>
             </div>
         </div>
@@ -119,13 +122,13 @@
             
         <div class="form-group">
 
-            <button type="submit" [disabled]="!producto_form.valid" *ngIf="!isEditSession" class="btn btn-primary"
+            <button type="submit" [disabled]="!product_form.valid" *ngIf="!isEditSession" class="btn btn-primary"
             id="guardar-producto">Registrar Producto</button>
-            <button type="submit" [disabled]="!producto_form.valid" *ngIf="isEditSession" class="btn btn-primary"
+            <button type="submit" [disabled]="!product_form.valid" *ngIf="isEditSession" class="btn btn-primary"
             id="editar-producto">Editar Producto</button>
             
         </div>
-        <div [hidden]="!producto_form.submitted" class="alert alert-success position-absolute bottom-0 end-0">
+        <div [hidden]="!product_form.submitted" class="alert alert-success position-absolute bottom-0 end-0">
             <h2>Producto {{isEditSession?'Modificado':'Agregado'}} con exito!</h2>
         </div>
     </form>

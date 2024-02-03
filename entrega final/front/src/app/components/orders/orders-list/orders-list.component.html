@@ -11,7 +11,7 @@
             <h6 class="m-0 font-weight-bold text-primary">Ordenes</h6>
             <div>
                 <button routerLink='../' class="btn btn-outline-primary me-2">Volver</button>
-                <button [routerLink]="['new']" class="btn btn-primary">Nueva Orden</button>
+                <button [routerLink]="['form']" class="btn btn-primary">Nueva Orden</button>
             </div>
 
           
@@ -39,7 +39,7 @@
                             <td>
                                 <button class="btn btn-warning" routerLink={{orden.numero_orden_compra}}>Ver</button>
                                 <button class="btn btn-warning"
-                                    [routerLink]="['edit/'+orden.numero_orden_compra]">Editar</button>
+                                    [routerLink]="['form/'+orden.numero_orden_compra]">Editar</button>
                                 <button *ngIf="orden.state!=='cancelado'"
                                     (click)="deleteOrder(orden.numero_orde_compra)"
                                     class="btn btn-danger">Cancelar</button>

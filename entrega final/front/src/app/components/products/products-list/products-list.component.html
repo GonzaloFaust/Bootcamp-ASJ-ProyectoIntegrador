@@ -11,15 +11,67 @@
         <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
             <div class="row">
 
-                <!-- --------filtros--------- -->
-            </div> 
-            <div>
+                <form action="">
+                    <div class="form-group d-flex gap-2 wi">
 
-                <button routerLink='../'   class="btn btn-outline-primary me-2">Volver</button>
-                <button [routerLink]="['new']" class="btn btn-primary">Nuevo Producto</button>
-            </div>
+                        <input class="form-control " type="search" name="search" id="search">
+                        <button class="btn btn-outline-primary  " type="submit">Buscar</button>
+
+                        <select class="form-select" name="category" id="category"></select>
+                        <input class="form-check" type="checkbox" name="showDeleted" id="showDeleted">
+                        <label for="showDeleted" class="form-label small ">Mostrar eliminados</label>
+                    </div>
+                </form>
+            </div> 
+                <div>
+                    
+                    <button routerLink='../'   class="btn btn-outline-primary me-2">Volver</button>
+                    <button [routerLink]="['form']" class="btn btn-primary">Nuevo Producto</button>
+                </div>
+            
         </div>
     </div>
+    
+<!--  -->
+<div class="card-body">
+    <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Razón social</th>
+                    <th>Sitio web / e-mail / teléfono</th>
+                    <th>Contacto</th>
+                    <th>Datos fiscales</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody id="proveedores-container">
+                <ng-container *ngFor="let prod of products" >
+                <!-- <tr *ngIf="prov.active"> -->
+                    <tr>
+                        <td><img src="{{prod.image}}" height="50" width="50"></td>
+                        <td>{{prod.nombre_producto}}</td>
+                        <td>
+                            <a class="d-block "  target="_blank">{{prod.descripcion}}</a>
+                        </td>
+                        
+                       
+                        <td>
+                            
+                            <button class="btn btn-warning" routerLink={{prod.codigoSKU}} >Ver </button>
+                            <button class="btn btn-warning" [routerLink]="['form/'+prod.codigoSKU]" >Editar</button>
+                            <!-- <button (click)="deleteProveedor(prov.codigo)" class="btn btn-danger">Borrar</button> -->
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+        
+    </div>
+</div>
+
+<!--  -->
     <div class="row m-2" >
 
         <div *ngFor="let prod of products" class="col-4">
@@ -34,7 +86,7 @@
                     <p class="card-text">{{prod.descripcion}}</p>
                     <div class="d-flex ">
 
-                        <button class="btn btn-warning me-2 text-light " [routerLink]="['/productos/edit/'+prod.id]" ><fa-icon [icon]="faEdit"></fa-icon></button>
+                        <button class="btn btn-warning me-2 text-light " [routerLink]="['form/'+prod.id]" ><fa-icon [icon]="faEdit"></fa-icon></button>
                         <a [routerLink]="[prod.id]" class="btn btn-primary h-25">Detalle</a>
                     </div>
                 </div>

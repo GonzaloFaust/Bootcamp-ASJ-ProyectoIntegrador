@@ -3,91 +3,108 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item" aria-current="page"><a routerLink="/"
                     routerLinkActive="router-link-active">Home</a></li>
-            <li class="breadcrumb-item"><a routerLink="/ordenes">Ordenes de Compra</a>
+            <li class="breadcrumb-item"><a routerLink="/orders">Ordenes de Compra</a>
             </li>
             <li class="breadcrumb-item" aria-current="page">{{isEditSession?'Editar':'Nuevo'}}</li>
         </ol>
     </nav>
 
+    
+
+</div>
+
+
+
+<div class="container w-75 w-md-75 mb-5 ">
+
     <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
-        <h6 class="m-0 font-weight-bold text-primary">Ordenes de Compra</h6>
+        <h5 class="m-0 font-weight-bold text-primary">{{isEditSession?"Edición":"Registro"}} Orden de Compra</h5>
         <button routerLink='../' class="btn btn-outline-primary">Volver</button>
     </div>
+    <form #order_form="ngForm" (ngSubmit)="createOrden(order_form)">
 
+        <div class="row gy-4 mb-4 ">
 
-    <form #orden_form="ngForm" (ngSubmit)="createOrden(orden_form)">
-        <div class="form-group">
-            <label for="fechaEmision">Fecha de Emisión:</label>
-            <input [disabled]="isEditSession" type="date" class="form-control" id="fechaEmision" name="fecha_emision"
+        
+        <div class="form-group col-12 col-md-6">
+            <label class="form-label" for="issue_date">Fecha de Emisión:</label>
+
+            <input [disabled]="isEditSession" type="date" class="form-control" id="issue_date" name="issue_date"
                 required [(ngModel)]="this.service.orderTemplate.fecha_emision"
-                #fechaEmision="ngModel" [min]="minFechaEmision">
+                #issueDate="ngModel" [min]="minFechaEmision">
     
-            <div *ngIf="fechaEmision.invalid && (fechaEmision.dirty || fechaEmision.touched)">
-                <div *ngIf="fechaEmision?.errors?.['required']" class="text-danger">La Fecha de Emisión es obligatoria.</div>
-                <div *ngIf="fechaEmision?.errors?.['min']" class="text-danger">La fecha debe estar entre 1/1/2000 y la fecha actual.</div>
+            <div class="position-absolute">
+                <span *ngIf="issueDate?.errors?.['required'] && (issueDate.dirty || issueDate.touched)" class="font-weight-light warning-txt">La Fecha de Emisión es obligatoria.</span>
+                <span *ngIf="issueDate?.errors?.['min'] && (issueDate.dirty || issueDate.touched)" class="font-weight-light warning-txt">La fecha debe estar entre 1/1/2000 y la fecha actual.</span>
             </div>
         </div>
     
-        <div class="form-group">
-            <label for="fechaEntregaEsperada">Fecha de Entrega Esperada:</label>
-            <input  type="date" class="form-control" id="fechaEntregaEsperada"
-                name="fecha_entrega_esperada" required [(ngModel)]="this.service.orderTemplate.fecha_entrega_esperada"
-                #fechaEntregaEsperada="ngModel" [min]="this.service.orderTemplate.fecha_emision">
+        <div class="form-group col-12 col-md-6">
+            <label class="form-label" for="Exp_delivery_date">Fecha de Entrega Esperada:</label>
+            <input  type="date" class="form-control" id="Exp_delivery_date"
+                name="exp_delivery_date" required [(ngModel)]="this.service.orderTemplate.fecha_entrega_esperada"
+                #expDeliveryDate="ngModel" [min]="this.service.orderTemplate.fecha_emision">
     
-            <div *ngIf="fechaEntregaEsperada.invalid && (fechaEntregaEsperada.dirty || fechaEntregaEsperada.touched)">
-                <div *ngIf="fechaEntregaEsperada?.errors?.['required']" class="text-danger">La Fecha de Entrega Esperada es obligatoria.</div>
-                <div *ngIf="fechaEntregaEsperada?.errors?.['min']" class="text-danger">La fecha no puede ser menor que la Fecha de Emisión.</div>
+            <div *ngIf="expDeliveryDate.invalid && (expDeliveryDate.dirty || expDeliveryDate.touched)">
+                <div *ngIf="expDeliveryDate?.errors?.['required'] && (expDeliveryDate.dirty || expDeliveryDate.touched)" class="text-danger">La Fecha de Entrega Esperada es obligatoria.</div>
+                <div *ngIf="expDeliveryDate?.errors?.['min'] && (expDeliveryDate.dirty || expDeliveryDate.touched)" class="text-danger">La fecha no puede ser menor que la Fecha de Emisión.</div>
             </div>
         </div>
 
-        <div class="form-group">
-            <label for="codProveedor">Proveedor:</label>
-            <select (change)="getProductosProveedor()" [disabled]="isEditSession" class="form-control" id="codProveedor"
-                name="cod_proveedor" required [(ngModel)]="this.service.orderTemplate.cod_proveedor">
+    </div>
+    <div class="row gy-4 mb-4 ">
+
+        <div class="form-group col-12 col-md-8">
+            <label class="form-label" for="supplier_code">Proveedor:</label>
+            <select (change)="getProductosProveedor()" [disabled]="isEditSession" class="form-select" id="supplier_code"
+                name="supplier_code" required [(ngModel)]="this.service.orderTemplate.cod_proveedor" #supplierCode="ngModel">
                 
                 <option *ngFor="let prov of proveedores" value={{prov.cod_proveedor}}>{{prov.razon_social}}</option>
             </select>
         </div>
 
-        <div class="form-group">
-            <label for="estadoOrden">Estado:</label>
-            <select [disabled]="this.service.orderTemplate.state==='cancelado'"class="form-control" id="state" name="state" required
-                [(ngModel)]="this.service.orderTemplate.state">
+        <div class="form-group col-12 col-md-4">
+            <label class="form-label" for="order_state">Estado:</label>
+            <select [disabled]="this.service.orderTemplate.state==='cancelado'"class="form-select" id="order_state" name="order_state" required
+                [(ngModel)]="this.service.orderTemplate.state" required>
                 <ng-container *ngFor="let est of estadosOrden">
                     <option *ngIf="est!=='cancelado'" value="{{est}}">{{est}}</option>
                 </ng-container>
             </select>
         </div>
+        </div>
 
-        <div class="form-group" id="productosContainer">
+        <div  id="productosContainer" >
             <div *ngIf="!isEditSession">
 
-                <label>Productos:</label>
-                <div class="row producto-agregado">
-                    <div class=" col-md-6">
-                        <label for="codigoSKU1">Producto:</label>
-                        <select #selected_item [disabled]="isEditSession" class="form-control">
-                            <option *ngFor="let item of productosDisponibles" value="{{item.codigo_SKU}}">
+                <hr class="text-muted mt-5"/>
+                <h6 class="mb-3 mt-5 font-weight-bold text-primary">Productos</h6>
+                <div class="row gy-4 mb-4 producto-agregado">
+                    <div class=" form-group col-12 col-md-8">
+                        <label class="form-label" for="selected_item">Producto:</label>
+                        <select #selectedItem="ngModel" [(ngModel)]="this.service.orderTemplate" [disabled]="isEditSession" class="form-select" id="selected_item" [disabled]="supplierCode.invalid!">
+                            <option *ngFor="let item of productosDisponibles" value="{{item.codigo_SKU}}" >
                                 {{item.nombre_producto}}</option>
                         </select>
-                        <div *ngIf="estadoOrden.invalid && (estadoOrden.dirty || estadoOrden.touched)">
-                            <div *ngIf="estadoOrden.errors?.['required']" class="text-danger">El Estado es obligatorio.</div>
+                        <div *ngIf="selectedItem.invalid && (selectedItem.dirty || selectedItem.touched)">
+                            <div *ngIf="selectedItem.errors?.['required']" class="text-danger">Debe elegir un producto.</div>
                         </div>
                     </div>
 
-                    <div class="col-md-5">
-                        <label for="cantidad1">Cantidad:</label>
-                        <input #selected_quantity [disabled]="isEditSession" type="number" class="form-control">
+                    <div class="form-grou´p col-12 col-md-4">
+                        <label class="form-label" for="quantity">Cantidad:</label>
+                        <input #selected_quantity [disabled]="isEditSession" type="number" id="quantity" class="form-control" [disabled]="supplierCode.value=='' && selectedItem.valid">
                     </div>
 
                     <div class="row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-6 mt-4">
                             <button [disabled]="isEditSession" type="button" class="btn btn-success"
-                                (click)="agregarProducto(selected_item.value, selected_quantity.value)"
+                                (click)="agregarProducto(selectedItem.value, selected_quantity.value)"
                                 id="btn-agregar-producto">Agregar Producto</button>
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
             <table class="table table-bordered">
                 <thead>
@@ -112,18 +129,26 @@
                     </tr>
                 </tbody>
             </table>
+            <div class="row mb-5">
+                <div class="col-12 text-muted text-end ">
+                    <p class="mt-5"><span class="warning-txt" style="font-size:1em">✱   </span> El campo es obligatorio</p>
+ 
+            </div>
         </div>
-        <button type="submit" [disabled]="!orden_form.valid || this.service.orderTemplate.productos.length<1" *ngIf="!isEditSession" class="btn btn-primary"
-            id="guardar-orden">Crear Orden de
-            Compra</button>
-        <button type="submit" [disabled]="!orden_form.valid || this.service.orderTemplate.state=='cancelado'"
-            *ngIf="isEditSession" class="btn btn-primary" id="editar-orden">Editar Orden de
-            Compra</button>
-        <button *ngIf="this.service.orderTemplate.state!=='cancelado' && isEditSession" class=" btn btn-danger"
-            (click)="cancelarOrden()">Cancelar Orden</button>
-        <div [hidden]="!orden_form.submitted" class="alert alert-success position-absolute bottom-0 end-0">
-            <h2>Orden {{isEditSession?'Modificada':'Agregada'}} con exito!</h2>
-        </div>
+            <div class="form-group">
+
+                <button type="submit" [disabled]="!order_form.valid || this.service.orderTemplate.productos.length<1" *ngIf="!isEditSession" class="btn btn-primary"
+                id="guardar-orden">Crear Orden de
+                Compra</button>
+                <button type="submit" [disabled]="!order_form.valid || this.service.orderTemplate.state=='cancelado'"
+                *ngIf="isEditSession" class="btn btn-primary" id="editar-orden">Editar Orden de
+                Compra</button>
+                <button *ngIf="this.service.orderTemplate.state!=='cancelado' && isEditSession" class=" btn btn-danger"
+                (click)="cancelarOrden()">Cancelar Orden</button>
+            </div>
+                <div [hidden]="!order_form.submitted" class="alert alert-success position-absolute bottom-0 end-0">
+                    <h2>Orden {{isEditSession?'Modificada':'Agregada'}} con exito!</h2>
+                </div>
     </form>
 
 </div>

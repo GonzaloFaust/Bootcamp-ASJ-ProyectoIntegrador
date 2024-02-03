@@ -11,8 +11,7 @@ export class AsideComponent {
   constructor(private route: Router){}
 
   laRuta(word:string):boolean{
-    console.log()
     
-    return this.route.routerState.snapshot.url.split('/').at(-1)!.includes(word); 
+    return this.route.routerState.snapshot.url.split('/').includes(word);
   }
 }

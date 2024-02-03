@@ -4,7 +4,7 @@
         <ol class="breadcrumb">
             <li class="breadcrumb-item active" aria-current="page"><a routerLink="/"
                     routerLinkActive="router-link-active">Home</a></li>
-            <li class="breadcrumb-item"><a routerLink="/productos">Productos</a>
+            <li class="breadcrumb-item"><a routerLink="/products">Productos</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">Producto: {{producto.id}}</li>
         </ol>
@@ -39,7 +39,7 @@
                             <p class="about">{{producto.descripcion}}</p>
 
                             <div class="container py-3 d-flex gap-2  align-items-baseline">
-                                <button class="btn btn-warning" [routerLink]="['/productos/edit/'+producto.id]" >Editar</button>
+                                <button class="btn btn-warning" [routerLink]="['form/'+producto.id]" >Editar</button>
                                 <button class="btn btn-danger" (click)="deleteProducto()" >Borrar</button>
                             </div>
                         </div>

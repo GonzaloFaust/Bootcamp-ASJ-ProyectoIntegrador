@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ProductsListComponent } from './components/productos/products-list/products-list.component';
+import { ProductsListComponent } from './components/products/products-list/products-list.component';
 import { SuppliersListComponent } from './components/suppliers/suppliers-list/suppliers-list.component';
-import { OrdersListComponent } from './components/ordenes/orders-list/orders-list.component';
+import { OrdersListComponent } from './components/orders/orders-list/orders-list.component';
 import { SuppliersFormComponent } from './components/suppliers/suppliers-form/suppliers-form.component';
 
 @Component({
