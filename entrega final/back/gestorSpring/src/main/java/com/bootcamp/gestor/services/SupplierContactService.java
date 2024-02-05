@@ -26,7 +26,7 @@ public class SupplierContactService {
 	    return supplierContactRepo.findById(id).orElseThrow(()->new EntityNotFoundException("Couldn´t find a Supplier Contact with the id " + id));
 	}
 
-	public List<SupplierContactModel> createSupplierContact(SupplierContactModel supplierContact){
+	public SupplierContactModel createSupplierContact(SupplierContactModel supplierContact){
 	    if(supplierContact.getSupContactName().isEmpty()) throw new IllegalArgumentException("Name of supplier contact is empty");
 	    for(SupplierContactModel s:supplierContactRepo.findAll()) {
 	        if(s.getSupContactName().toLowerCase().equals(supplierContact.getSupContactName().toLowerCase()))
@@ -34,7 +34,7 @@ public class SupplierContactService {
 	    }
 	   // try {            
 	        supplierContactRepo.save(supplierContact);
-	        return supplierContactRepo.findAll();
+	        return supplierContactRepo.findById(supplierContact.getSupContactId()).get();
 	 //   }
 	  //  catch(Exception e) {
 	       // throw new RuntimeException("Error creating supplier contact", e);

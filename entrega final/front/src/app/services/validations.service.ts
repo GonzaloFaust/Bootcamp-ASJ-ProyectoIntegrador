@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { FormControl, NgForm } from '@angular/forms';
 
-import { supplierCategory } from '../models/supplierCategory';
-import { CondicionIva } from '../models/taxCondition';
+import { Field } from '../models/fields';
+import { TaxCondition } from '../models/taxCondition';
 
 
 @Injectable({
@@ -51,11 +51,11 @@ export class ValidationsService {
     return {[control.key]:control.value && control.value!=""}
   }
 
-  private isValidRubro(control:FormControl){
-    return {validRubro: Object.values(supplierCategory).includes(control.value)}
-  }
+  // private isValidRubro(control:FormControl){
+  //   return {validRubro: Object.values(supplierCategory).includes(control.value)}
+  // }
 
-  private isValidCondicionIva(control:FormControl){
-    return {validCondicion: Object.values(CondicionIva).includes(control.value)}
-  }
+  // private isValidCondicionIva(control:FormControl){
+  //   return {validCondicion: Object.values(taxCondition).includes(control.value)}
+  // }
 }

@@ -1,9 +1,10 @@
 package com.bootcamp.gestor.controllers;
 
 import java.util.List;
-import java.util.Optional;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -17,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.gestor.models.ProductModel;
 import com.bootcamp.gestor.services.ProductService;
+
+import jakarta.persistence.EntityExistsException;
+import jakarta.persistence.EntityNotFoundException;
 
 @RestController
 @RequestMapping("/product")
@@ -33,23 +37,56 @@ public class ProductController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<ProductModel>> getProductById(@PathVariable int id ){
+	public ResponseEntity<Object> getProductById(@PathVariable int id ){
+		try {
 		return ResponseEntity.ok(productService.getProductById(id));
+	} catch (EntityNotFoundException e) {
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+	} catch (Exception e) {
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 	}
+}
+	
 	
 	@PostMapping()
-	public ResponseEntity<List<ProductModel>> createProduct( @RequestBody ProductModel product){
+	public ResponseEntity<Object> createProduct( @RequestBody ProductModel product){
+		try {
 		return ResponseEntity.ok(productService.createProduct(product));
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (EntityExistsException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<List<ProductModel>> updateProduct(@PathVariable int id, @RequestBody ProductModel product){
+	public ResponseEntity<String> updateProduct(@PathVariable int id, @RequestBody ProductModel product){
+		try {
 		return ResponseEntity.ok(productService.updateProduct(id, product));
+	} catch (EntityNotFoundException e) {
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+	} catch (IllegalArgumentException e) {
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+	} catch (EntityExistsException e) {
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+	} catch (Exception e) {
+		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 	}
 	
 	
     @DeleteMapping("/{id}")
-    public ResponseEntity<List<ProductModel>> deleteProduct(@PathVariable int id) {
-        return ResponseEntity.ok(productService.deleteProduct(id));
+    public ResponseEntity<String> deleteProduct(@PathVariable int id) {
+        try {
+    	return ResponseEntity.ok(productService.deleteProduct(id));
+        } catch (EntityNotFoundException e) {
+    		return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+    	} catch (Exception e) {
+    		return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    	}
     }
 }

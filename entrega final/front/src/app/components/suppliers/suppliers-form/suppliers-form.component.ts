@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { SuppliersService, blankProvider } from 'src/app/services/suppliers.service';
+import { SuppliersService} from 'src/app/services/suppliers.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
-import { supplierCategory } from 'src/app/models/supplierCategory';
-import { CondicionIva } from 'src/app/models/taxCondition';
+import { Field } from 'src/app/models/fields';
+import { TaxCondition } from 'src/app/models/taxCondition';
 import { LocalizationService } from 'src/app/services/localization.service';
 import { Location } from '@angular/common'
+import { HttpResponse } from '@angular/common/http';
+import { Country } from 'src/app/models/country';
+import { State } from 'src/app/models/state';
+import { TaxConditionsService } from 'src/app/services/tax-conditions.service';
+import { Supplier } from 'src/app/models/supplier';
+import { FieldsService } from 'src/app/services/fields.service';
 
 @Component({
   selector: 'app-suppliers-form',
@@ -14,18 +20,77 @@ import { Location } from '@angular/common'
 })
 export class SuppliersFormComponent implements OnInit {
 
-  idParam = this.route.snapshot.paramMap.get("id-proveedor");
+  idParam = this.route.snapshot.paramMap.get("id-supplier");
 
   isEditSession: boolean = this.idParam !== null;
 
-  rubrosPermitidos = Object.values(supplierCategory)
-  condicionesIVA = Object.values(CondicionIva)
+  // rubrosPermitidos = Object.values(supplierCategory)
+ taxConditions:TaxCondition[]=[]
 
-  constructor(public service: SuppliersService, private route: ActivatedRoute, public geo: LocalizationService, private location:Location, private router:Router) { }
+  supplier:Supplier=
+    {
+      "supId": 0,
+      "supCode": "",
+      "supBussinessName": "",
+      "field": {
+          "fieldId": 0,
+          "fieldName": "",
+          "fieldDetail": "",
+      },
+      "supImage": "",
+      "supWebsite": "",
+      "supEmail": "",
+      "supTelephone": "",
+      "address": {
+          "addrId": 0,
+          "state": {
+              "stateId": 0,
+              "country": {
+                  "counId": 0,
+                  "counName": ""
+              },
+              "stateName": ""
+          },
+          "cityName": "",
+          "addrPostcode": "",
+          "addrStreet": "",
+          "addrNumber": 0,
+          "addrFloor": 0,
+          "addrApartment": ""
+      },
+      "supCuit": "",
+      "taxCond": {
+          "taxId": 0,
+          "taxCondTitle": ""
+      },
+      "supContact": {
+        "supContactId": 0,
+    "supContactName": "",
+    "supContactLastname": "",
+    "supContactTelephone": "",
+    "supContactEmail": "",
+    "supContactRole": "",
+      },
+      "isActive": true,
 
-  countries: any[] = []
-  states: any[] = []
-  cities: any[] = []
+  }
+  
+ 
+
+  constructor(
+    public supplierService: SuppliersService, 
+    private route: ActivatedRoute, 
+    public geo: LocalizationService, 
+    private location:Location, 
+    private router:Router,
+    private taxConditionService:TaxConditionsService,
+    private fieldService: FieldsService
+    ) { }
+
+  countries: Country[] = []
+  states: State[] = []
+  fields: Field[]=[]
+
 
   getBack(){
     this.location.back()
@@ -34,37 +99,55 @@ export class SuppliersFormComponent implements OnInit {
   ngOnInit(): void {
     this.getCountries()
     if (this.isEditSession) {
-      let prov = this.service.getSupplierById(this.idParam!);
-      this.service.supplierTemplate.direccion.pais = prov.direccion.pais;
-      this.getStates()
-      this.service.supplierTemplate.direccion.provincia = prov.direccion.provincia;
-      this.getCities()
-      this.service.supplierTemplate.direccion.localidad = prov.direccion.localidad;
+      this.supplierService.getSupplierById(this.idParam!).subscribe(
+        {
+          next: (data: HttpResponse<Supplier>) => { this.supplier = data.body! },
+          error: (error: any) => console.log("error aca guachin")
+        }
+      )
+    //   this.supplierService.supplierTemplate.direccion.pais = prov.direccion.pais;
+    //   // this.getStates()
+    //   this.supplierService.supplierTemplate.direccion.provincia = prov.direccion.provincia;
+
 
 
     }
-    else this.service.supplierTemplate = structuredClone(blankProvider)
+    else{
+      this.taxConditionService.getTaxConditions().subscribe({
+        next:(data:HttpResponse<TaxCondition[]>)=>{this.taxConditions=data.body!} ,
+        error: (error:any)=> console.log(error)
+      })
+      //   this.supplierService.supplierTemplate = structuredClone(blankProvider)
+      this.fieldService.getFields().subscribe({
+        next:(data:HttpResponse<Field[]>)=>{this.fields=data.body!} ,
+        error: (error:any)=> console.log(error)
+      })
+      //   this.supplierService.supplierTemplate = structuredClone(blankProvider)
+    } 
   }
 
   createProveedor(form:NgForm) {
-    if (this.isEditSession) this.service.editSupplier(this.idParam!)
-    else this.service.addSupplier()
-    setTimeout(()=>this.router.navigateByUrl('/proveedores'),1000)
+    // if (this.isEditSession) this.supplierService.editSupplier(this.idParam!)
+    // else this.supplierService.addSupplier()
+    //setTimeout(()=>this.router.navigateByUrl('/suppliers'),1000)
   }
 
   getCountries() {
     this.states = [];
 
-    this.geo.getCountries().subscribe((data: any) => this.countries = data)
+    this.geo.getCountries().subscribe({
+      next:(data:HttpResponse<Country[]>)=>{this.countries=data.body!} ,
+      error: (error)=> console.error(error)
+    })
   }
 
-  getStates() {
-    this.cities = [];
-    this.geo.getStates().subscribe((data: any) => this.states = data.filter((s: any) => s.country_name === this.service.supplierTemplate.direccion.pais))
+  getStates(countryId: number) {
+
+    this.geo.getStates(countryId).subscribe({
+      next:(data:HttpResponse<State[]>)=>{this.states=data.body!} ,
+      error: (error)=> console.error(error)
+    })
   }
 
-  getCities() {
-    this.geo.getCities().subscribe((data: any) => this.cities = data.filter((c: any) => c.country_name === this.service.supplierTemplate.direccion.pais && c.state_name === this.service.supplierTemplate.direccion.provincia))
-  }
 }
 

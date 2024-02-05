@@ -1,28 +1,27 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import '../../assets/data/geo/countries.json'
+import { Observable } from 'rxjs';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class LocalizationService {
-  private COUNTRIES:string= '../../assets/data/geo/countries.json'
-  private STATES:string= '../../assets/data/geo/states.json'
-  private CITIES:string= '../../assets/data/geo/cities.json'
+  private COUNTRIES:string= 'country'
+  private STATES:string= 'state'
+  private API_URL="http://localhost:8080/"
   
   constructor(private http: HttpClient){}
 
-  getCountries(){
-  return this.http.get(this.COUNTRIES)
+  getCountries():Observable<any>{
+  return this.http.get(this.API_URL+this.COUNTRIES,{observe:"response"})
 
   }
 
-  getStates(){
-    return this.http.get(this.STATES)
+  getStates(countryId:number):Observable<any>{
+    return this.http.get(this.API_URL+this.STATES+'/by?country='+countryId, {observe:"response"})
   }
 
-  getCities(){
-    return this.http.get(this.CITIES)
-  }
+
 }

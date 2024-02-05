@@ -1,5 +1,4 @@
-export enum CondicionIva{
-    Autonomo="Autónomo",
-    Exento= "Exento",
-    ResponsableInscripto="Responsable Inscripto"
+export interface TaxCondition{
+    "taxId": number,
+    "taxCondTitle": String
 }

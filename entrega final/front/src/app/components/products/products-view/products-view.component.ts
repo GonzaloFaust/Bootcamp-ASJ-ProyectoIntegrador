@@ -1,9 +1,10 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/models/product';
 import { Supplier } from 'src/app/models/supplier';
-import { ProductsService, blankProduct } from 'src/app/services/products.service';
-import {SuppliersService, blankProvider } from 'src/app/services/suppliers.service';
+import { ProductsService } from 'src/app/services/products.service';
+import {SuppliersService} from 'src/app/services/suppliers.service';
 @Component({
   selector: 'app-products-view',
   templateUrl: './products-view.component.html',
@@ -12,17 +13,22 @@ import {SuppliersService, blankProvider } from 'src/app/services/suppliers.servi
 export class ProductsViewComponent implements OnInit{
 
   constructor(public productoService: ProductsService, public provServ: SuppliersService, private ruta: ActivatedRoute, private router:Router) { }
-   producto:Product=blankProduct;
+   product:Product | undefined;
    razonSocial:string="";
 
   ngOnInit(): void {
-    this.producto = this.productoService.getProductById(this.ruta.snapshot.paramMap.get("id-producto")!)
-    this.razonSocial = this.provServ.getSupplierById(this.producto.cod_proveedor)?.razon_social
+    this.productoService.getProductById(this.ruta.snapshot.paramMap.get("id-producto")!).subscribe(
+      {
+        next:(data:HttpResponse<Product>)=>{this.product=data.body!} ,
+          error: (error:any)=> console.log(error)
+      }
+    )
+    // this.razonSocial = this.provServ.getSupplierById(this.producto.cod_proveedor)?.razon_social
   }
   
   deleteProducto() {
-    this.productoService.deleteProduct()
-    setTimeout(()=>this.router.navigateByUrl('/proveedores'),1000)
+    // this.productoService.deleteProduct()
+    setTimeout(()=>this.router.navigateByUrl('/suppliers'),1000)
   }
 }
 

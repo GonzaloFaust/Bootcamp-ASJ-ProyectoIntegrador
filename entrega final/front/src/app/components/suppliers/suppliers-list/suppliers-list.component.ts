@@ -1,4 +1,6 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit} from '@angular/core';
+import { Supplier } from 'src/app/models/supplier';
 import { SuppliersService } from 'src/app/services/suppliers.service';
 
 @Component({
@@ -7,8 +9,8 @@ import { SuppliersService } from 'src/app/services/suppliers.service';
   styleUrls: ['./suppliers-list.component.css']
 })
 export class SuppliersListComponent implements OnInit{
-  proveedores:any[]=[]
-  constructor( public service:SuppliersService){
+  suppliersList:Supplier[]=[]
+  constructor( public supplierService:SuppliersService){
 
   }
   ngOnInit(): void {
@@ -16,11 +18,16 @@ export class SuppliersListComponent implements OnInit{
   }
 
   deleteProveedor(id:string){
-    this.service.deleteSupplier(id)
+    this.supplierService.deleteSupplier(id)
     this.updateLista();
   }
   
   private updateLista(){
-    this.proveedores = this.service.getSuppliers()
+   this.supplierService.getSuppliers().subscribe(
+      {
+        next:(data:HttpResponse<Supplier[]>)=>{this.suppliersList=data.body!} ,
+         error: (error:any)=> console.log(error)
+      }
+    )
   }
 }

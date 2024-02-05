@@ -29,24 +29,23 @@
                         </tr>
                     </thead>
                     <tbody id="proveedores-container">
-                        <ng-container *ngFor="let prov of proveedores" >
-                        <tr *ngIf="prov.active">
+                        <ng-container *ngFor="let sup of suppliersList" >
+                        <tr *ngIf="sup.isActive">
 
-                                <td>{{prov.codigo}}</td>
-                                <td>{{prov.razon_social}}</td>
+                                <td>{{sup.supCode}}</td>
+                                <td>{{sup.supBussinessName}}</td>
                                 <td>
-                                    <a class="d-block " [href]="['http://'+prov.sitio_web]" target="_blank">{{prov.sitio_web}}</a>
-                                    <a class="d-block " [href]="['mailto: '+prov.email]">{{prov.email}}</a>
-                                    <span class="d-block">{{prov.telefono}}</span>
+                                    <a class="d-block " [href]="['http://'+sup.supWebsite]" target="_blank">{{sup.supWebsite}}</a>
+                                    <a class="d-block " [href]="['mailto: '+sup.supEmail]">{{sup.supEmail}}</a>
+                                    <span class="d-block">{{sup.supTelephone}}</span>
                                 </td>
                                 
-                                <td>{{prov.datos_contacto.nombre}}, {{prov.datos_contacto.apellido}}</td>
-                                <td>{{prov.datos_fiscales.cuit}}, ({{prov.datos_fiscales.condicion_iva}})</td>
+                                <td>{{sup.supContact.supContactName}}, {{sup.supContact.supContactLastname}}</td>
+                                <td>{{sup.supCuit}}, ({{sup.taxCond.taxCondTitle}})</td>
                                 <td>
-                                    
-                                    <button class="btn btn-warning" routerLink={{prov.codigo}} >Ver </button>
-                                    <button class="btn btn-warning" [routerLink]="['form/'+prov.codigo]" >Editar</button>
-                                    <button (click)="deleteProveedor(prov.codigo)" class="btn btn-danger">Borrar</button>
+                                      <button class="btn btn-warning" routerLink={{sup.supId}} >Ver </button>
+                                    <button class="btn btn-warning" [routerLink]="['form/'+sup.supId]" >Editar</button>
+                                    <button (click)="deleteProveedor(sup.supCode)" class="btn btn-danger">Borrar</button>
                                 </td>
                             </tr>
                         </ng-container>

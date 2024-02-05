@@ -34,7 +34,7 @@ public class AddressService {
 	}
 	
 	
-	public List<AddressModel> createAddress(AddressModel address) {
+	public AddressModel createAddress(AddressModel address) {
 //		try {
 		if (address.getAddrStreet().isEmpty() || address.getCityName().isEmpty() || address.getAddrPostcode().isEmpty())
 			throw new IllegalArgumentException("There's missing data");
@@ -45,11 +45,11 @@ public class AddressService {
 				if (a.getAddrStreet().toLowerCase().equals(address.getAddrStreet().toLowerCase())
 						&& a.getAddrPostcode().toLowerCase().equals(address.getAddrPostcode().toLowerCase() )
 						&& a.getCityName().toLowerCase().equals(address.getCityName().toLowerCase() )
-						&& a.getAddrApartment().toLowerCase().equals(address.getAddrApartment().toLowerCase() )
-						&& a.getAddrFloor() == address.getAddrFloor()
+						//&& a.getAddrApartment().toLowerCase().equals(address.getAddrApartment().toLowerCase() )
+						//&& a.getAddrFloor() == address.getAddrFloor()
 						&& a.getState().getStateId()==state.getStateId()
 						)
-					throw new EntityExistsException("The value already exists");
+					throw new EntityExistsException("This address already exists");
 			}
 			address.setState(state);
 		} else {
@@ -57,7 +57,7 @@ public class AddressService {
 		}
 
 			addressRepo.save(address);
-			return addressRepo.findAll();
+			return addressRepo.findById(address.getAddrId()).get();
 
 //		} catch (
 //

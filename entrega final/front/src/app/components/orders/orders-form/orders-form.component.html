@@ -59,7 +59,7 @@
             <select (change)="getProductosProveedor()" [disabled]="isEditSession" class="form-select" id="supplier_code"
                 name="supplier_code" required [(ngModel)]="this.service.orderTemplate.cod_proveedor" #supplierCode="ngModel">
                 
-                <option *ngFor="let prov of proveedores" value={{prov.cod_proveedor}}>{{prov.razon_social}}</option>
+                <!-- <option *ngFor="let prov of proveedores" value={{prov.cod_proveedor}}>{{prov.razon_social}}</option> -->
             </select>
         </div>
 

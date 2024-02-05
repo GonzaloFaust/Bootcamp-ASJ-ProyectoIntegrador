@@ -17,7 +17,9 @@
                         <input class="form-control " type="search" name="search" id="search">
                         <button class="btn btn-outline-primary  " type="submit">Buscar</button>
 
-                        <select class="form-select" name="category" id="category"></select>
+                        <select class="form-select" name="category" id="category">
+                            <option *ngFor="let category of  categories" value="{{category}}">{{category.catName}}</option>
+                        </select>
                         <input class="form-check" type="checkbox" name="showDeleted" id="showDeleted">
                         <label for="showDeleted" class="form-label small ">Mostrar eliminados</label>
                     </div>
@@ -31,7 +33,7 @@
             
         </div>
     </div>
-    
+   
 <!--  -->
 <div class="card-body">
     <div class="table-responsive">
@@ -50,17 +52,17 @@
                 <ng-container *ngFor="let prod of products" >
                 <!-- <tr *ngIf="prov.active"> -->
                     <tr>
-                        <td><img src="{{prod.image}}" height="50" width="50"></td>
-                        <td>{{prod.nombre_producto}}</td>
+                        <td><img src="{{prod.prodImage}}" height="50" width="50"></td>
+                        <td>{{prod.prodName}}</td>
                         <td>
-                            <a class="d-block "  target="_blank">{{prod.descripcion}}</a>
+                            <a class="d-block "  target="_blank">{{prod.prodDescription}}</a>
                         </td>
                         
                        
                         <td>
                             
-                            <button class="btn btn-warning" routerLink={{prod.codigoSKU}} >Ver </button>
-                            <button class="btn btn-warning" [routerLink]="['form/'+prod.codigoSKU]" >Editar</button>
+                            <!-- <button class="btn btn-warning" routerLink={{prod.codigoSKU}} >Ver </button>
+                            <button class="btn btn-warning" [routerLink]="['form/'+prod.codigoSKU]" >Editar</button> -->
                             <!-- <button (click)="deleteProveedor(prov.codigo)" class="btn btn-danger">Borrar</button> -->
                         </td>
                     </tr>
@@ -77,17 +79,17 @@
         <div *ngFor="let prod of products" class="col-4">
             <div class="card d-flex flex-row mb-3" style="height:13em;overflow:hidden;">
                 <div class="card-img ">
-                    <img class=" img-fluid w-100 h-100 object-fit-cover " src={{prod.image}}
-                        alt='{{prod.descripcion}} product photo'>
+                    <img class=" img-fluid w-100 h-100 object-fit-cover " src={{prod.prodImage}}
+                        alt='{{prod.prodDescription}} product photo'>
                 </div>
                 <div class="card-body">
-                    <sub>{{prod.cod_proveedor}}</sub>
-                    <h5 class="card-title">{{prod.nombre_producto}} - <sub>{{prod.codigo_SKU}}</sub></h5>
-                    <p class="card-text">{{prod.descripcion}}</p>
+                    <sub>{{prod.supplier.supCode}}</sub>
+                    <h5 class="card-title">{{prod.prodName}} - <sub>{{prod.prodSku}}</sub></h5>
+                    <p class="card-text">{{prod.prodDescription}}</p>
                     <div class="d-flex ">
 
-                        <button class="btn btn-warning me-2 text-light " [routerLink]="['form/'+prod.id]" ><fa-icon [icon]="faEdit"></fa-icon></button>
-                        <a [routerLink]="[prod.id]" class="btn btn-primary h-25">Detalle</a>
+                        <!-- <button class="btn btn-warning me-2 text-light " [routerLink]="['form/'+prod.id]" ><fa-icon [icon]="faEdit"></fa-icon></button> -->
+                        <!-- <a [routerLink]="[prod.id]" class="btn btn-primary h-25">Detalle</a> -->
                     </div>
                 </div>
             </div>

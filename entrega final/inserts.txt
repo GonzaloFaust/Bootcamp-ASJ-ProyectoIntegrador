@@ -1,3 +1,21 @@
+INSERT INTO tax_conditions (tax_cond_title)
+VALUES
+('IVA Responsable Inscripto'),
+('IVA Responsable no Inscripto'),
+('IVA no Responsable'),
+('IVA Sujeto Exento'),
+('Consumidor Final'),
+('Responsable Monotributo'),
+('Sujeto no Categorizado'),
+('Proveedor del Exterior'),
+('Cliente del Exterior'),
+('IVA Liberado – Ley Nº 19.640'),
+('IVA Responsable Inscripto – Agente de Percepcion'),
+('Pequeño Contribuyente Eventual'),
+('Monotributista Social'),
+('Pequeño Contribuyente Eventual Social');
+
+
 INSERT INTO order_status (ordst_name)
 VALUES 
 ('Creada'),
@@ -20,7 +38,7 @@ VALUES
 ('Paraguay');
 
 
-INSERT INTO states (coun_id, state_name)
+INSERT INTO states (country_id, state_name)
 VALUES 
 (1, 'Buenos Aires'),
 (1, 'Córdoba'),
@@ -51,3 +69,15 @@ VALUES
 (5, 'Central'),
 (5, 'Itapúa'),
 (5, 'Caaguaz');
+
+INSERT INTO fields (FIELD_NAME, FIELD_DETAIL) 
+VALUES 
+('Alimentos', 'Especializado en la distribución de alimentos frescos y enlatados'),
+('Construcción', 'Ofrece una amplia gama de materiales para la construcción'),
+('Tecnología', 'Distribuidor de dispositivos tecnológicos y accesorios'),
+('Ropa', 'Distribuidor de ropa de moda y accesorios'),
+('Muebles', 'Especializado en muebles de oficina y para el hogar');
+
+INSERT INTO suppliers_contacts (sup_contact_telephone, sup_contact_name,sup_contact_lastname,sup_contact_role, sup_contact_email)
+VALUES
+('23333333311','chicho','serna','esquilador de ovejas','chicho@hotmail');

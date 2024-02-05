@@ -5,7 +5,7 @@
                 routerLinkActive="router-link-active">Home</a></li>
         <li class="breadcrumb-item"><a routerLink="/suppliers">Proveedores</a>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">Proveedor: {{supplier.razon_social}}</li>
+        <li class="breadcrumb-item active" aria-current="page">Proveedor: {{supplier?.supBussinessName}}</li>
     </ol>
 </nav>
        
@@ -17,38 +17,37 @@
         <div class="card">
           <div class="card-body">
       
-            <p class="card-text"><strong>Código:</strong> {{ supplier.codigo }}</p>
-            <p class="card-text"><strong>Razón Social:</strong> {{ supplier.razon_social }}</p>
-            <p class="card-text"><strong>Rubro:</strong> {{ supplier.rubro }}</p>
-            <p class="card-text"><strong>Sitio Web:</strong> {{ supplier.sitio_web }}</p>
-            <p class="card-text"><strong>Email:</strong> {{ supplier.email }}</p>
-            <p class="card-text"><strong>Teléfono:</strong> {{ supplier.telefono }}</p>
+            <p class="card-text"><strong>Código:</strong> {{ supplier?.supCode}}</p>
+            <p class="card-text"><strong>Razón Social:</strong> {{ supplier?.supBussinessName }}</p>
+            <p class="card-text"><strong>Rubro:</strong> {{ supplier?.field?.fieldName}}</p>
+            <p class="card-text"><strong>Sitio Web:</strong> {{ supplier?.supWebsite }}</p>
+            <p class="card-text"><strong>Email:</strong> {{ supplier?.supEmail }}</p>
+            <p class="card-text"><strong>Teléfono:</strong> {{ supplier?.supTelephone}}</p>
       
             <div>
               <h4 class="mt-4">Dirección</h4>
-              <p><strong>Calle y Número:</strong> {{ supplier.direccion.calle_numero }}</p>
-              <p><strong>CP:</strong> {{ supplier.direccion.cp }}</p>
-              <p><strong>Localidad:</strong> {{ supplier.direccion.localidad }}</p>
-              <p><strong>Provincia:</strong> {{ supplier.direccion.provincia }}</p>
-              <p><strong>País:</strong> {{ supplier.direccion.pais }}</p>
+              <p><strong>Calle y Número:</strong> {{ supplier?.address?.addrStreet+', ' + supplier?.address?.addrNumber }}</p>
+              <p><strong>CP:</strong> {{ supplier?.address?.addrPostcode }}</p>
+              <p><strong>Localidad:</strong> {{ supplier?.address?.cityName }}</p>
+              <p><strong>Provincia:</strong> {{ supplier?.address?.state?.stateName}}</p>
+              <p><strong>País:</strong> {{ supplier?.address?.state?.country?.counName }}</p>
             </div>
       
             <div>
               <h4 class="mt-4">Datos Fiscales</h4>
-              <p><strong>CUIT:</strong> {{ supplier.datos_fiscales.cuit }}</p>
-              <p><strong>Condición IVA:</strong> {{ supplier.datos_fiscales.condicion_iva }}</p>
-            </div>
+              <p><strong>CUIT:</strong> {{ supplier?.supCuit }}</p>
+              <p><strong>Condición IVA:</strong> {{ supplier?.taxCond?.taxCondTitle}}
       
             <div>
               <h4 class="mt-4">Datos de Contacto</h4>
-              <p><strong>Nombre:</strong> {{ supplier.datos_contacto.nombre }}</p>
-              <p><strong>Apellido:</strong> {{ supplier.datos_contacto.apellido }}</p>
-              <p><strong>Teléfono de Contacto:</strong> {{ supplier.datos_contacto.telefono_contacto }}</p>
-              <p><strong>Email de Contacto:</strong> {{ supplier.datos_contacto.email_contacto }}</p>
-              <p><strong>Rol:</strong> {{ supplier.datos_contacto.rol }}</p>
+              <p><strong>Nombre:</strong> {{ supplier?.supContact?.supContactName }}</p>
+              <p><strong>Apellido:</strong> {{ supplier?.supContact?.supContactLastname }}</p>
+              <p><strong>Teléfono de Contacto:</strong> {{ supplier?.supContact?.supContactTelephone }}</p>
+              <p><strong>Email de Contacto:</strong> {{ supplier?.supContact?.supContactEmail }}</p>
+              <p><strong>Rol:</strong> {{ supplier?.supContact?.supContactRole }}</p>
             </div>
-            <p class="mt-4"><strong>Activo:</strong> {{ supplier.active ? 'Sí' : 'No' }}</p>
-            <button class="btn btn-warning" [routerLink]="['../edit/'+supplier.codigo]">Editar</button>
+            <p class="mt-4"><strong>Activo:</strong> {{ supplier?.isActive ? 'Sí' : 'No' }}</p>
+            <button class="btn btn-warning" [routerLink]="['../edit/'+supplier?.supCode]">Editar</button>
           </div>
         </div>
 </div>

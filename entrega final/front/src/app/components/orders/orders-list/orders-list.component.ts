@@ -25,7 +25,7 @@ export class OrdersListComponent {
 
   private updateLista() {
     this.ordenes = this.service.getOrders();
-    this.ordenes = this.ordenes.map(o => { return { ...o, nombre_proveedor: this.servProv.getSupplierById(o.cod_proveedor).razon_social } })
+    // this.ordenes = this.ordenes.map(o => { return { ...o, nombre_proveedor: this.servProv.getSupplierById(o.cod_proveedor).razon_social } })
     
   }
 }

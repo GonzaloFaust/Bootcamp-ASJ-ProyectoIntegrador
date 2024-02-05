@@ -1,5 +1,6 @@
 package com.bootcamp.gestor.models;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -40,14 +41,14 @@ public class PurchaseOrderModel {
 	@NotNull(message = "Order creation date can't be null")
     @NotBlank(message="Order creation date can't be empty")
 	@Column(name = "ord_issue_date", nullable = false)
-	private Date ordIssueDate;
+	private LocalDateTime ordIssueDate;
 
 	@NotNull(message = "Expect delivery date can't be null")
     @NotBlank(message="Expect delivery date can't be empty")
 	@Column(name = "ord_exp_deliver_date", nullable = false)
 	private Date ordExpDeliverDate;
 
-	@OneToMany(mappedBy = "purchase_order_detail_list", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<PurchaseOrderProductModel> orderDetail;
 	
 	@NotNull(message = "Address id can't be null")
@@ -80,7 +81,7 @@ public class PurchaseOrderModel {
 
 	}
 
-	public PurchaseOrderModel(OrderStatusModel ordStatus, Date ordIssueDate, Date ordExpDeliverDate,
+	public PurchaseOrderModel(OrderStatusModel ordStatus, LocalDateTime ordIssueDate, Date ordExpDeliverDate,
 			AddressModel address, SupplierModel supplier) {
 
 		this.ordStatus = ordStatus;
@@ -93,6 +94,26 @@ public class PurchaseOrderModel {
 
 	public OrderStatusModel getOrdStatus() {
 		return ordStatus;
+	}
+
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	public void setOrdIssueDate(LocalDateTime ordIssueDate) {
+		this.ordIssueDate = ordIssueDate;
+	}
+
+	public void setAddress(AddressModel address) {
+		this.address = address;
+	}
+
+	public void setSupplier(SupplierModel supplier) {
+		this.supplier = supplier;
 	}
 
 	public void setOrdStatus(OrderStatusModel ordStatus) {
@@ -111,7 +132,7 @@ public class PurchaseOrderModel {
 		return ordId;
 	}
 
-	public Date getOrdIssueDate() {
+	public LocalDateTime getOrdIssueDate() {
 		return ordIssueDate;
 	}
 

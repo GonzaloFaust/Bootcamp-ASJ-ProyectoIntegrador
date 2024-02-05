@@ -1,10 +1,10 @@
-import { supplierCategory } from "../../app/models/supplierCategory";
+import { Field } from "../../app/models/fields";
 
 const supplier = [
     {
         codigo: "PROV0",
         razon_social: "Proveedor ABC S.A.",
-        rubro: "Electrónica" as supplierCategory,
+        // rubro: "Electrónica" as Field,
         sitio_web: "http://www.proveedorabc.com",
         email: "info@proveedorabc.com",
         telefono: "123-456-789",

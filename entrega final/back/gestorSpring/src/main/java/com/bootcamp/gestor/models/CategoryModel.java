@@ -2,7 +2,9 @@ package com.bootcamp.gestor.models;
 
 
 import java.util.Date;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -57,16 +60,16 @@ public class CategoryModel {
     @JoinColumn(name = "field_id")
     private FieldModel field;
     
-    
+    @OneToMany(mappedBy="category", cascade=CascadeType.ALL)
+    private List<ProductModel> products; 
 
 	public CategoryModel() {
 		super();
 		
 	}
 
-	public CategoryModel(Integer catId, String catName, String catDetail, FieldModel field) {
-		super();
-		this.catId = catId;
+	public CategoryModel( String catName, String catDetail, FieldModel field) {
+
 		this.catName = catName;
 		this.catDetail = catDetail;
 		this.field= field;

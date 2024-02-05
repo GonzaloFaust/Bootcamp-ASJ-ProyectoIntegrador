@@ -1,13 +1,17 @@
-import { productCategory } from "./productCategory"
+import { Category } from "./category"
+import { Supplier } from "./supplier"
 
 export interface Product {
-    id:string,
-    cod_proveedor: string,
-    codigo_SKU: string,
-    categoria: productCategory,
-    image:string,
-    nombre_producto: string,
-    descripcion: string,
-    precio: number
-  
-  }
+
+  "prodId": number,
+  "prodSku": string,
+  "supplier": Supplier,
+  "category": Category,
+  "prodImage": string,
+  "prodName": string,
+  "prodDescription": string,
+  "prodPrice": number,
+  "createdAt": string,
+  "updatedAt": string,
+  "prodAvailable": boolean
+}

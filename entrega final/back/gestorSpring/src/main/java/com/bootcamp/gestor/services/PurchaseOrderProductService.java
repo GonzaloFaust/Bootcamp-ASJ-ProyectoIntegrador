@@ -15,9 +15,9 @@ public class PurchaseOrderProductService {
 	@Autowired
 	PurchaseOrderProductRepository purchOrdProdRepo;
 	
-//	public List<PurchaseOrderProductModel> getAddresses(){
-//	    return null;
-//	}
+	public List<PurchaseOrderProductModel> getAddresses(){
+	    return null;
+	}
 
 	public Optional<PurchaseOrderProductModel> getPurchaseOrderProductById(int id) {
 		return null;

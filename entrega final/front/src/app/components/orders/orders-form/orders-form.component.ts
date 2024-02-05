@@ -36,7 +36,7 @@ export class OrdersFormComponent implements OnInit {
   idParam = this.route.snapshot.paramMap.get("id-orden");
   isEditSession: boolean = this.idParam !== null;
 
-  proveedores = this.provService.getSuppliers().map(prov => { return { cod_proveedor: prov.codigo, razon_social: prov.razon_social } })
+  // proveedores = this.provService.getSuppliers().map(prov => { return { cod_proveedor: prov.codigo, razon_social: prov.razon_social } })
 
   productosAgregados: any[] = []
 
@@ -64,9 +64,9 @@ export class OrdersFormComponent implements OnInit {
   createOrden(form: NgForm) {
     if (this.isEditSession) this.service.editOrder(this.idParam!)
     else this.service.addOrder()
-  for(let prov of this.proveedores){
-    localStorage.removeItem(prov.cod_proveedor)
-  }
+  // for(let prov of this.proveedores){
+  //   localStorage.removeItem(prov.cod_proveedor)
+  // }
     setTimeout(()=>this.router.navigateByUrl('/ordenes'),1000)
   }
   cancelarOrden(){
@@ -85,7 +85,7 @@ export class OrdersFormComponent implements OnInit {
   }
 
   getProductosProveedor() {
-    this.productosDisponibles = this.productService.getProductsbySupplier(this.service.orderTemplate.cod_proveedor)
+    // this.productosDisponibles = this.productService.getProductsbySupplier(this.service.orderTemplate.cod_proveedor)
     this.productosAgregados= JSON.parse(localStorage.getItem(this.service.orderTemplate.cod_proveedor)!) || []
     this.cleanTemplate();
     this.updateProductosAgregados()
@@ -97,15 +97,15 @@ export class OrdersFormComponent implements OnInit {
   }
 
   private updateProductosAgregados() {
-    this.productosAgregados = this.service.orderTemplate.productos
-      .map( p => {
-        return {
-          ...this.productService.getProductById(this.service.orderTemplate.cod_proveedor + p.codigo_SKU),
-          cantidad: p.cantidad
-        }
-      })
-      .filter( p => p.codigo_SKU!=="" && p.cantidad>0)
-      localStorage.setItem(this.service.orderTemplate.cod_proveedor,JSON.stringify(this.productosAgregados))
+    // this.productosAgregados = this.service.orderTemplate.productos
+    //   .map( p => {
+    //     return {
+    //       ...this.productService.getProductById(this.service.orderTemplate.cod_proveedor + p.codigo_SKU),
+    //       cantidad: p.cantidad
+    //     }
+    //   })
+    //   .filter( p => p.codigo_SKU!=="" && p.cantidad>0)
+    //   localStorage.setItem(this.service.orderTemplate.cod_proveedor,JSON.stringify(this.productosAgregados))
   }
 
   deleteProduct(id:string){

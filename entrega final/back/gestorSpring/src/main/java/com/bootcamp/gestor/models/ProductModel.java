@@ -1,16 +1,19 @@
 package com.bootcamp.gestor.models;
 
-import java.time.LocalDateTime;
-
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -26,19 +29,20 @@ public class ProductModel {
     @NotNull(message="Product SKU can't be null")
 //    @NotBlank(message="Product SKU can't be empty")
     @Size(max = 13)
-    @Column(name = "prod_sku", nullable = false, length = 13, unique=true)
+    @Column(name = "prod_sku", length = 13, unique=true)
     private String prodSku;
 
-    @JdbcTypeCode(SqlTypes.JSON)
     @NotNull(message="Supplier id can't be null")
 //    @NotBlank(message="Supplier id can't be empty")
-    @Column(name = "sup_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "sup_id")
     private SupplierModel supplier;
 
-    @JdbcTypeCode(SqlTypes.JSON)
+
     @NotNull(message="Category id can't be null")
 //    @NotBlank(message="Category id can't be empty")
-    @Column(name = "cat_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "cat_id")
     private CategoryModel category;
 
    
@@ -62,15 +66,17 @@ public class ProductModel {
     @Column(name = "prod_price", nullable = false)
     private Float prodPrice;
 
-    @NotNull(message="Creation date can't be null")
-//    @NotBlank(message="Creation date can't be empty")
-    @Column(name = "created_at", nullable = false)
-    private LocalDateTime createdAt;
+ // @NotNull(message="Creation date can't be null")
+//  @NotBlank(message="Creation date can't be empty")
+	@Column(name = "created_at")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdAt;
 
-    @NotNull(message="Updating date can't be null")
-//    @NotBlank(message="Updating date can't be empty")
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+//  @NotNull(message="Updating date can't be null")
+//  @NotBlank(message="Updating date can't be empty")
+	@Column(name = "updated_at")
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updatedAt;
 
     @NotNull(message="Product availability can't be null")
 //    @NotBlank(message="Product availability can't be empty")
@@ -83,11 +89,10 @@ public class ProductModel {
 	}
 	
 
-	public ProductModel(Integer prodId, @NotNull @Size(max = 13) String prodSku, @NotNull SupplierModel supplier,
-			@NotNull CategoryModel category, String prodImage, @NotNull @Size(max = 30) String prodName,
-			@NotNull String prodDescription, @NotNull Float prodPrice) {
-		super();
-		this.prodId = prodId;
+	public ProductModel( String prodSku,  SupplierModel supplier,
+			 CategoryModel category, String prodImage,  String prodName,
+			 String prodDescription, Float prodPrice) {
+		
 		this.prodSku = prodSku;
 		this.supplier = supplier;
 		this.category = category;
@@ -96,14 +101,13 @@ public class ProductModel {
 		this.prodDescription = prodDescription;
 		this.prodPrice = prodPrice;
 		this.prodAvailable =true;
-		this.createdAt = LocalDateTime.now();
-		this.updatedAt = LocalDateTime.now();
+		
 	}
-	public CategoryModel getCatId() {
+	public CategoryModel getCategory() {
 		return this.category;
 	}
 
-	public void setCatId(CategoryModel category) {
+	public void setCategory(CategoryModel category) {
 		this.category = category;
 	}
 
@@ -139,13 +143,8 @@ public class ProductModel {
 		this.prodPrice = prodPrice;
 	}
 
-	public LocalDateTime getUpdatedAt() {
-		return updatedAt;
-	}
+	
 
-	public void setUpdatedAt() {
-		this.updatedAt = LocalDateTime.now();
-	}
 
 	public Integer getProdId() {
 		return prodId;
@@ -155,13 +154,14 @@ public class ProductModel {
 		return prodSku;
 	}
 
-	public SupplierModel getSupId() {
+	public SupplierModel getSupplier() {
 		return supplier;
 	}
 
-	public LocalDateTime getCreatedAt() {
-		return createdAt;
+	public void setSupplier(SupplierModel supplier) {
+		this.supplier= supplier;
 	}
+
 	
 	public void setProdAvailable(Boolean prodAvailable) {
 		this.prodAvailable=prodAvailable;
@@ -169,6 +169,24 @@ public class ProductModel {
 	
 	public Boolean getProdAvailable() {
 		return this.prodAvailable;
+	}
+	
+	public Date getCreatedAt() {
+		return createdAt;
+	}
+	public Date getUpdatedAt() {
+		return updatedAt;
+	}
+	
+	@PrePersist
+	protected void onCreate() {
+		createdAt = new Date();
+		updatedAt = new Date();
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		updatedAt = new Date();
 	}
 
 }

@@ -6,7 +6,7 @@
                     routerLinkActive="router-link-active">Home</a></li>
             <li class="breadcrumb-item"><a routerLink="/products">Productos</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Producto: {{producto.id}}</li>
+            <li class="breadcrumb-item active" aria-current="page">Producto: {{product?.prodId}}</li>
         </ol>
     </nav>
 
@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-md-6">
                         <div class="images p-3">
-                            <div class="text-center"> <img id="main-image" src={{producto.image}} width="100%" /> </div>
+                            <div class="text-center"> <img id="main-image" src={{product?.prodImage}} width="100%" /> </div>
                             
                         </div>
                     </div>
@@ -31,15 +31,15 @@
                                 
                             </div>
                             <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand">{{razonSocial}}</span>
-                                <h5 class="text-uppercase">{{producto.nombre_producto}}</h5>
-                                <div class="price d-flex flex-row align-items-center"> <span class="act-price">{{producto.precio | currency:'USD'}}</span>
+                                <h5 class="text-uppercase">{{product?.prodName}}</h5>
+                                <div class="price d-flex flex-row align-items-center"> <span class="act-price">{{product?.prodPrice| currency:'USD'}}</span>
                                    
                                 </div>
                             </div>
-                            <p class="about">{{producto.descripcion}}</p>
+                            <p class="about">{{product?.prodDescription}}</p>
 
                             <div class="container py-3 d-flex gap-2  align-items-baseline">
-                                <button class="btn btn-warning" [routerLink]="['form/'+producto.id]" >Editar</button>
+                                <button class="btn btn-warning" [routerLink]="['form/'+product?.prodId]" >Editar</button>
                                 <button class="btn btn-danger" (click)="deleteProducto()" >Borrar</button>
                             </div>
                         </div>

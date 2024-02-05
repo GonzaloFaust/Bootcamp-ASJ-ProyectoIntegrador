@@ -29,7 +29,7 @@ public class CategoryService {
 
 	public CategoryModel getCategoryById(int id) {
 		return categoryRepo.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("Couldn´t find a Tax Condition with the id " + id));
+				.orElseThrow(() -> new EntityNotFoundException("Couldn´t find a category with the id " + id));
 	}
 
 	public List<CategoryModel> createCategory(CategoryModel category) {

@@ -45,8 +45,9 @@ public class AddressController {
 			return new ResponseEntity<>(e.getMessage(),HttpStatus.NOT_FOUND);
 		}
 		catch(NumberFormatException e) {
-			
 			return new ResponseEntity<>("Expected a number",HttpStatus.BAD_REQUEST);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 //	@GetMapping("/{id}")
