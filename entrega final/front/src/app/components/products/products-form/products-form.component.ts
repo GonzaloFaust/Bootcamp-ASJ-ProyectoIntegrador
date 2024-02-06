@@ -22,71 +22,18 @@ export class ProductsFormComponent implements OnInit {
 
   suppliers: Supplier[] = []
   categories: Category[] = [];
-  product: Product = {
-    "prodId": 0,
+  product: any = {
     "prodSku": "",
     "supplier": {
-      "supId": 0,
-      "supCode": "",
-      "supBussinessName": "",
-      "field": {
-        "fieldId": 0,
-        "fieldName": "",
-        "fieldDetail": ""
-      },
-      "supImage": "",
-      "supWebsite": "",
-      "supEmail": "",
-      "supTelephone": "",
-      "address": {
-        "addrId": 0,
-        "state": {
-          "stateId": 0,
-          "country": {
-            "counId": 0,
-            "counName": ""
-          },
-          "stateName": ""
-        },
-        "cityName": "",
-        "addrPostcode": "",
-        "addrStreet": "",
-        "addrNumber": 0,
-        "addrFloor": 0,
-        "addrApartment": ""
-      },
-      "supCuit": "",
-      "taxCond": {
-        "taxId": 0,
-        "taxCondTitle": ""
-      },
-      "supContact": {
-        "supContactId": 0,
-        "supContactName": "",
-        "supContactLastname": "",
-        "supContactTelephone": "",
-        "supContactEmail": "",
-        "supContactRole": "",
-      },
-      "isActive": true
+      "supId": '',
     },
     "category": {
-      "catId": 0,
-      "catName": "",
-      "catDetail": "",
-      "field": {
-        "fieldId": 0,
-        "fieldName": "",
-        "fieldDetail": ""
+      "catId": ''
       },
-
-    },
     "prodImage": "",
     "prodName": "",
     "prodDescription": "",
-    "prodPrice": 0,
-    "createdAt": "",
-    "updatedAt": "",
+    "prodPrice": '',
     "prodAvailable": true
   };
 

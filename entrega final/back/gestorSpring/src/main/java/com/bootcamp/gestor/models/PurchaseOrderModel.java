@@ -1,8 +1,10 @@
 package com.bootcamp.gestor.models;
 
-import java.time.LocalDateTime;
+
 import java.util.Date;
 import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -19,7 +21,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.validation.constraints.NotBlank;
+
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -38,13 +40,15 @@ public class PurchaseOrderModel {
 	@JoinColumn(name = "ord_status_id")
 	private OrderStatusModel ordStatus;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@NotNull(message = "Order creation date can't be null")
-    @NotBlank(message="Order creation date can't be empty")
+   // @NotBlank(message="Order creation date can't be empty")
 	@Column(name = "ord_issue_date", nullable = false)
-	private LocalDateTime ordIssueDate;
+	private Date ordIssueDate;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
 	@NotNull(message = "Expect delivery date can't be null")
-    @NotBlank(message="Expect delivery date can't be empty")
+   // @NotBlank(message="Expect delivery date can't be empty")
 	@Column(name = "ord_exp_deliver_date", nullable = false)
 	private Date ordExpDeliverDate;
 
@@ -67,7 +71,7 @@ public class PurchaseOrderModel {
 	// @NotNull(message="Creation date can't be null")
 //  @NotBlank(message="Creation date can't be empty")
 	@Column(name = "created_at")
-	@Temporal(TemporalType.TIMESTAMP)
+	//@Temporal(TemporalType.TIMESTAMP)
 	private Date createdAt;
 
 //  @NotNull(message="Updating date can't be null")
@@ -81,15 +85,15 @@ public class PurchaseOrderModel {
 
 	}
 
-	public PurchaseOrderModel(OrderStatusModel ordStatus, LocalDateTime ordIssueDate, Date ordExpDeliverDate,
-			AddressModel address, SupplierModel supplier) {
-
-		this.ordStatus = ordStatus;
-		this.ordIssueDate = ordIssueDate;
-		this.ordExpDeliverDate = ordExpDeliverDate;
-		this.address = address;
-		this.supplier = supplier;
-	}
+//	public PurchaseOrderModel(OrderStatusModel ordStatus, Date ordIssueDate, Date ordExpDeliverDate,
+//			AddressModel address, SupplierModel supplier) {
+//
+//		this.ordStatus = ordStatus;
+//		this.ordIssueDate = ordIssueDate;
+//		this.ordExpDeliverDate = ordExpDeliverDate;
+//		this.address = address;
+//		this.supplier = supplier;
+//	}
 	// -----getters y settres
 
 	public OrderStatusModel getOrdStatus() {
@@ -104,7 +108,7 @@ public class PurchaseOrderModel {
 		return updatedAt;
 	}
 
-	public void setOrdIssueDate(LocalDateTime ordIssueDate) {
+	public void setOrdIssueDate(Date ordIssueDate) {
 		this.ordIssueDate = ordIssueDate;
 	}
 
@@ -132,7 +136,7 @@ public class PurchaseOrderModel {
 		return ordId;
 	}
 
-	public LocalDateTime getOrdIssueDate() {
+	public Date getOrdIssueDate() {
 		return ordIssueDate;
 	}
 

@@ -2,7 +2,6 @@ import { HttpResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Product } from 'src/app/models/product';
-import { Supplier } from 'src/app/models/supplier';
 import { ProductsService } from 'src/app/services/products.service';
 import {SuppliersService} from 'src/app/services/suppliers.service';
 @Component({

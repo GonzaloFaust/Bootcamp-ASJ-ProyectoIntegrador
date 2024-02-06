@@ -9,17 +9,18 @@
     </nav>
     <div class="card shadow mb-4">
         <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
-            <div class="row">
+            <div class="row d-flex flex-row ">
 
                 <form action="">
-                    <div class="form-group d-flex gap-2 wi">
+                    <div class="form-group  d-flex gap-2 ">
 
-                        <input class="form-control " type="search" name="search" id="search">
-                        <button class="btn btn-outline-primary  " type="submit">Buscar</button>
-
-                        <select class="form-select" name="category" id="category">
+                        <input class="form-control form-control-sm " type="text" name="search" id="search">
+                        <button class="btn btn-outline-primary btn-sm" type="submit">Buscar</button>
+                   
+                        <select class="form-select form-select-sm" name="category" id="category">
                             <option *ngFor="let category of  categories" value="{{category}}">{{category.catName}}</option>
                         </select>
+                    
                         <input class="form-check" type="checkbox" name="showDeleted" id="showDeleted">
                         <label for="showDeleted" class="form-label small ">Mostrar eliminados</label>
                     </div>
@@ -40,29 +41,34 @@
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
                 <tr>
-                    <th>Código</th>
-                    <th>Razón social</th>
-                    <th>Sitio web / e-mail / teléfono</th>
-                    <th>Contacto</th>
-                    <th>Datos fiscales</th>
+                    <th>Imagen</th>
+                    <th>SKU y Nombre</th>
+                    <th>Categoría</th>
+                    <th>Precio</th>
+                    <th>Proveedor</th>
                     <th>Acciones</th>
                 </tr>
             </thead>
             <tbody id="proveedores-container">
                 <ng-container *ngFor="let prod of products" >
-                <!-- <tr *ngIf="prov.active"> -->
-                    <tr>
-                        <td><img src="{{prod.prodImage}}" height="50" width="50"></td>
-                        <td>{{prod.prodName}}</td>
+                 <tr *ngIf="prod.prodAvailable"> 
+                    <!-- <tr> -->
+                        <td style="width:60px"><img src="{{prod.prodImage}}" height="50" width="50"></td>
+                        <td>{{prod.prodSku}}<br><strong>{{prod.prodName}}</strong></td>
                         <td>
-                            <a class="d-block "  target="_blank">{{prod.prodDescription}}</a>
+                            {{prod.category.catName}}
                         </td>
-                        
-                       
                         <td>
+                            {{prod.prodPrice | currency}}
+                        </td>
+                        <td>
+                            {{prod.supplier.supBussinessName}}
+                        </td>
+                        <td class="d-flex gap-2">
                             
-                            <!-- <button class="btn btn-warning" routerLink={{prod.codigoSKU}} >Ver </button>
-                            <button class="btn btn-warning" [routerLink]="['form/'+prod.codigoSKU]" >Editar</button> -->
+                            <button class="btn btn-info   text-light" routerLink={{prod.prodId}} ><fa-icon [icon]="faView"></fa-icon> </button>
+                            <button class="btn btn-warning text-light " [routerLink]="['form/'+prod.prodId]" ><fa-icon [icon]="faEdit"></fa-icon></button>
+                            <button class="btn btn-danger text-light " (click)="deleteProduct(prod.prodId)" ><fa-icon [icon]="faDelete"></fa-icon></button>
                             <!-- <button (click)="deleteProveedor(prov.codigo)" class="btn btn-danger">Borrar</button> -->
                         </td>
                     </tr>
@@ -74,7 +80,7 @@
 </div>
 
 <!--  -->
-    <div class="row m-2" >
+    <!-- <div class="row m-2" >
 
         <div *ngFor="let prod of products" class="col-4">
             <div class="card d-flex flex-row mb-3" style="height:13em;overflow:hidden;">
@@ -88,11 +94,11 @@
                     <p class="card-text">{{prod.prodDescription}}</p>
                     <div class="d-flex ">
 
-                        <!-- <button class="btn btn-warning me-2 text-light " [routerLink]="['form/'+prod.id]" ><fa-icon [icon]="faEdit"></fa-icon></button> -->
-                        <!-- <a [routerLink]="[prod.id]" class="btn btn-primary h-25">Detalle</a> -->
+                         <button class="btn btn-warning me-2 text-light " [routerLink]="['form/'+prod.id]" ><fa-icon [icon]="faEdit"></fa-icon></button> 
+                         <a [routerLink]="[prod.id]" class="btn btn-primary h-25">Detalle</a> 
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</div> -->

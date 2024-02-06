@@ -14,80 +14,12 @@ export class ProductsService {
 
 
   private API_URL="http://localhost:8080/product"
-  productsData: Array<Product> = []
 
-  // product: Product = {
-  //   "prodId": 0,
-  //   "prodSku": "",
-  //   "supplier": {
-  //     "supId": 0,
-  //     "supCode": "",
-  //     "supBussinessName": "",
-  //     "field": {
-  //       "fieldId": 0,
-  //       "fieldName": "",
-  //       "fieldDetail": ""
-  //     },
-  //     "supImage": "",
-  //     "supWebsite": "",
-  //     "supEmail": "",
-  //     "supTelephone": "",
-  //     "address": {
-  //       "addrId": 0,
-  //       "state": {
-  //         "stateId": 0,
-  //         "country": {
-  //           "counId": 0,
-  //           "counName": ""
-  //         },
-  //         "stateName": ""
-  //       },
-  //       "cityName": "",
-  //       "addrPostcode": "",
-  //       "addrStreet": "",
-  //       "addrNumber": 0,
-  //       "addrFloor": 0,
-  //       "addrApartment": ""
-  //     },
-  //     "supCuit": "",
-  //     "taxCond": {
-  //       "taxId": 0,
-  //       "taxCondTitle": ""
-  //     },
-  //     "supContact": {
-  //       "supContactId": 0,
-  //       "supContactName": "",
-  //       "supContactLastname": "",
-  //       "supContactTelephone": "",
-  //       "supContactEmail": "",
-  //       "supContactRole": "",
-  //     },
-  //     "isActive": true,
-  //   },
-  //   "category": {
-  //     "catId": 0,
-  //     "catName": "",
-  //     "catDetail": "",
-  //     "field": {
-  //       "fieldId": 0,
-  //       "fieldName": "",
-  //       "fieldDetail": ""
-  //     },
-  //   },
-  //   "prodImage": "",
-  //   "prodName": "",
-  //   "prodDescription": "",
-  //   "prodPrice": 0,
-  //   "createdAt": "",
-  //   "updatedAt": "",
-  //   "prodAvailable": true
-  // };
 
   constructor(private http:HttpClient,
     private categoryService:CategoriesService
     ) 
   {
-    this.productsData = JSON.parse(localStorage.getItem('products')!) || [...product]
   }
 
   public getProducts():Observable<any>
@@ -105,10 +37,9 @@ export class ProductsService {
 
   public addProduct(product:Product):Observable<any> {
        const headers = { 'Content-Type': 'application/json' };
-    console.log("esto vino: ", product)
     return this.http.post<Product>(this.API_URL,product,{headers });
     // this.productTemplate = structuredClone(blankProduct)
-    this.saveData()
+    //this.saveData()
   }
 
   // public editProduct(id: string):void {
@@ -117,15 +48,12 @@ export class ProductsService {
   //   this.productTemplate = structuredClone(blankProduct)
   // }
 
-  // public deleteProduct() :void{
-  //   this.productsData = this.productsData.filter(p => p.id !== this.productTemplate.id)
-  //   this.saveData()
-  // }
-
-
-  private saveData(){
-    localStorage.setItem('products',JSON.stringify(this.productsData))
+  public deleteProduct(id:number) :Observable<any>{
+    return this.http.delete<Product>(this.API_URL+'/'+id)
   }
+
+
+  
 }
 
 

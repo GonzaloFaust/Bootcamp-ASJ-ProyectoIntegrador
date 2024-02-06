@@ -18,202 +18,241 @@
         <button (click)="getBack()" class="btn btn-outline-primary">Volver</button>
     </div>
 
-   <form #proveedor_form="ngForm" (ngSubmit)="createProveedor(proveedor_form)">
+    <form #proveedor_form="ngForm" (ngSubmit)="createProveedor(proveedor_form)">
 
 
-    <div class="row gy-4 mb-4">
-        <div class="form-group col-12 col-md-6">
-            <label class="form-label" for="bussiness_name">Razón Social: <span *ngIf="bussinessName.invalid"  class="warning-txt">✱</span></label>
-            <input [class.input-valid]="bussinessName.valid && bussinessName.touched"
-            [class.input-invalid]="bussinessName.touched && bussinessName.invalid" [(ngModel)]="supplier.supBussinessName" type="text" class="form-control"
-                id="bussiness_name" name="bussiness_name" required #bussinessName="ngModel">
-            <div class="position-absolute">
-                <span *ngIf="bussinessName?.errors?.['required'] && (bussinessName.dirty || bussinessName.touched)" class="font-weight-light  warning-txt">Razón Social es obligatoria.</span>
-            </div>
-        </div>
-
-        
+        <div class="row gy-4 mb-4">
             <div class="form-group col-12 col-md-6">
-                <label class="form-label" for="field">Rubro: <span *ngIf="field.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="bussiness_name">Razón Social: <span *ngIf="bussinessName.invalid"
+                        class="warning-txt">✱</span></label>
+                <input [class.input-valid]="bussinessName.valid && bussinessName.touched"
+                    [class.input-invalid]="bussinessName.touched && bussinessName.invalid"
+                    [(ngModel)]="supplier.supBussinessName" type="text" class="form-control" id="bussiness_name"
+                    name="bussiness_name" required #bussinessName="ngModel">
+                <div class="position-absolute">
+                    <span *ngIf="bussinessName?.errors?.['required'] && (bussinessName.dirty || bussinessName.touched)"
+                        class="font-weight-light  warning-txt">Razón Social es obligatoria.</span>
+                </div>
+            </div>
+
+
+            <div class="form-group col-12 col-md-6">
+                <label class="form-label" for="field">Rubro: <span *ngIf="field.invalid"
+                        class="warning-txt">✱</span></label>
                 <select [class.input-valid]="field.valid && field.touched"
-                [class.input-invalid]="field.touched && field.invalid" [(ngModel)]="supplier.field.fieldId" class="form-select" id="field" name="field"
-                    required #field="ngModel">
+                    [class.input-invalid]="field.touched && field.invalid" [(ngModel)]="supplier.field.fieldId"
+                    class="form-select" id="field" name="field" required #field="ngModel">
                     <option *ngFor="let field of fields" [value]="field.fieldId">{{field.fieldName}}</option>
                 </select>
                 <div class="position-absolute">
-                    <span *ngIf="field?.errors?.['required'] && (field.dirty || field.touched)" class="font-weight-light warning-txt">Rubro es obligatorio.</span>
+                    <span *ngIf="field?.errors?.['required'] && (field.dirty || field.touched)"
+                        class="font-weight-light warning-txt">Rubro es obligatorio.</span>
                 </div>
             </div>
-        
 
-    </div>
 
-    <div class="row gy-4 mb-4">
-        <div class="form-group col-md-6">
-            <label class="form-label" for="cuit">CUIT: <span *ngIf="cuit.invalid"  class="warning-txt">✱</span></label>
-            <input [class.input-valid]="cuit.valid && cuit.touched"
-            [class.input-invalid]="cuit.touched && cuit.invalid" [disabled]="isEditSession" #cuit="ngModel" [(ngModel)]="supplier.supCuit" type="text" class="form-control"
-                   id="cuit" name="cuit"
-                   pattern="^[0-9]{11}$"  
-                   maxLength="11"
-                   required>
-            <div class="position-absolute">
-                <span *ngIf="cuit?.errors?.['required'] && (cuit.dirty || cuit.touched)" class="font-weight-light warning-txt">CUIT es obligatorio.</span>
-                <span *ngIf="cuit?.errors?.['pattern'] && (cuit.dirty || cuit.touched)" class="font-weight-light warning-txt">CUIT debe contener solo 11 dígitos numéricos.</span>
-            </div>
-        </div>
-        <div class="form-group col-md-6">
-            <label class="form-label" for="tax_condition">Condición IVA: <span *ngIf="taxCondition.invalid"  class="warning-txt">✱</span></label>
-            <select [class.input-valid]="taxCondition.valid && taxCondition.touched"
-            [class.input-invalid]="taxCondition.touched && taxCondition.invalid" [(ngModel)]="supplier.taxCond.taxId" class="form-select"
-                id="tax_condition" name="tax_condition" required #taxCondition="ngModel">
-                <option *ngFor="let cond of taxConditions" [value]="cond.taxId">{{cond.taxCondTitle}}</option>
-            </select>
-            <div class="position-absolute">
-                <span *ngIf="taxCondition?.errors?.['required'] && (taxCondition.dirty || taxCondition.touched)" class="font-weight-light warning-txt">Condición IVA es obligatoria.</span>
-            </div>
         </div>
 
-    </div>
+        <div class="row gy-4 mb-4">
+            <div class="form-group col-md-6">
+                <label class="form-label" for="cuit">CUIT: <span *ngIf="cuit.invalid"
+                        class="warning-txt">✱</span></label>
+                <input [class.input-valid]="cuit.valid && cuit.touched"
+                    [class.input-invalid]="cuit.touched && cuit.invalid" [disabled]="isEditSession" #cuit="ngModel"
+                    [(ngModel)]="supplier.supCuit" type="text" class="form-control" id="cuit" name="cuit"
+                    pattern="^[0-9]{11}$" maxLength="11" required>
+                <div class="position-absolute">
+                    <span *ngIf="cuit?.errors?.['required'] && (cuit.dirty || cuit.touched)"
+                        class="font-weight-light warning-txt">CUIT es obligatorio.</span>
+                    <span *ngIf="cuit?.errors?.['pattern'] && (cuit.dirty || cuit.touched)"
+                        class="font-weight-light warning-txt">CUIT debe contener solo 11 dígitos numéricos.</span>
+                </div>
+            </div>
+            <div class="form-group col-md-6">
+                <label class="form-label" for="tax_condition">Condición IVA: <span *ngIf="taxCondition.invalid"
+                        class="warning-txt">✱</span></label>
+                <select [class.input-valid]="taxCondition.valid && taxCondition.touched"
+                    [class.input-invalid]="taxCondition.touched && taxCondition.invalid"
+                    [(ngModel)]="supplier.taxCond.taxId" class="form-select" id="tax_condition" name="tax_condition"
+                    required #taxCondition="ngModel">
+                    <option *ngFor="let cond of taxConditions" [value]="cond.taxId">{{cond.taxCondTitle}}</option>
+                </select>
+                <div class="position-absolute">
+                    <span *ngIf="taxCondition?.errors?.['required'] && (taxCondition.dirty || taxCondition.touched)"
+                        class="font-weight-light warning-txt">Condición IVA es obligatoria.</span>
+                </div>
+            </div>
 
-    <div class="row gy-4 mb-4">
-        
+        </div>
+
+        <div class="row gy-4 mb-4">
+
             <div class="form-group col-12 col-md-6 col-lg-4">
-                <label class="form-label" for="website">Sitio web: <span *ngIf="website.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="website">Sitio web: <span *ngIf="website.invalid"
+                        class="warning-txt">✱</span></label>
                 <input [class.input-valid]="website.valid && website.touched"
-                [class.input-invalid]="website.touched && website.invalid" [(ngModel)]="supplier.supWebsite" type="url" class="form-control" id="website"
-                    name="website" #website="ngModel" required>
-                    <div class="position-absolute">
-                        <span *ngIf="website?.errors?.['required'] && (website.dirty || website.touched)" class="font-weight-light warning-txt">Condición IVA es obligatoria.</span>
-                    </div>
+                    [class.input-invalid]="website.touched && website.invalid" [(ngModel)]="supplier.supWebsite"
+                    type="url" class="form-control"  pattern="https?://.+" id="website" name="website" #website="ngModel" required>
+                <div class="position-absolute">
+                    <span *ngIf="website?.errors?.['required'] && (website.dirty || website.touched)"
+                        class="font-weight-light warning-txt">Sitio web es obligatorio.</span>
+                    <span *ngIf="website?.errors?.['pattern'] && (website.dirty || website.touched)"
+                        class="font-weight-light warning-txt">Ingrese un sitio web válido</span>
+                </div>
             </div>
 
             <div class="form-group col-12 col-md-6 col-lg-4">
-                <label class="form-label" for="email">Email: <span *ngIf="email.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="email">Email: <span *ngIf="email.invalid"
+                        class="warning-txt">✱</span></label>
                 <input [class.input-valid]="email.valid && email.touched"
-                [class.input-invalid]="email.touched && email.invalid" [(ngModel)]="supplier.supEmail" type="email" class="form-control" id="email"
-                    name="email" required #email="ngModel">
-                <div class="position-absolute" >
-                    <span *ngIf="email?.errors?.['required'] && (email.dirty || email.touched)" class="font-weight-light warning-txt">Email es obligatorio.</span>
+                    [class.input-invalid]="email.touched && email.invalid" [(ngModel)]="supplier.supEmail" type="email"
+                    class="form-control" id="email" name="email" required #email="ngModel">
+                <div class="position-absolute">
+                    <span *ngIf="email?.errors?.['required'] && (email.dirty || email.touched)"
+                        class="font-weight-light warning-txt">Email es obligatorio.</span>
                 </div>
             </div>
 
             <div class="form-group col-12 col-md-12 col-lg-4">
-                <label class="form-label" for="telephone">Teléfono: <span *ngIf="telephone.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="telephone">Teléfono: <span *ngIf="telephone.invalid"
+                        class="warning-txt">✱</span></label>
                 <input [class.input-valid]="telephone.valid && telephone.touched"
-                [class.input-invalid]="telephone.touched && telephone.invalid" [(ngModel)]="supplier.supTelephone" type="number" class="form-control"
-                       id="telephone" name="telephone"
-                       pattern="^[0-9]{1,11}$" 
-                       maxlength="11"
-                       #telephone="ngModel">
-                <div class="position-absolute" >
-                    <span *ngIf="telephone?.errors?.['required'] && (telephone.dirty || telephone.touched)" class="font-weight-light warning-txt">Teléfono es obligatorio.</span>
-                    <span *ngIf="telephone?.errors?.['pattern'] && (telephone.dirty || telephone.touched)" class="font-weight-light warning-txt">Teléfono debe contener solo dígitos numéricos y tener hasta 11 dígitos.</span>
+                    [class.input-invalid]="telephone.touched && telephone.invalid" [(ngModel)]="supplier.supTelephone"
+                    type="number" class="form-control" id="telephone" name="telephone" pattern="^[0-9]{11}$"
+                    minlength="9" maxlength="11" #telephone="ngModel" required>
+                <div class="position-absolute">
+                    <span *ngIf="telephone?.errors?.['required'] && (telephone.dirty || telephone.touched)"
+                        class="font-weight-light warning-txt">Teléfono es obligatorio.</span>
+                    <span *ngIf="telephone?.errors?.['pattern'] && (telephone.dirty || telephone.touched)"
+                        class="font-weight-light warning-txt">Sólo números y
+                        entre 9 y 11 dígitos.</span>
                 </div>
             </div>
-    </div>
-    <hr class="text-muted mt-5"/>
-    <h6 class="mb-3 mt-5 font-weight-bold text-primary">Dirección</h6>
+        </div>
+        <hr class="text-muted mt-5" />
+        <h6 class="mb-3 mt-5 font-weight-bold text-primary">Dirección</h6>
 
-    <div class="row gy-4 mb-4">
+        <div class="row gy-4 mb-4">
             <div class="form-group col-12 col-md-12 col-lg-6">
-                <label class="form-label" for="street_name">Calle: <span *ngIf="streetName.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="street_name">Calle: <span *ngIf="streetName.invalid"
+                        class="warning-txt">✱</span></label>
                 <input [class.input-valid]="streetName.valid && streetName.touched"
-                [class.input-invalid]="streetName.touched && streetName.invalid" [(ngModel)]="supplier.address.addrStreet" type="text" class="form-control"
-                    id="street_name" name="street_name" required #streetName="ngModel">
+                    [class.input-invalid]="streetName.touched && streetName.invalid"
+                    [(ngModel)]="supplier.address.addrStreet" type="text" class="form-control" id="street_name"
+                    name="street_name" required #streetName="ngModel">
                 <div class="position-absolute">
-                    <span *ngIf="streetName?.errors?.['required'] && (streetName.dirty || streetName.touched)" class="font-weight-light warning-txt">Nombre de calle es obligatorio.</span>
+                    <span *ngIf="streetName?.errors?.['required'] && (streetName.dirty || streetName.touched)"
+                        class="font-weight-light warning-txt">Nombre de calle es obligatorio.</span>
                 </div>
             </div>
 
             <div class="form-group col-12 col-md-6 col-lg-2">
-                <label class="form-label" for="street_number">Altura: <span *ngIf="streetNumber.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="street_number">Altura: <span *ngIf="streetNumber.invalid"
+                        class="warning-txt">✱</span></label>
                 <input [class.input-valid]="streetNumber.valid && streetNumber.touched"
-                [class.input-invalid]="streetNumber.touched && streetNumber.invalid" [(ngModel)]="supplier.address.addrNumber" type="text" class="form-control"
-                    id="street_number" name="street_number" required #streetNumber="ngModel">
+                    [class.input-invalid]="streetNumber.touched && streetNumber.invalid"
+                    [(ngModel)]="supplier.address.addrNumber" type="text" class="form-control" id="street_number"
+                    name="street_number" required #streetNumber="ngModel">
                 <div class="position-absolute">
-                    <span  *ngIf="streetNumber?.errors?.['required'] && (streetNumber.dirty || streetNumber.touched)" class="font-weight-light warning-txt">Altura de calle es obligatorio.</span>
+                    <span *ngIf="streetNumber?.errors?.['required'] && (streetNumber.dirty || streetNumber.touched)"
+                        class="font-weight-light warning-txt">Altura de calle es obligatorio.</span>
                 </div>
             </div>
 
             <div class="form-group col-12 col-md-6 col-lg-4">
-                <label class="form-label" for="post_code">Código Postal: <span *ngIf="postCode.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="post_code">Código Postal: <span *ngIf="postCode.invalid"
+                        class="warning-txt">✱</span></label>
                 <input [class.input-valid]="postCode.valid && postCode.touched"
-                [class.input-invalid]="postCode.touched && postCode.invalid" [(ngModel)]="supplier.address.addrPostcode" type="text" class="form-control" id="post_code"
+                    [class.input-invalid]="postCode.touched && postCode.invalid"
+                    [(ngModel)]="supplier.address.addrPostcode" type="text" class="form-control" id="post_code"
                     name="post_code" required #postCode="ngModel">
                 <div class="position-absolute">
-                    <span *ngIf="postCode?.errors?.['required'] && (postCode.dirty || postCode.touched)" class="font-weight-light warning-txt">Código Postal es obligatorio.</span>
+                    <span *ngIf="postCode?.errors?.['required'] && (postCode.dirty || postCode.touched)"
+                        class="font-weight-light warning-txt">Código Postal es obligatorio.</span>
                 </div>
             </div>
 
         </div>
 
         <div class="row gy-4 mb-4">
-        
+
 
 
             <div class="form-group col-12 col-md-6 col-lg-4">
-                <label class="form-label" for="country">País: <span *ngIf="country.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="country">País: <span *ngIf="country.invalid"
+                        class="warning-txt">✱</span></label>
                 <select [class.input-valid]="country.valid && country.touched"
-                [class.input-invalid]="country.touched && country.invalid" (change)="getStates(1)" [(ngModel)]="supplier.address.state.country.counId"
-                    class="form-select" id="country" name="country" required #country="ngModel">
+                    [class.input-invalid]="country.touched && country.invalid" (change)="getStates(1)"
+                    [(ngModel)]="supplier.address.state.country.counId" class="form-select" id="country" name="country"
+                    required #country="ngModel">
                     <option *ngFor="let c of countries" [value]="c.counId">{{c.counName}}</option>
                 </select>
                 <div class="position-absolute ">
-                    <span *ngIf="country?.errors?.['required'] && (country.dirty || country.touched)" class="font-weight-light warning-txt">País es obligatorio.</span>
+                    <span *ngIf="country?.errors?.['required'] && (country.dirty || country.touched)"
+                        class="font-weight-light warning-txt">País es obligatorio.</span>
                 </div>
             </div>
-      
+
             <div class="form-group col-12 col-md-6 col-lg-4">
-                <label class="form-label" for="state">Provincia: <span *ngIf="state.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="state">Provincia: <span *ngIf="state.invalid"
+                        class="warning-txt">✱</span></label>
                 <select [class.input-valid]="state.valid && state.touched"
-                [class.input-invalid]="state.touched && state.invalid" [(ngModel)]="supplier.address.state.stateId"
+                    [class.input-invalid]="state.touched && state.invalid" [(ngModel)]="supplier.address.state.stateId"
                     class="form-select" id="state" name="state" required #state="ngModel">
                     <option *ngFor="let s of states" [value]="s.stateId">{{s.stateName}}</option>
                 </select>
                 <div class="position-absolute ">
-                    <span *ngIf="state?.errors?.['required'] && (state.dirty || state.touched)" class="font-weight-light warning-txt">Provincia es obligatoria.</span>
+                    <span *ngIf="state?.errors?.['required'] && (state.dirty || state.touched)"
+                        class="font-weight-light warning-txt">Provincia es obligatoria.</span>
                 </div>
             </div>
-       
 
-       
+
+
             <div class="form-group col-12 col-md-12 col-lg-4">
-                <label class="form-label" for="city">Ciudad: <span *ngIf="city.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="city">Ciudad: <span *ngIf="city.invalid"
+                        class="warning-txt">✱</span></label>
                 <input [class.input-valid]="city.valid && city.touched"
-                [class.input-invalid]="city.touched && city.invalid" [(ngModel)]="supplier.address.cityName" class="form-control" id="city"
-                    name="city" required #city="ngModel">
-                    
+                    [class.input-invalid]="city.touched && city.invalid" [(ngModel)]="supplier.address.cityName"
+                    class="form-control" id="city" name="city" required #city="ngModel">
+
 
                 <div class="position-absolute ">
-                    <span *ngIf="city?.errors?.['required'] && (city.dirty || city.touched)" class="font-weight-light warning-txt">Ciudad es obligatoria.</span>
+                    <span *ngIf="city?.errors?.['required'] && (city.dirty || city.touched)"
+                        class="font-weight-light warning-txt">Ciudad es obligatoria.</span>
                 </div>
             </div>
 
 
         </div>
-<hr class="text-muted mt-5"/>
+        <hr class="text-muted mt-5" />
         <h6 class="mb-3 mt-5 font-weight-bold text-primary">Datos de Contacto</h6>
 
         <div class="row gy-4 mb-4">
             <div class="form-group col-md-6">
-                <label class="form-label" for="contactName">Nombre de Contacto: <span *ngIf="contactName.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="contactName">Nombre de Contacto: <span *ngIf="contactName.invalid"
+                        class="warning-txt">✱</span></label>
                 <input [class.input-valid]="contactName.valid && contactName.touched"
-                [class.input-invalid]="contactName.touched && contactName.invalid" [(ngModel)]="supplier.supContact.supContactName" type="text" class="form-control"
-                    id="contactName" name="contactName" required #contactName="ngModel">
+                    [class.input-invalid]="contactName.touched && contactName.invalid"
+                    [(ngModel)]="supplier.supContact.supContactName" type="text" class="form-control" id="contactName"
+                    name="contactName" required #contactName="ngModel">
                 <div class="position-absolute ">
-                    <span *ngIf="contactName?.errors?.['required'] && (contactName.dirty || contactName.touched)" class="font-weight-light warning-txt">Nombre de Contacto es obligatorio.</span>
+                    <span *ngIf="contactName?.errors?.['required'] && (contactName.dirty || contactName.touched)"
+                        class="font-weight-light warning-txt">Nombre de Contacto es obligatorio.</span>
                 </div>
             </div>
 
             <div class="form-group col-md-6">
-                <label class="form-label" for="contact_lastname">Apellido de Contacto: <span *ngIf="contactLastname.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="contact_lastname">Apellido de Contacto: <span
+                        *ngIf="contactLastname.invalid" class="warning-txt">✱</span></label>
                 <input [class.input-valid]="contactLastname.valid && contactLastname.touched"
-                [class.input-invalid]="contactLastname.touched && contactLastname.invalid" [(ngModel)]="supplier.supContact.supContactLastname" type="text" class="form-control"
+                    [class.input-invalid]="contactLastname.touched && contactLastname.invalid"
+                    [(ngModel)]="supplier.supContact.supContactLastname" type="text" class="form-control"
                     id="contact_lastname" name="contact_lastname" required #contactLastname="ngModel">
-                <div class="position-absolute "
-                    >
-                    <span *ngIf="contactLastname?.errors?.['required'] && (contactLastname.dirty || contactLastname.touched)" class="font-weight-light warning-txt">Apellido de Contacto es obligatorio.</span>
+                <div class="position-absolute ">
+                    <span
+                        *ngIf="contactLastname?.errors?.['required'] && (contactLastname.dirty || contactLastname.touched)"
+                        class="font-weight-light warning-txt">Apellido de Contacto es obligatorio.</span>
                 </div>
 
             </div>
@@ -221,53 +260,67 @@
 
         <div class="row gy-4 mb-4">
             <div class="form-group col-12 col-md-6 col-lg-4">
-                <label class="form-label" for="contact_telephone">Teléfono: <span *ngIf="contactTelephone.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="contact_telephone">Teléfono: <span *ngIf="contactTelephone.invalid"
+                        class="warning-txt">✱</span></label>
                 <input [class.input-valid]="contactTelephone.valid && contactTelephone.touched"
-                [class.input-invalid]="contactTelephone.touched && contactTelephone.invalid" [(ngModel)]="supplier.supContact.supContactTelephone" type="number" class="form-control" id="contact_telephone" #contactTelephone="ngModel"
-                    name="contact_telephone" pattern="^[0-9]{1,11}$" maxlength="11">
+                    [class.input-invalid]="contactTelephone.touched && contactTelephone.invalid"
+                    [(ngModel)]="supplier.supContact.supContactTelephone" type="number" class="form-control"
+                    id="contact_telephone" #contactTelephone="ngModel" required name="contact_telephone"
+                    maxlength="11" pattern="^[0-9]{11}$">
                 <div class="position-absolute ">
-                    <span *ngIf="contactTelephone?.errors?.['required'] && (contactTelephone.dirty || contactTelephone.touched)" class="font-weight-light warning-txt">Teléfono es obligatorio.</span>
-                    <span *ngIf="contactTelephone?.errors?.['pattern'] && (contactTelephone.dirty || contactTelephone.touched)" class="font-weight-light warning-txt">Teléfono debe contener solo dígitos numéricos y tener hasta 11 dígitos.
+                    <span
+                        *ngIf="contactTelephone?.errors?.['required'] && (contactTelephone.dirty || contactTelephone.touched)"
+                        class="font-weight-light warning-txt">Teléfono es obligatorio.</span>
+                    <span
+                        *ngIf="contactTelephone?.errors?.['pattern'] && (contactTelephone.dirty || contactTelephone.touched) && contactTelephone"
+                        class="font-weight-light warning-txt">Teléfono debe contener solo dígitos numéricos y tener
+                        entre 9 y 11 dígitos.
                     </span>
                 </div>
             </div>
 
             <div class="form-group col-12 col-md-6 col-lg-4">
-                <label class="form-label" for="contact_email">Email de Contacto: <span *ngIf="contactEmail.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="contact_email">Email de Contacto: <span *ngIf="contactEmail.invalid"
+                        class="warning-txt">✱</span></label>
                 <input [class.input-valid]="contactEmail.valid && contactEmail.touched"
-                [class.input-invalid]="contactEmail.touched && contactEmail.invalid" [(ngModel)]="supplier.supContact.supContactEmail" type="email"
-                    class="form-control" id="contact_email" name="contact_email" required #contactEmail="ngModel">
+                    [class.input-invalid]="contactEmail.touched && contactEmail.invalid"
+                    [(ngModel)]="supplier.supContact.supContactEmail" type="email" class="form-control"
+                    id="contact_email" name="contact_email" required #contactEmail="ngModel">
                 <div class="position-absolute ">
-                    <span *ngIf="contactEmail?.errors?.['required'] && (contactEmail.dirty || contactEmail.touched)" class="font-weight-light warning-txt">Email de Contacto es obligatorio.</span>
+                    <span *ngIf="contactEmail?.errors?.['required'] && (contactEmail.dirty || contactEmail.touched)"
+                        class="font-weight-light warning-txt">Email de Contacto es obligatorio.</span>
                 </div>
             </div>
 
             <div class="form-group col-sm-12 col-lg-4">
-                <label class="form-label" for="contact_role">Rol de Contacto: <span *ngIf="contactRole.invalid"  class="warning-txt">✱</span></label>
+                <label class="form-label" for="contact_role">Rol de Contacto: <span *ngIf="contactRole.invalid"
+                        class="warning-txt">✱</span></label>
                 <input [class.input-valid]="contactRole.valid && contactRole.touched"
-                [class.input-invalid]="contactRole.touched && contactRole.invalid" [(ngModel)]="supplier!.supContact.supContactRole" type="text" class="form-control"
-                    id="contact_role" name="contact_role" required #contactRole="ngModel">
+                    [class.input-invalid]="contactRole.touched && contactRole.invalid"
+                    [(ngModel)]="supplier!.supContact.supContactRole" type="text" class="form-control" id="contact_role"
+                    name="contact_role" required #contactRole="ngModel">
                 <div clas="position-absolute">
-                    <span *ngIf="contactRole?.errors?.['required'] && (contactRole.dirty || contactRole.touched)" class="font-weight-light warning-txt">Rol de Contacto es obligatorio.</span>
+                    <span *ngIf="contactRole?.errors?.['required'] && (contactRole.dirty || contactRole.touched)"
+                        class="font-weight-light warning-txt">Rol de Contacto es obligatorio.</span>
                 </div>
             </div>
         </div>
 
         <div class="row mb-5">
-                <div class="col-12 text-muted text-end ">
-                    <p class="mt-5"><span class="warning-txt" style="font-size:1em">✱   </span> El campo es obligatorio</p>
- 
+            <div class="col-12 text-muted text-end ">
+                <p class="mt-5"><span class="warning-txt" style="font-size:1em">✱ </span> El campo es obligatorio</p>
+
             </div>
         </div>
         <div class="form-group">
 
-        <button type="submit" [disabled]="!proveedor_form.valid" *ngIf="!isEditSession" class="btn btn-primary"
-            id="guardar-proveedor">Registrar Proveedor</button>
-        <button type="submit" [disabled]="!proveedor_form.valid" *ngIf="isEditSession" class="btn btn-primary"
-            id="editar-proveedor">Editar Proveedor</button>
+            <button type="submit" [disabled]="!proveedor_form.valid" *ngIf="!isEditSession" class="btn btn-primary"
+                id="guardar-proveedor">Registrar Proveedor</button>
+            <button type="submit" [disabled]="!proveedor_form.valid" *ngIf="isEditSession" class="btn btn-primary"
+                id="editar-proveedor">Editar Proveedor</button>
         </div>
         <div [hidden]="!proveedor_form.submitted" class="alert alert-success position-absolute bottom-0 end-0">
             <h2>Proveedor {{isEditSession?'Modificado':'Agregado'}} con exito!</h2>
         </div>
-    </form> 
+    </form>
 </div>

@@ -56,12 +56,20 @@ public class PurchaseOrderProductModel {
 		return popId;
 	}
 
-	public PurchaseOrderModel getOrdId() {
+	public PurchaseOrderModel getOrder() {
 		return order;
 	}
 
-	public ProductModel getProdId() {
+	public ProductModel getProduct() {
 		return product;
+	}
+
+	public void setOrder(PurchaseOrderModel order) {
+		this.order = order;
+	}
+
+	public void setProduct(ProductModel product) {
+		this.product = product;
 	}
 
 	public Integer getProdQuantity() {

@@ -103,8 +103,9 @@ public class ProductService {
 		Optional<ProductModel> productExists = productRepo.findById(id);
 		if (productExists.isPresent()) {
 			ProductModel p = productExists.get();
+			
 			p.setProdAvailable(false);
-			productRepo.save(p);
+			System.out.println(productRepo.save(p).getProdAvailable());
 			return "Product " + p.getProdName() + " deleted succesfully";
 		} else {
 			throw new EntityNotFoundException("Couldn´t find a product with the id " + id);

@@ -1,4 +1,4 @@
-<div class="px-4 py-5 my-5 text-center">
+<!-- <div class="px-4 py-5 my-5 text-center">
     <img class="d-block mx-auto mb-4" src={{logo}} alt="" style="width:200px;">
     <h1 class="display-5 fw-bold text-body-emphasis">Gestion de Compras</h1>
     <div class="col-lg-6 mx-auto">
@@ -13,4 +13,80 @@
         <button [routerLink]="['/ordenes/new']" routerLinkActive="router-link-active"  type="button" class="btn btn-outline-secondary btn-lg px-4">Crear Ordenes</button>
       </div>
     </div>
+  </div> -->
+
+
+  <div class="px-4 py-5 my-5 text-center">
+    <img class="d-block mx-auto mb-4" src={{logo}} alt="" style="width:200px;">
+    <h1 class="display-6 fw-bold text-body-emphasis">Gestion de Compras</h1>
+    
+      <p class="lead mb-4">Con esta web app podrás gestionar todo lo relacionado con tus proveedores, sus productos y tus órdenes de compra. Podrás ver, crear y modificar los datos de cada uno de ellos, así como consultar el estado de tus pedidos. Además, tendrás acceso a información útil y visual sobre tus compras, como estadísticas y gráficos. Esta web app te facilitará el proceso de comprar y te ahorrará tiempo y dinero. </p>
+      
+      <h2 class="fw-medium h2 mt-4 ">Que quieres hacer?</h2>
+      <div class="row g-4 w-75 my-3 mx-auto ">
+        <div class="col-6 col-sm-4 col-xl-2">
+          <button [routerLink]="['/suppliers']" routerLinkActive="router-link-active" type="button" class="btn btn-primary  h-100 btn-sm w-100">Ver Proveedores</button>
+        </div>
+        <div class="col-6 col-sm-4 col-xl-2">
+          <button [routerLink]="['/products']" routerLinkActive="router-link-active"  type="button" class="btn btn-primary  h-100 btn-sm w-100">Gestionar Productos</button>
+        </div>
+        <div class="col-6 col-sm-4 col-xl-2">
+          <button [routerLink]="['/orders']" routerLinkActive="router-link-active"  type="button" class="btn btn-primary  h-100 btn-sm w-100">Gestionar Ordenes</button>
+        </div>
+        <div class="col-6 col-sm-4 col-xl-2">
+          <button [routerLink]="['/suppliers/form']" routerLinkActive="router-link-active"  type="button" class="btn btn-outline-secondary  h-100 btn-sm w-100">Crear Proveedores</button>
+        </div>
+        <div class="col-6 col-sm-4 col-xl-2">
+          <button [routerLink]="['/products/form']" routerLinkActive="router-link-active"  type="button" class="btn btn-outline-secondary  h-100 btn-sm w-100">Crear Productos</button>
+        </div>
+        <div class="col-6 col-sm-4 col-xl-2">
+          <button [routerLink]="['/orders/form']" routerLinkActive="router-link-active"  type="button" class="btn btn-outline-secondary  h-100 btn-sm w-100">Crear Ordenes</button>
+        </div>
+      </div>
+    
   </div>
+
+  <section class="container mb-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+      <div class="col">
+        <article class="card h-100 bg-primary text-white">
+          <div class="card-body">
+            <h5 class="card-title">Proveedores</h5>
+            <p class="card-text"><i class="fas fa-truck"></i> Hay 10 proveedores registrados.</p>
+            <p class="card-text"><i class="fas fa-chart-pie"></i> El proveedor con más productos es Proveedor A con 50 productos.</p>
+            <p class="card-text"><i class="fas fa-chart-line"></i> El proveedor con más órdenes es Proveedor B con 30 órdenes.</p>
+          </div>
+          <div class="card-footer">
+            <small class="text-white-50">Última actualización: 05/02/2024</small>
+          </div>
+        </article>
+      </div>
+      <div class="col">
+        <article class="card h-100 bg-success text-white">
+          <div class="card-body">
+            <h5 class="card-title">Productos</h5>
+            <p class="card-text"><i class="fas fa-box"></i> Hay 100 productos registrados.</p>
+            <p class="card-text"><i class="fas fa-chart-bar"></i> El producto más vendido es Producto X con 200 ventas.</p>
+            <p class="card-text"><i class="fas fa-chart-area"></i> El producto más caro es Producto Y con un precio de 1000.</p>
+          </div>
+          <div class="card-footer">
+            <small class="text-white-50">Última actualización: 05/02/2024</small>
+          </div>
+        </article>
+      </div>
+      <div class="col">
+        <article class="card h-100 bg-warning text-white">
+          <div class="card-body">
+            <h5 class="card-title">Órdenes</h5>
+            <p class="card-text"><i class="fas fa-shopping-cart"></i> Hay 150 órdenes registradas.</p>
+            <p class="card-text"><i class="fas fa-chart-donut"></i> El estado más frecuente es Pendiente con 80 órdenes.</p>
+            <p class="card-text"><i class="fas fa-chart-scatter"></i> El promedio de tiempo entre la creación y la entrega de una orden es 5 días.</p>
+          </div>
+          <div class="card-footer">
+            <small class="text-white-50">Última actualización: 05/02/2024</small>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ProductsService } from 'src/app/services/products.service';
 //import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faPen } from '@fortawesome/free-solid-svg-icons'
+import { faPen, faEye, faTrash} from '@fortawesome/free-solid-svg-icons'
 import { CategoriesService } from 'src/app/services/categories.service';
 import { Category } from 'src/app/models/category';
 import { HttpResponse } from '@angular/common/http';
@@ -14,6 +14,8 @@ import { Product } from 'src/app/models/product';
 })
 export class ProductsListComponent implements OnInit {
   faEdit = faPen
+  faView =faEye
+  faDelete=faTrash
   constructor(private productsService: ProductsService, private categoryService: CategoriesService) { }
   ngOnInit(): void {
     this.productsService.getProducts().subscribe(
@@ -30,4 +32,13 @@ export class ProductsListComponent implements OnInit {
   }
   categories: Category[] = []
   products: Product[] = []
+
+  deleteProduct(id:number){
+    this.productsService.deleteProduct(id).subscribe(
+      {
+        next: (data: HttpResponse<Product>) => { console.log(data.statusText) },
+        error: (error) => console.log(error)
+      }
+    )
+  }
 }

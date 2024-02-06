@@ -1,11 +1,11 @@
 package com.bootcamp.gestor.services;
 
+
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 
 import com.bootcamp.gestor.models.AddressModel;
 import com.bootcamp.gestor.models.OrderStatusModel;
@@ -47,9 +47,9 @@ public class PurchaseOrderService {
 		Optional<AddressModel> a = addressRepo.findById(purchOrder.getAddress().getAddrId());
 		Optional<SupplierModel> s = supplierRepo.findById(purchOrder.getSupplier().getSupId());
 		Optional<OrderStatusModel> os = orderStatusRepo.findById(purchOrder.getOrdStatus().getOrdstId());
-//		if(Assert.isNull(purchOrder.getOrdIssueDate(), "")) {
-//			validar fechas de inicio y fecha de entrega
-//		}
+
+		
+		//cotrolar fechas
 		if (!a.isPresent())
 			throw new EntityNotFoundException("Couldn't find the address for this order");
 		if (!s.isPresent())
