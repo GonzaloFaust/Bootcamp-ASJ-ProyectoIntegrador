@@ -73,7 +73,13 @@ export class ProductsFormComponent implements OnInit {
 
   createProduct(form: NgForm) {
 
-    this.productsService.addProduct(this.product).subscribe(data => console.log(data))
+    if(this.isEditSession){
+      this.productsService.editProduct(this.product).subscribe(data => console.log(data))
+    }
+    else{
+
+      this.productsService.addProduct(this.product).subscribe(data => console.log(data))
+    }
     // setTimeout(()=>this.router.navigateByUrl('/productos'),1000)
   }
 

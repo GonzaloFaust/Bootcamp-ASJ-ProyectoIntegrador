@@ -7,79 +7,119 @@
             <li class="breadcrumb-item active" aria-current="page">Productos</li>
         </ol>
     </nav>
+    <h3 class="m-0 font-weight-bold text-primary my-5 ms-2">Productos</h3>
     <div class="card shadow mb-4">
         <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
             <div class="row d-flex flex-row ">
 
-                <form action="">
+                <form (ngSubmit)="search()">
                     <div class="form-group  d-flex gap-2 ">
 
-                        <input class="form-control form-control-sm " type="text" name="search" id="search">
-                        <button class="btn btn-outline-primary btn-sm" type="submit">Buscar</button>
-                   
-                        <select class="form-select form-select-sm" name="category" id="category">
-                            <option *ngFor="let category of  categories" value="{{category}}">{{category.catName}}</option>
+                        <input [(ngModel)]="filters.searchTerm" class="form-control form-control-sm " type="text"
+                            name="search" id="search">
+
+                        <select [(ngModel)]="filters.category" (change)="search()" class="form-select form-select-sm"
+                            name="category" id="category">
+                            <option  value="" disabled selected>Filtrar por categoria</option>
+                            <option *ngFor="let category of  categories" [value]="category.catId">{{category.catName}}
+                            </option>
                         </select>
-                    
-                        <input class="form-check" type="checkbox" name="showDeleted" id="showDeleted">
-                        <label for="showDeleted" class="form-label small ">Mostrar eliminados</label>
+                        <button class="btn btn-outline-primary btn-sm"  type="button" (click)="cleanForm()">Limpiar</button>
+
+                        <input class="form-check" type="checkbox" [checked]="showDeleted" (change)="showDeletedProducts()" name="showDeleted" 
+                            id="showDeleted">
+                        <label for="showDeleted" class="form-label small ">Mostrar no disponibles</label>
                     </div>
                 </form>
-            </div> 
-                <div>
-                    
-                    <button routerLink='../'   class="btn btn-outline-primary me-2">Volver</button>
-                    <button [routerLink]="['form']" class="btn btn-primary">Nuevo Producto</button>
-                </div>
-            
+            </div>
+            <div>
+
+                <button routerLink='../' class="btn btn-outline-primary me-2">Volver</button>
+                <button [routerLink]="['form']" class="btn btn-primary">Nuevo Producto</button>
+            </div>
+
         </div>
     </div>
-   
-<!--  -->
-<div class="card-body">
-    <div class="table-responsive">
-        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>Imagen</th>
-                    <th>SKU y Nombre</th>
-                    <th>Categoría</th>
-                    <th>Precio</th>
-                    <th>Proveedor</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="proveedores-container">
-                <ng-container *ngFor="let prod of products" >
-                 <tr *ngIf="prod.prodAvailable"> 
-                    <!-- <tr> -->
-                        <td style="width:60px"><img src="{{prod.prodImage}}" height="50" width="50"></td>
-                        <td>{{prod.prodSku}}<br><strong>{{prod.prodName}}</strong></td>
-                        <td>
-                            {{prod.category.catName}}
-                        </td>
-                        <td>
-                            {{prod.prodPrice | currency}}
-                        </td>
-                        <td>
-                            {{prod.supplier.supBussinessName}}
-                        </td>
-                        <td class="d-flex gap-2">
-                            
-                            <button class="btn btn-info   text-light" routerLink={{prod.prodId}} ><fa-icon [icon]="faView"></fa-icon> </button>
-                            <button class="btn btn-warning text-light " [routerLink]="['form/'+prod.prodId]" ><fa-icon [icon]="faEdit"></fa-icon></button>
-                            <button class="btn btn-danger text-light " (click)="deleteProduct(prod.prodId)" ><fa-icon [icon]="faDelete"></fa-icon></button>
-                            <!-- <button (click)="deleteProveedor(prov.codigo)" class="btn btn-danger">Borrar</button> -->
-                        </td>
-                    </tr>
-                </ng-container>
-            </tbody>
-        </table>
-        
-    </div>
-</div>
 
-<!--  -->
+    <!--  -->
+    <div class="card-body">
+        <ng-container *ngIf="showTable()">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Imagen</th>
+                            <th>SKU y Nombre</th>
+                            <th>Categoría</th>
+                            <th>Precio</th>
+                            <th>Proveedor</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="proveedores-container">
+
+                        <ng-container *ngFor="let prod of products">
+                            <ng-container *ngIf="prod.prodAvailable || prod.prodAvailable==!showDeleted">
+
+
+                                <tr>
+                                    <!-- <tr> -->
+                                    <td style="width:60px"><img src="{{prod.prodImage}}"
+                                            (error)="handleImageError(image)" height="50" width="50" #image></td>
+                                    <td [ngClass]="!prod.prodAvailable?'text-muted bg-light bg-gradient':''">
+                                        {{prod.prodSku}}<br><strong>{{prod.prodName}}</strong></td>
+                                    <td [ngClass]="!prod.prodAvailable?'text-muted bg-light bg-gradient':''">
+                                        {{prod.category.catName}}
+                                    </td>
+                                    <td [ngClass]="!prod.prodAvailable?'text-muted bg-light bg-gradient':''">
+                                        {{prod.prodPrice | currency}}
+                                    </td>
+                                    <td [ngClass]="!prod.prodAvailable?'text-muted bg-light bg-gradient':''">
+                                        {{prod.supplier.supBussinessName}}
+                                    </td>
+                                    <td class="d-flex my-auto gap-2">
+                                        <ng-container *ngIf="prod.prodAvailable">
+                                            <button class="btn btn-info btn-sm  text-light"
+                                                routerLink={{prod.prodId}}><fa-icon [icon]="faView"></fa-icon> </button>
+                                            <button class="btn btn-warning btn-sm text-light "
+                                                [routerLink]="['form/'+prod.prodId]"><fa-icon
+                                                    [icon]="faEdit"></fa-icon></button>
+                                            <button class="btn btn-danger btn-sm text-light "
+                                                (click)="deleteProduct(prod)"><fa-icon
+                                                    [icon]="faDelete"></fa-icon></button>
+                                        </ng-container>
+                                        <ng-container *ngIf="!prod.prodAvailable">
+                                            <button class="btn btn-outline-primary btn-sm text-primary "
+                                                (click)="undeleteProduct(prod)"><fa-icon
+                                                    [icon]="faUndelete"></fa-icon></button>
+                                        </ng-container>
+
+                                    </td>
+                                </tr>
+                            </ng-container>
+                        </ng-container>
+                    </tbody>
+                </table>
+
+            </div>
+        </ng-container>
+        <ng-container *ngIf="!showTable()">
+            <div class="container mt-5">
+                <div class="row">
+                  <div class="col-md-12">
+                    <section class="alert text-center" role="alert">
+                      <h4 class="alert-heading">No hay productos para mostrar</h4>
+                      <p>Prueba cambiando los criterios de busqueda o puedes agregar un producto.</p>
+                      
+                      <button class="btn btn-primary" routerLink="form" type="button">Crear producto</button>
+                    </section>
+                  </div>
+                </div>
+              </div>
+        </ng-container>
+    </div>
+
+    <!--  -->
     <!-- <div class="row m-2" >
 
         <div *ngFor="let prod of products" class="col-4">

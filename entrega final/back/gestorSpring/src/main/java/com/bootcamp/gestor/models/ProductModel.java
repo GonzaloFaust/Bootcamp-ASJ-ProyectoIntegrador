@@ -29,7 +29,7 @@ public class ProductModel {
     @NotNull(message="Product SKU can't be null")
 //    @NotBlank(message="Product SKU can't be empty")
     @Size(max = 13)
-    @Column(name = "prod_sku", length = 13, unique=true)
+    @Column(name = "prod_sku", length = 13)
     private String prodSku;
 
     @NotNull(message="Supplier id can't be null")

@@ -1,15 +1,21 @@
 <header id="head">
   <app-header></app-header>
 </header>
-<div class="container-fluid">
-  <div class="row" style="min-height: 90vh;">
-    <aside class="col-md-2 d-none d-md-block bg-light sidebar">
-      <app-aside></app-aside>
-    </aside>
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 mt-md-3">  
-      <router-outlet></router-outlet>
-    </main>
-  </div>
+<ng-container *ngIf="!loggedIn">
+<app-login></app-login>
+</ng-container>
+<ng-container *ngIf="loggedIn">
+
+  <div class="container-fluid">
+    <div class="row" style="min-height: 90vh;">
+      <aside class="col-md-2 d-none d-md-block bg-light sidebar">
+        <app-aside></app-aside>
+      </aside>
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 pt-3 px-4 mt-md-3">  
+        <router-outlet></router-outlet>
+      </main>
+    </div>
     <app-footer></app-footer>
-</div>
+  </div>
+</ng-container>
 

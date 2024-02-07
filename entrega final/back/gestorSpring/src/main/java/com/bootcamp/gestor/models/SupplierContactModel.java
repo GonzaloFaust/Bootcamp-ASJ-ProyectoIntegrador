@@ -9,7 +9,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -70,9 +69,9 @@ public class SupplierContactModel {
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedAt;
     
-    @OneToOne(cascade=CascadeType.ALL)//fijate de que lado va el mapped by, si el padre o el hijo
- //   @JoinColumn(name = "sup_contact_id")//fijate de que lado va el join column
+    @OneToOne(mappedBy="supContact",cascade=CascadeType.ALL)//fijate de que lado va el mapped by, si el padre o el hijo
     private SupplierModel supplier;
+    //   @JoinColumn(name = "sup_contact_id")//fijate de que lado va el join column
 
 	public SupplierContactModel() {
 		super();

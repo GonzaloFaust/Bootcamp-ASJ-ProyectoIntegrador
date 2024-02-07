@@ -18,6 +18,7 @@ import { HomeComponent } from './components/home/home.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 
 import { LoginComponent } from './components/login/login.component';
+import { ManagementComponent } from './components/management/management.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent }
@@ -37,6 +38,7 @@ const routes: Routes = [
   { path: 'orders/form', pathMatch: "full", component: OrdersFormComponent },
   { path: 'orders/:id-order', component: OrdersViewComponent }
   ,
+  {path:'management',component:ManagementComponent},
   { path: '404-notfound', component: NotFoundComponent },
   {path:'login',component:LoginComponent},
   {path:'', pathMatch:'full', redirectTo:'home'},

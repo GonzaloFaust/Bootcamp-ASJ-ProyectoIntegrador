@@ -2,22 +2,31 @@
 :root {
     --clr-red: #f09b93;
     --clr-green: #90c290;
+    --clr-disabled:#ccc;
     --font-small: 0.8em;
-    ::placeholder{
-        color:#ccc;
+
+    ::placeholder {
+        color: #ccc;
     }
+}
+
+*::placeholder {
+    color: var(--clr-disabled);
 }
 
 option {
     color: #212529;
 }
 
-select:required:invalid {
-    color: #ccc;
+select:invalid {
+    color: var(--clr-disabled);
 }
 
 option[disabled] {
     display: none
+}
+.select-placeholder{
+    color:var(--clr-disabled)
 }
 
 
@@ -37,6 +46,6 @@ option[disabled] {
 }
 
 input::-webkit-outer-spin-button,
-      input::-webkit-inner-spin-button {
-        display: none;
-      }
+input::-webkit-inner-spin-button {
+    display: none;
+}

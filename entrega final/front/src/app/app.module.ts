@@ -27,6 +27,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { LocalizationService } from './services/localization.service';
 import { ValidationsService } from './services/validations.service';
 import { LoginComponent } from './components/login/login.component';
+import { ManagementComponent } from './components/management/management.component';
 
 
 
@@ -47,7 +48,8 @@ import { LoginComponent } from './components/login/login.component';
     FooterComponent,
     HeaderComponent,
     NotFoundComponent,
-    LoginComponent
+    LoginComponent,
+    ManagementComponent
   ],
   imports: [
     BrowserModule,

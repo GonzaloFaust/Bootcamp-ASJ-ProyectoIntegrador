@@ -107,8 +107,8 @@ public class SupplierModel {
    
     @NotNull(message="Supplier Contact can't be null")
 //    @NotBlank(message="Contact id can't be empty")
-    @OneToOne(mappedBy="supplier",cascade=CascadeType.ALL)//fijate de que lado va el mapped by, si el padre o el hijo
-    @JoinColumn(name = "sup_contact_id")                   //fijate de que lado va el joincolumn
+    @OneToOne(cascade=CascadeType.ALL)//fijate de que lado va el mapped by, si el padre o el hijo
+    @JoinColumn(name = "sup_contact")                   //fijate de que lado va el joincolumn
     private SupplierContactModel supContact;
 
     @NotNull(message="Activity status can't be null")
@@ -242,6 +242,7 @@ public class SupplierModel {
 	protected void onUpdate() {
 		updatedAt = new Date();
 	}
+	
 	public TaxConditionModel getTaxCond() {
 		return taxCond;
 	}

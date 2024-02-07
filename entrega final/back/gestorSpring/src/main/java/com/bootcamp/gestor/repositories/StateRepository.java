@@ -13,3 +13,5 @@ public interface StateRepository extends JpaRepository<StateModel,Integer>{
 	@Query(value="SELECT s.* FROM states s WHERE s.country_id = :coun_id", nativeQuery=true)
 	List<StateModel> getStatesByCountry(@Param("coun_id") int coun_id);
 }
+
+
