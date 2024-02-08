@@ -3,8 +3,9 @@ import { supplier } from '../../assets/data/suppliers'
 import { NgForm } from '@angular/forms';
 import { Supplier } from '../models/supplier';
 import { Field } from '../models/fields';
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment.development';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +13,7 @@ import { Observable } from 'rxjs';
 export class SuppliersService {
   suppliersData: Array<Supplier> = []
 
-  private API_URL="http://localhost:8080/supplier"
-  
-
-  PREFIX: string = "PROV";
-  counter: number = 1;
-  supplierTemplate: Supplier | undefined;
+  private API_URL = environment.API_URL + 'supplier';
 
   constructor(private http:HttpClient) {
    // this.suppliersData = JSON.parse(localStorage.getItem('suppliers')!) || [...supplier]
@@ -34,43 +30,41 @@ export class SuppliersService {
     // return prov;
   }
 
-  // public addSupplier(): void {
-  //   let newId = this.PREFIX + this.counter;
-  //   while (this.suppliersData.some(p => p.codigo === newId)) {
-  //     this.counter++;
-  //     newId = this.PREFIX + this.counter;
-  //   }
-  //   this.suppliersData.push({ ...this.supplierTemplate, codigo: newId });
-  //   this.supplierTemplate = structuredClone(blankProvider)
-  //   this.saveData()
-  // }
+  public addSupplier(sup:Supplier): Observable<any> {
+    
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post<Supplier>(this.API_URL, sup, { headers });
 
-  // public editSupplier(id:string): void {
-  //   this.supplierTemplate = { ...structuredClone(this.supplierTemplate), codigo:id }
+  }
 
-  //   this.saveData()
-  //   this.supplierTemplate = structuredClone(blankProvider)
-  // }
+  public editSupplier(sup:Supplier): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.put<Supplier>(this.API_URL + '/' + sup.supId, sup, { headers})
+  }
 
-  public deleteSupplier(id: string): void {
-    let sup:Supplier;
-    this.getSupplierById(id).subscribe(
-      {
-        next:(data:HttpResponse<Supplier>)=>{
-          sup=data.body!
-        sup.isActive=false;
-        this.saveData()
-        } ,
-         error: (error:any)=> console.log(error)
-      }
-    )
+  public deleteSupplier(sup:Supplier): Observable<any> {
+    return this.http.delete(this.API_URL + '/' + sup.supId, { responseType: 'text' })
     
   }
 
-
-  private saveData() {
-    localStorage.setItem('suppliers', JSON.stringify(this.suppliersData))
+  public undeleteProduct(sup:Supplier): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.put(this.API_URL + '/undelete/' + sup.supId, { headers})
   }
+
+  public getSupplierBySearch(filters: any): Observable<any> {
+    console.log(filters)
+    let params = new HttpParams();
+    const keys = Object.keys(filters)
+
+    for (let key of keys) {
+      if (filters[key] !== '' && filters[key] !== null)
+        params = params.append(key, filters[key])
+    }
+
+    return this.http.get(this.API_URL + '/q?', { params: params, observe: "response" })
+  }
+
 }
 
 

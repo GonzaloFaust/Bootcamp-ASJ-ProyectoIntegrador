@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.gestor.models.SupplierModel;
@@ -33,6 +34,11 @@ public class SupplierController {
 	public ResponseEntity<List<SupplierModel>> getSuppliers()
 	{
 		return ResponseEntity.ok(supplierService.getSuppliers());
+	}
+	
+	@GetMapping("/q")
+	public ResponseEntity<List<SupplierModel>> getSuppliersSearch(@RequestParam(value="searchTerm", required=false) String searchTerm, @RequestParam(value="category", required=false) Integer category ) {
+		return ResponseEntity.ok(supplierService.getSuppliersSearch(searchTerm));
 	}
 	
 	@GetMapping("/{id}")
@@ -76,6 +82,21 @@ public class SupplierController {
 		}
 	}
 	
+	
+	@PutMapping("/undelete/{id}")
+	public ResponseEntity<Object> makeActiveSupplier(@PathVariable int id){
+		try {
+		return ResponseEntity.ok(supplierService.makeAvailable(id));
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (EntityExistsException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 	
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteSupplier(@PathVariable int id) {

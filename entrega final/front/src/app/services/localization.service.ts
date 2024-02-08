@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment.development';
 
 
 @Injectable({
@@ -10,7 +11,7 @@ import { Observable } from 'rxjs';
 export class LocalizationService {
   private COUNTRIES:string= 'country'
   private STATES:string= 'state'
-  private API_URL="http://localhost:8080/"
+  private API_URL=environment.API_URL
   
   constructor(private http: HttpClient){}
 

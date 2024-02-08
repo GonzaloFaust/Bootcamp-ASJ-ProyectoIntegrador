@@ -26,8 +26,8 @@ export class SuppliersListComponent implements OnInit{
     this.updateLista()
   }
 
-  deleteProveedor(id:string){
-    this.supplierService.deleteSupplier(id)
+  deleteProveedor(sup:Supplier){
+    this.supplierService.deleteSupplier(sup)
     this.updateLista();
   }
   
@@ -42,7 +42,6 @@ export class SuppliersListComponent implements OnInit{
 
   filters: any = {
     searchTerm: "",
-    category: ''
   }
 
   showDeletedProducts(){
@@ -52,18 +51,25 @@ export class SuppliersListComponent implements OnInit{
 
   cleanForm(){
     this.filters.searchTerm='';
-    this.filters.category='';
     this.search();
   }
 
   search() {
     // console.log("!antes: ",this.filters)
-    // this.productsService.getProductBySearch(this.filters).subscribe({
-    //   next: (data: HttpResponse<Product[]>) => {
-    //     this.products = data.body!;
-    //   },
-    //   error: (error) => console.error(error.message)
-    // })
+    this.supplierService.getSupplierBySearch(this.filters).subscribe({
+      next: (data: HttpResponse<Supplier[]>) => {
+        this.suppliersList = data.body!;
+      },
+      error: (error) => console.error(error.message)
+    })
+  }
+  showTable():boolean{
+    let count=0
+    for(let sup of this.suppliersList){
+      if(sup.isActive || this.showDeleted!=sup.isActive)
+      count++;
+    }
+    return count>0;
   }
 
   deleteSupplier(sup: Supplier) {
@@ -77,17 +83,17 @@ export class SuppliersListComponent implements OnInit{
       confirmButtonText: 'Eliminar',
       cancelButtonText: 'Cancelar',
     })
-      // .then(res => {
-      //   if (res.isConfirmed) {
-      //     this.productsService.deleteProduct(prod.prodId).subscribe(
-      //       {
-      //         next: (data: HttpResponse<String>) => { console.log(data.statusText) },
-      //         error: (error) => console.error(error.message)
-      //       }
-      //     )
-      //   }
-      //})
-    // 
+      .then(res => {
+        if (res.isConfirmed) {
+          this.supplierService.deleteSupplier(sup).subscribe(
+            {
+              next: (data: HttpResponse<String>) => { console.log(data.statusText);this.search();},
+              error: (error) => console.error(error.message)
+            }
+          )
+        }
+      })
+    
   }
 
   handleImageError(image: HTMLImageElement) {
@@ -95,11 +101,12 @@ export class SuppliersListComponent implements OnInit{
   }
 
   undeleteSupplier(sup:Supplier) {
-  //   this.productsService.undeleteProduct(prod.prodId).subscribe(
-  //     {
-  //       next: (data: HttpResponse<String>) => { console.log(data) },
-  //       error: (error) => console.error(error.message)
-  //     }
-  //   )
+    this.supplierService.undeleteProduct(sup).subscribe(
+      {
+        next: (data: HttpResponse<String>) => { console.log(data) ;this.search();},
+        error: (error) => console.error(error.message)
+      }
+    )
+    
    }
 }

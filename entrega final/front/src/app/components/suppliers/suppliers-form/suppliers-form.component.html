@@ -182,7 +182,7 @@
                 <label class="form-label" for="country">País: <span *ngIf="country.invalid"
                         class="warning-txt">✱</span></label>
                 <select [class.input-valid]="country.valid && country.touched"
-                    [class.input-invalid]="country.touched && country.invalid" (change)="getStates(1)"
+                    [class.input-invalid]="country.touched && country.invalid" (change)="getStates(country.value)"
                     [(ngModel)]="supplier.address.state.country.counId" class="form-select" id="country" name="country"
                     required #country="ngModel">
                     <option *ngFor="let c of countries" [value]="c.counId">{{c.counName}}</option>

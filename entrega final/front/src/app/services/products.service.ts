@@ -42,9 +42,9 @@ export class ProductsService {
   }
 
 
-  public deleteProduct(id: number): Observable<any> {
+  public deleteProduct(product:Product): Observable<any> {
 
-    return this.http.delete(this.API_URL + '/' + id, { responseType: 'text' })
+    return this.http.delete(this.API_URL + '/' + product.prodId, { responseType: 'text' })
   }
 
 

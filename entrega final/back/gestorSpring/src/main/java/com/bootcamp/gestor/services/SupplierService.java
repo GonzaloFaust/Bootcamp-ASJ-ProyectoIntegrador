@@ -8,11 +8,17 @@ import org.springframework.stereotype.Service;
 
 //import com.bootcamp.gestor.models.AddressModel;
 import com.bootcamp.gestor.models.FieldModel;
+import com.bootcamp.gestor.models.SupplierContactModel;
 //import com.bootcamp.gestor.models.SupplierContactModel;
 import com.bootcamp.gestor.models.SupplierModel;
 import com.bootcamp.gestor.models.TaxConditionModel;
+import com.bootcamp.gestor.repositories.AddressRepository;
+import com.bootcamp.gestor.repositories.FieldRepository;
+import com.bootcamp.gestor.repositories.SupplierContactRepository;
 import com.bootcamp.gestor.repositories.SupplierRepository;
+import com.bootcamp.gestor.repositories.TaxConditionRepository;
 
+import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
 
 @Service
@@ -20,21 +26,29 @@ public class SupplierService {
 
 	@Autowired
 	SupplierRepository supplierRepo;
-	
+
 	@Autowired
-	FieldService fieldService;
-	
+	FieldRepository fieldRepo;
+
 	@Autowired
-	TaxConditionService taxCondService;
-	
+	TaxConditionRepository taxCondRepo;
+
 	@Autowired
-	AddressService addressService;
-	
+	AddressRepository addressRepo;
+
 	@Autowired
-	SupplierContactService supplierContactService;
-	
-	public List<SupplierModel> getSuppliers(){
-	    return supplierRepo.findAll();
+	SupplierContactRepository supplierContactRepo;
+
+	public List<SupplierModel> getSuppliers() {
+		return supplierRepo.findAll();
+	}
+
+	public List<SupplierModel> getSuppliersSearch(String searchTerm) {
+
+		if (searchTerm == null) {
+			searchTerm = "";
+		}
+		return supplierRepo.findByTitleContaining(searchTerm);
 	}
 
 	public SupplierModel getSupplierById(int id) {
@@ -42,7 +56,7 @@ public class SupplierService {
 				.orElseThrow(() -> new EntityNotFoundException("Couldn´t find a supplier with the id " + id));
 	}
 
-	public SupplierModel createSupplier(SupplierModel supplier){
+	public SupplierModel createSupplier(SupplierModel supplier) {
 //		FieldModel field= fieldService.getFieldById(supplier.getField().getFieldId());
 //		//AddressModel address= addressService.createAddress(supplier.getAddress());
 //		//SupplierContactModel supContact= supplierContactService.createSupplierContact(supplier.getSupContact());
@@ -54,29 +68,33 @@ public class SupplierService {
 //		supplier.setTaxCond(tax);
 //		supplierRepo.save(supplier);
 //		return supplierRepo.findById(supplier.getSupId()).get();
-		
-		
-		
-	
-	    if (supplier.getSupCode().isEmpty() || supplier.getSupBussinessName().isEmpty() || supplier.getSupImage().isEmpty() || supplier.getSupWebsite().isEmpty() || supplier.getSupEmail().isEmpty() || supplier.getSupTelephone().isEmpty() || supplier.getSupCuit().isEmpty()) {
-	        throw new IllegalArgumentException("There's missing data");
-	    }
 
-	    FieldModel fieldExists = fieldService.getFieldById(supplier.getField().getFieldId());
-	    TaxConditionModel taxExists = taxCondService.getTaxConditionById(supplier.getTaxCond().getTaxId());
-	    supplier.setField(fieldExists);
-	    supplier.setTaxCond(taxExists);
-	    supplierRepo.save(supplier);
+		if (supplier.getSupCode().isEmpty() || supplier.getSupBussinessName().isEmpty()
+				|| supplier.getSupImage().isEmpty() || supplier.getSupWebsite().isEmpty()
+				|| supplier.getSupEmail().isEmpty() || supplier.getSupTelephone().isEmpty()
+				|| supplier.getSupCuit().isEmpty()) {
+			throw new IllegalArgumentException("There's missing data");
+		}
 
-	    Optional<SupplierModel> supplierExists = supplierRepo.findById(supplier.getSupId());
-	    if (!supplierExists.isPresent()) {
-	        throw new EntityNotFoundException("Couldn't find a Supplier with the id " + supplier.getSupId());
-	    }
+		Optional<FieldModel> fieldExists = fieldRepo.findById(supplier.getField().getFieldId());
+		Optional<TaxConditionModel> taxExists = taxCondRepo.findById(supplier.getTaxCond().getTaxId());
+		if (fieldExists.isPresent() && taxExists.isPresent()) {
 
-	    return supplierExists.get();
+			supplier.setField(fieldExists.get());
+			supplier.setTaxCond(taxExists.get());
+			supplierRepo.save(supplier);
+
+			Optional<SupplierModel> supplierExists = supplierRepo.findById(supplier.getSupId());
+			if (!supplierExists.isPresent()) {
+				throw new EntityNotFoundException("Couldn't find a Supplier with the id " + supplier.getSupId());
+			}
+
+			return supplierExists.get();
+
+		} else {
+			throw new EntityNotFoundException("Couldn´t find a field or tax condition for this supplier");
+		}
 	}
-
-	
 
 	public String updateSupplier(int id, SupplierModel supplier){
 		Optional<SupplierModel> supplierExists = supplierRepo.findById(id);
@@ -88,26 +106,47 @@ public class SupplierService {
 		        throw new IllegalArgumentException("There's missing data");
 		    }
 
+			Optional<SupplierContactModel> cont= supplierContactRepo.findById(supplier.getSupContact().getSupContactId());
 			SupplierModel sup=supplierExists.get();
-		    FieldModel fieldExists = fieldService.getFieldById(supplier.getField().getFieldId());
-		    TaxConditionModel taxExists = taxCondService.getTaxConditionById(supplier.getTaxCond().getTaxId());
-		    sup.setField(fieldExists);
-		    sup.setTaxCond(taxExists);
+Optional<FieldModel> fieldExists = fieldRepo.findById(supplier.getField().getFieldId());
+Optional<TaxConditionModel> taxExists = taxCondRepo.findById(supplier.getTaxCond().getTaxId());
+		    sup.setField(fieldExists.get());
+		    sup.setTaxCond(taxExists.get());
+		    sup.setSupEmail(supplier.getSupEmail());
+		    sup.setSupWebsite(supplier.getSupWebsite());
+		    sup.setSupImage(supplier.getSupImage());
+		    sup.setSupTelephone(supplier.getSupTelephone());
+		    sup.setSupContact(cont.get());
+		    sup.setAddress(supplier.getAddress());
 		    supplierRepo.save(sup);
 
 		    return "Supplier updated succesfully";
 		}
 	}
-	
-	public String deleteSupplier(int id){
+
+	public SupplierModel makeAvailable(int id) {
 		Optional<SupplierModel> supplierExists = supplierRepo.findById(id);
-		if(!supplierExists.isPresent()) {
-	        throw new EntityNotFoundException("Couldn't find a Supplier with the id " + id);
-	    }else {
-	    	SupplierModel sup=supplierExists.get();
-	    	sup.setIsActive(false);
-	    	supplierRepo.save(sup);
-	    	return "Supplier deleted succesfully";
-	    }
+		if (supplierExists.isPresent()) {
+			SupplierModel prod = supplierExists.get();
+			if (prod.getIsActive() == true)
+				throw new EntityExistsException("The supplier is active already");
+			prod.setIsActive(true);
+			supplierRepo.save(prod);
+			return prod;
+		} else {
+			throw new EntityNotFoundException("Couldn´t find a supplier with the id " + id);
+		}
+	}
+
+	public String deleteSupplier(int id) {
+		Optional<SupplierModel> supplierExists = supplierRepo.findById(id);
+		if (!supplierExists.isPresent()) {
+			throw new EntityNotFoundException("Couldn't find a Supplier with the id " + id);
+		} else {
+			SupplierModel sup = supplierExists.get();
+			sup.setIsActive(false);
+			supplierRepo.save(sup);
+			return "Supplier deleted succesfully";
+		}
 	}
 }

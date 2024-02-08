@@ -84,7 +84,7 @@ export class ProductsListComponent implements OnInit {
     })
       .then(res => {
         if (res.isConfirmed) {
-          this.productsService.deleteProduct(prod.prodId).subscribe(
+          this.productsService.deleteProduct(prod).subscribe(
             {
               next: (data: HttpResponse<String>) => { console.log(data.statusText);this.search() },
               error: (error) => console.error(error.message)
@@ -102,7 +102,7 @@ export class ProductsListComponent implements OnInit {
   undeleteProduct(prod: Product) {
     this.productsService.undeleteProduct(prod.prodId).subscribe(
       {
-        next: (data: HttpResponse<String>) => { console.log(data) },
+        next: (data: HttpResponse<String>) => { console.log(data);this.search(); },
         error: (error) => console.error(error.message)
       }
     )
@@ -114,6 +114,7 @@ export class ProductsListComponent implements OnInit {
     this.productsService.getProductBySearch(this.filters).subscribe({
       next: (data: HttpResponse<Product[]>) => {
         this.products = data.body!;
+      
       },
       error: (error) => console.error(error.message)
     })

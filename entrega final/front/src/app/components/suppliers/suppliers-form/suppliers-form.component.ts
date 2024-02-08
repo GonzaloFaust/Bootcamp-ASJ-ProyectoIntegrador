@@ -27,6 +27,7 @@ export class SuppliersFormComponent implements OnInit {
   // rubrosPermitidos = Object.values(supplierCategory)
   taxConditions: TaxCondition[] = []
 
+
   supplier: any =
     {
       "supCode": "",
@@ -77,6 +78,7 @@ export class SuppliersFormComponent implements OnInit {
   countries: Country[] = []
   states: State[] = []
   fields: Field[] = []
+ 
 
 
   getBack() {
@@ -85,38 +87,63 @@ export class SuppliersFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCountries()
-    if (this.isEditSession) {
+  this.getFields();
+  this.getTaxConditions();
+  if (this.isEditSession) {
+      this.getSuppliers();
+      
       this.supplierService.getSupplierById(this.idParam!).subscribe(
         {
-          next: (data: HttpResponse<Supplier>) => { this.supplier = data.body! },
+          next: (data: HttpResponse<Supplier[]>) => 
+          { 
+            this.supplier = data.body!;
+            this.getStates(this.supplier.address.state.country.counId)
+
+           },
           error: (error: any) => console.log("error aca guachin")
         }
       )
-      //   this.supplierService.supplierTemplate.direccion.pais = prov.direccion.pais;
-      //   // this.getStates()
-      //   this.supplierService.supplierTemplate.direccion.provincia = prov.direccion.provincia;
-
-
-
     }
-    else {
-      this.taxConditionService.getTaxConditions().subscribe({
-        next: (data: HttpResponse<TaxCondition[]>) => { this.taxConditions = data.body! },
-        error: (error: any) => console.log(error)
-      })
-      //   this.supplierService.supplierTemplate = structuredClone(blankProvider)
-      this.fieldService.getFields().subscribe({
+    
+  }
+
+  getSuppliers(){
+    this.supplierService.getSupplierById(this.idParam!).subscribe(
+      {
+        next: (data: HttpResponse<Supplier>) => { this.supplier = data.body! },
+        error: (error: any) => console.log("error aca guachin")
+      }
+    )
+  }
+
+  getFields(){
+    this.fieldService.getFields().subscribe(
+      {
         next: (data: HttpResponse<Field[]>) => { this.fields = data.body! },
-        error: (error: any) => console.log(error)
-      })
-      //   this.supplierService.supplierTemplate = structuredClone(blankProvider)
-    }
+        error: (error: any) => console.log("error aca guachin")
+      }
+    )
+  }
+
+  getTaxConditions(){
+    this.taxConditionService.getTaxConditions().subscribe(
+      {
+        next: (data: HttpResponse<TaxCondition[]>) => { this.taxConditions = data.body! },
+        error: (error: any) => console.log("error aca guachin")
+      }
+    )
   }
 
   createProveedor(form: NgForm) {
-    // if (this.isEditSession) this.supplierService.editSupplier(this.idParam!)
-    // else this.supplierService.addSupplier()
-    //setTimeout(()=>this.router.navigateByUrl('/suppliers'),1000)
+    if (this.isEditSession) {
+      this.supplierService.editSupplier(this.supplier).subscribe(
+        data => console.log(data)
+      )
+    }
+    else this.supplierService.addSupplier(this.supplier).subscribe(
+      data => console.log(data)
+    )
+    setTimeout(()=>this.router.navigateByUrl('/suppliers'),1000)
   }
 
   getCountries() {

@@ -18,10 +18,11 @@
                         <input [(ngModel)]="filters.searchTerm" class="form-control form-control-sm " type="text"
                             name="search" id="search">
 
-                        <button class="btn btn-outline-primary btn-sm"  type="button" (click)="cleanForm()">Limpiar</button>
+                        <button class="btn btn-outline-primary btn-sm" type="button"
+                            (click)="cleanForm()">Limpiar</button>
 
-                        <input class="form-check" type="checkbox" [checked]="showDeleted" (change)="showDeletedProducts()" name="showDeleted" 
-                            id="showDeleted">
+                        <input class="form-check" type="checkbox" [checked]="showDeleted"
+                            (change)="showDeletedProducts()" name="showDeleted" id="showDeleted">
                         <label for="showDeleted" class="form-label small ">Mostrar no disponibles</label>
                     </div>
                 </form>
@@ -32,68 +33,86 @@
             </div>
         </div>
         <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
-                    <thead>
-                        <tr>
-                            <th>Logo</th>
-                            <th>Código</th>
-                            <th>Razón social</th>
-                            <th>Pais, Provincia</th>
-                            <th>Contacto</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="proveedores-container">
-                        <ng-container *ngFor="let sup of suppliersList">
-                            <tr *ngIf="sup.isActive">
-
-                                <td><img src="{{sup.supImage}}"
-                                    (error)="handleImageError(image)" height="50" width="50" #image></td>
-                                <td>{{sup.supCode}}</td>
-                                <td>{{sup.supBussinessName}}</td>
-                                <td>{{sup.address.state.country.counName}}, {{sup.address.state.stateName}}</td>
-                                <td>
-                                    <ng-template #tipContent>
-                                        <span>
-                                            {{sup.supWebsite}}
-                                        </span><br>
-                                        <span>
-                                            {{sup.supEmail}}
-                                        </span><br>
-                                        <span>
-                                            {{sup.supTelephone}}
-                                        </span>
-                                    </ng-template>
-                                    <p placement="top" [ngbTooltip]="tipContent">
-                                        {{sup.supContact.supContactName}}, {{sup.supContact.supContactLastname}}
-                                    </p>
-                                </td>
- 
-                                <td class="d-flex my-auto gap-2">
-                                    <ng-container *ngIf="sup.isActive">
-                                        <button class="btn btn-info btn-sm  text-light"
-                                            routerLink={{sup.supId}}><fa-icon [icon]="faView"></fa-icon> </button>
-                                        <button class="btn btn-warning btn-sm text-light "
-                                            [routerLink]="['form/'+sup.supId]"><fa-icon
-                                                [icon]="faEdit"></fa-icon></button>
-                                        <button class="btn btn-danger btn-sm text-light "
-                                            (click)="deleteSupplier(sup)"><fa-icon
-                                                [icon]="faDelete"></fa-icon></button>
-                                    </ng-container>
-                                    <ng-container *ngIf="!sup.isActive">
-                                        <button class="btn btn-outline-primary btn-sm text-primary "
-                                            (click)="undeleteSupplier(sup)"><fa-icon
-                                                [icon]="faUndelete"></fa-icon></button>
-                                    </ng-container>
-
-                                </td>
+            <ng-container *ngIf="showTable()">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Logo</th>
+                                <th>Código</th>
+                                <th>Razón social</th>
+                                <th>Pais, Provincia</th>
+                                <th>Contacto</th>
+                                <th>Acciones</th>
                             </tr>
-                        </ng-container>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody id="suppliers-container">
+                            <ng-container *ngFor="let sup of suppliersList">
+                                <ng-container *ngIf="sup.isActive || sup.isActive==!showDeleted">
+                                    <tr>
 
-            </div>
+                                    <td><img src="{{sup.supImage}}" (error)="handleImageError(image)" height="50"
+                                            width="50" #image></td>
+                                    <td [ngClass]="!sup.isActive?'text-muted bg-light bg-gradient':''">{{sup.supCode}}</td>
+                                    <td [ngClass]="!sup.isActive?'text-muted bg-light bg-gradient':''">{{sup.supBussinessName}}</td>
+                                    <td [ngClass]="!sup.isActive?'text-muted bg-light bg-gradient':''">{{sup.address.state.country.counName}}, {{sup.address.state.stateName}}</td>
+                                    <td [ngClass]="!sup.isActive?'text-muted bg-light bg-gradient':''">
+                                        <ng-template #tipContent>
+                                            <span>
+                                                {{sup.supWebsite}}
+                                            </span><br>
+                                            <span>
+                                                {{sup.supEmail}}
+                                            </span><br>
+                                            <span>
+                                                {{sup.supTelephone}}
+                                            </span>
+                                        </ng-template>
+                                        <p placement="top" [ngbTooltip]="tipContent">
+                                            {{sup.supContact.supContactName}}, {{sup.supContact.supContactLastname}}
+                                        </p>
+                                    </td>
+
+                                    <td class="d-flex my-auto gap-2">
+                                        <ng-container *ngIf="sup.isActive">
+                                            <button class="btn btn-info btn-sm  text-light"
+                                                routerLink={{sup.supId}}><fa-icon [icon]="faView"></fa-icon> </button>
+                                            <button class="btn btn-warning btn-sm text-light "
+                                                [routerLink]="['form/'+sup.supId]"><fa-icon
+                                                    [icon]="faEdit"></fa-icon></button>
+                                            <button class="btn btn-danger btn-sm text-light "
+                                                (click)="deleteSupplier(sup)"><fa-icon
+                                                    [icon]="faDelete"></fa-icon></button>
+                                        </ng-container>
+                                        <ng-container *ngIf="!sup.isActive">
+                                            <button class="btn btn-outline-primary btn-sm text-primary "
+                                                (click)="undeleteSupplier(sup)"><fa-icon
+                                                    [icon]="faUndelete"></fa-icon></button>
+                                        </ng-container>
+
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            </ng-container>
+                        </tbody>
+                    </table>
+
+                </div>
+            </ng-container>
+            <ng-container *ngIf="!showTable()">
+                <div class="container mt-5">
+                    <div class="row">
+                      <div class="col-md-12">
+                        <section class="alert text-center" role="alert">
+                          <h4 class="alert-heading">No hay proveedores para mostrar</h4>
+                          <p>Prueba cambiando los criterios de busqueda o puedes agregar un proveedor.</p>
+                          
+                          <button class="btn btn-primary" routerLink="form" type="button">Crear proveedor</button>
+                        </section>
+                      </div>
+                    </div>
+                  </div>
+            </ng-container>
         </div>
     </div>
 
