@@ -7,6 +7,6 @@ export interface Order {
         "ordStatus":OrderStatus,
         "ordIssueDate":string,
         "ordExpDeliverDate":string,
-        "address":Address,
+        "ordDeliveryInfo":string,
         "supplier":Supplier        
   }

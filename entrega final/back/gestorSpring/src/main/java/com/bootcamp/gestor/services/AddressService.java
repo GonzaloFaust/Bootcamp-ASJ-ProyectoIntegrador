@@ -35,7 +35,6 @@ public class AddressService {
 	
 	
 	public AddressModel createAddress(AddressModel address) {
-//		try {
 		if (address.getAddrStreet().isEmpty() || address.getCityName().isEmpty() || address.getAddrPostcode().isEmpty())
 			throw new IllegalArgumentException("There's missing data");
 		Optional<StateModel> s = stateRepo.findById(address.getState().getStateId());
@@ -59,11 +58,6 @@ public class AddressService {
 			addressRepo.save(address);
 			return addressRepo.findById(address.getAddrId()).get();
 
-//		} catch (
-//
-//		Exception e) {
-//			throw new RuntimeException("Error creating state", e);
-//		}
 	}
 	public String updateAddress(Long id, AddressModel address) {
 		Optional<AddressModel> addressExists = addressRepo.findById(id);
@@ -121,16 +115,4 @@ public class AddressService {
 
 	}
 
-
-//	public List<AddressModel> createAddress(AddressModel address){
-//		return null;
-//	}
-//
-//	public List<AddressModel> deleteAddress(int id){
-//		return null;
-//	}
-//
-//	public List<AddressModel> updateAddress(int id, AddressModel address){
-//		return null;
-//	}
 }

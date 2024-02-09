@@ -1,4 +1,4 @@
 export interface OrderStatus{
         "ordstId":number,
-        "ordstName": "Qatar"
+        "ordstName": string
 }

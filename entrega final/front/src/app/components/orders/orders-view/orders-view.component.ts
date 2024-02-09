@@ -12,12 +12,24 @@ import { Order } from 'src/app/models/order';
 })
 export class OrdersViewComponent {
 
-  constructor(public ordenService: OrdersService, public productoService: ProductsService, public provServ: SuppliersService, private ruta: ActivatedRoute) { }
-  //  order:Order=blankOrder;
-   idOrden=this.ruta.snapshot.paramMap.get("id-orden")!
+  constructor(public orderService: OrdersService, public productoService: ProductsService, public provServ: SuppliersService, private ruta: ActivatedRoute) { }
+ 
+    order:any={
+      "ordId":'',
+        "ordStatus":{
+          "ordstId":''
+        },
+        "ordIssueDate":'',
+        "ordExpDeliverDate":'',
+        "ordDeliveryInfo":'',
+        "supplier":{
+          "supId":''
+        }
+    }
+   idOrder=this.ruta.snapshot.paramMap.get("id-order")!
 
   ngOnInit(): void {
-    // this.order = this.ordenService.getOrderById(this.idOrden)
+    this.order = this.orderService.getOrderById(this.idOrder)
     // this.razonSocial = this.provServ.getProveedorById(this.orden.cod_proveedor)?.razon_social
   }
   

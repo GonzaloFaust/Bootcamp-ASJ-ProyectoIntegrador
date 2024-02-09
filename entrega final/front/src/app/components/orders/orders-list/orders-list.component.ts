@@ -148,6 +148,6 @@ export class OrdersListComponent {
       if(ord.ordStatus.ordstId== this.selectedOrderStatus)
       count++;
     }
-    return count>0;
+    return count>0 && this.selectedOrderStatus!=='all';
   }
 }

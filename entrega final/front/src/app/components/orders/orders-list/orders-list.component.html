@@ -39,7 +39,7 @@
 
         </div>
         <div class="card-body">
-            <ng-container *ngIf="showTable() || filter.value=='all' || filter.value==''">
+            <ng-container *ngIf="showTable() && filter.value==''">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -82,14 +82,11 @@
                             </td>
                         </tr>
 
-
-
-
                     </tbody>
                 </table>
             </div>
         </ng-container>
-        <ng-container *ngIf="!showTable() && filter.value!='all' && filter.value!=''">
+        <ng-container *ngIf="!showTable()">
                 <div class="container mt-5">
                     <div class="row">
                         <div class="col-md-12">
