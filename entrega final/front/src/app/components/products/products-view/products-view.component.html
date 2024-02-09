@@ -6,47 +6,51 @@
                     routerLinkActive="router-link-active">Home</a></li>
             <li class="breadcrumb-item"><a routerLink="/products">Productos</a>
             </li>
-            <li class="breadcrumb-item active" aria-current="page">Producto: {{product?.prodId}}</li>
+            <li class="breadcrumb-item active" aria-current="page">Producto: {{product?.prodName}}</li>
         </ol>
     </nav>
 
     <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
-        <h6 class="m-0 font-weight-bold text-primary">Detalle de Producto</h6>
-        <button routerLink='../'   class="btn btn-outline-primary">Volver</button>
+        <h3 class="m-0 font-weight-bold text-primary">Detalle de Producto</h3>
+        <button routerLink='/products' class="btn btn-outline-primary">Volver</button>
     </div>
 
     <div class="row d-flex justify-content-center">
-        
-            <div class="card">
-                <div class="row">
-                    <div class="col-md-6">
-                        <div class="images p-3">
-                            <div class="text-center"> <img id="main-image" src={{product?.prodImage}} width="100%" /> </div>
-                            
-                        </div>
-                    </div>
-                    <div class="col-md-6">
-                        <div class="product p-4">
-                            <div class="d-flex justify-content-between align-items-center">
-                                
-                            </div>
-                            <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand">{{razonSocial}}</span>
-                                <h5 class="text-uppercase">{{product?.prodName}}</h5>
-                                <div class="price d-flex flex-row align-items-center"> <span class="act-price">{{product?.prodPrice| currency:'USD'}}</span>
-                                   
-                                </div>
-                            </div>
-                            <p class="about">{{product?.prodDescription}}</p>
 
-                            <div class="container py-3 d-flex gap-2  align-items-baseline">
-                                <button class="btn btn-warning" [routerLink]="['form/'+product?.prodId]" >Editar</button>
-                                <button class="btn btn-danger" (click)="deleteProducto()" >Borrar</button>
+        <div class="card">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="images p-3">
+                        <div class="text-center"> <img id="main-image" src={{product?.prodImage}}
+                                (error)="handleImageError(image)" width="100%" #image /> </div>
+
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="product p-4">
+                        <div class="d-flex justify-content-between align-items-center">
+
+                        </div>
+                        <div class="mt-4 mb-3"> <span class="text-uppercase text-muted brand">{{product?.supplier.supBussinessName}}</span>
+                            <h5 class="text-uppercase">{{product?.prodName}}</h5>
+
+                         <p>{{product?.prodSku}}</p>
+                            <div class="price d-flex flex-row align-items-center"> <span
+                                    class="act-price">{{product?.prodPrice| currency:'USD'}}</span>
+
                             </div>
+                        </div>
+                        <p class="about">{{product?.prodDescription}}</p>
+
+                        <div class="container py-3 d-flex gap-2  align-items-baseline">
+                            <button class="btn btn-warning" [routerLink]="['/products/form/'+product?.prodId]">Editar</button>
+                            <button class="btn btn-danger" (click)="deleteProduct()">Borrar</button>
                         </div>
                     </div>
                 </div>
             </div>
-        
+        </div>
+
     </div>
 </div>
 

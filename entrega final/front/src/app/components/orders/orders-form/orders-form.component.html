@@ -206,10 +206,10 @@
         </div>
         <div class="form-group">
 
-            <button type="submit" [disabled]="!order_form.valid || orderDetail.length<1" *ngIf="!isEditSession"
+            <button type="submit" [disabled]=" orderDetail.length<1" *ngIf="!isEditSession"
                 class="btn btn-primary" id="guardar-orden">Crear Orden de
                 Compra</button>
-            <button type="submit" [disabled]="!order_form.valid || order.ordStatus.ordstId==10" *ngIf="isEditSession"
+            <button type="submit" [disabled]=" order.ordStatus.ordstId==10" *ngIf="isEditSession"
                 class="btn btn-primary" id="editar-orden">Editar Orden de
                 Compra</button>
             <button *ngIf="order.ordStatus.ordstId!==10 && isEditSession" class=" btn btn-danger"

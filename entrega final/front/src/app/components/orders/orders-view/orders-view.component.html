@@ -5,12 +5,12 @@
                 routerLinkActive="router-link-active">Home</a></li>
         <li class="breadcrumb-item"><a routerLink="/orders">Ordenes de Compra</a>
         </li>
-        <!-- <li class="breadcrumb-item active" aria-current="page">Orden: {{order.numero_orden_compra}}</li> -->
+        <li class="breadcrumb-item active" aria-current="page">Orden: {{order.ordId}}</li>
     </ol>
 </nav>
     
     <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
-      <!-- <h6 class="m-0 font-weight-bold text-primary">Detalles de la Orden {{order.numero_orden_compra}}</h6> -->
+      <h3 class="m-0 font-weight-bold text-primary">Detalles de la Orden {{order.ordId}}</h3>
 
       <button routerLink='../'   class="btn btn-outline-primary">Volver</button>
   </div>
@@ -18,9 +18,9 @@
     <div class="card">
       <div class="card-body">
         <p class="card-text"><strong>Número de Orden:</strong> {{ order.ordId }}</p>
-        <p class="card-text"><strong>Estado:</strong> {{ order.ordStatus.ordStatusName}}</p>
+        <p class="card-text"><strong>Estado:</strong> {{ order.ordStatus.ordstName}}</p>
         <p class="card-text"><strong>Fecha de Emisión:</strong> {{ order.ordIssueDate }}</p>
-        <p class="card-text"><strong>Fecha de Entrega Esperada:</strong> {{ order.ordExpDeliveryDate }}</p>
+        <p class="card-text"><strong>Fecha de Entrega Esperada:</strong> {{ order.ordExpDeliverDate }}</p>
   
         <div>
           <h3 class="mt-4">Información de Recepción</h3>
@@ -39,7 +39,7 @@
             </li>
           </ul>
         </div>
-        <button class="btn btn-warning" [routerLink]="['form/'+order.ordId]">Editar</button>
+        <button class="btn btn-warning" [routerLink]="['/orders/form/'+order.ordId]">Editar</button>
       </div>
     </div>
   </div>

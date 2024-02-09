@@ -145,9 +145,9 @@ export class OrdersListComponent {
   showTable():boolean{
     let count=0
     for(let ord of this.orders){
-      if(ord.ordStatus.ordstId== this.selectedOrderStatus)
+      if(ord.ordStatus.ordstId== this.selectedOrderStatus || this.selectedOrderStatus=='' || this.selectedOrderStatus=='all' )
       count++;
     }
-    return count>0 && this.selectedOrderStatus!=='all';
+    return count>0;
   }
 }

@@ -208,11 +208,12 @@ export class OrdersFormComponent implements OnInit {
   }
 
   addProduct(quantity: string) {
+    let productSelected=this.products.filter(p=>p.prodId== this.orderDetailProduct.product.prodId)[0];
      this.orderDetail.push({
       "order": this.orderDetailProduct.order,
-      "product":this.products.filter(p=>p.prodId== this.orderDetailProduct.product.prodId)[0],
+      "product":productSelected,
       "prodQuantity": parseInt(quantity),
-      "price":0
+      "price":productSelected.prodPrice
     })
     this.calculateTotalPrice();
     this.orderDetailProduct.product={

@@ -101,7 +101,7 @@ export class SuppliersFormComponent implements OnInit {
             this.getStates(this.supplier.address.state.country.counId)
 
           },
-          error: (error: any) => console.log("error aca guachin")
+          error: (error: any) => console.log("error")
         }
       )
     }
@@ -112,7 +112,7 @@ export class SuppliersFormComponent implements OnInit {
     this.supplierService.getSupplierById(this.idParam!).subscribe(
       {
         next: (data: HttpResponse<Supplier>) => { this.supplier = data.body! },
-        error: (error: any) => console.log("error aca guachin")
+        error: (error: any) => console.log("error")
       }
     )
   }
@@ -121,7 +121,7 @@ export class SuppliersFormComponent implements OnInit {
     this.fieldService.getFields().subscribe(
       {
         next: (data: HttpResponse<Field[]>) => { this.fields = data.body! },
-        error: (error: any) => console.log("error aca guachin")
+        error: (error: any) => console.log("error")
       }
     )
   }
@@ -130,7 +130,7 @@ export class SuppliersFormComponent implements OnInit {
     this.taxConditionService.getTaxConditions().subscribe(
       {
         next: (data: HttpResponse<TaxCondition[]>) => { this.taxConditions = data.body! },
-        error: (error: any) => console.log("error aca guachin")
+        error: (error: any) => console.log("error")
       }
     )
   }
@@ -151,7 +151,6 @@ export class SuppliersFormComponent implements OnInit {
             setTimeout(() => this.router.navigateByUrl('/suppliers'), 1000)
           },
           error: (error) => {
-            console.log(error)
             Swal.fire({
               position: "center",
               icon: "error",

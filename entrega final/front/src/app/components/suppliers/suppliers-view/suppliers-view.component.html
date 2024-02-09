@@ -1,53 +1,77 @@
 <div class="container">
   <nav aria-label="breadcrumb ms-3">
     <ol class="breadcrumb">
-        <li class="breadcrumb-item active" aria-current="page"><a routerLink="/"
-                routerLinkActive="router-link-active">Home</a></li>
-        <li class="breadcrumb-item"><a routerLink="/suppliers">Proveedores</a>
-        </li>
-        <li class="breadcrumb-item active" aria-current="page">Proveedor: {{supplier?.supBussinessName}}</li>
+      <li class="breadcrumb-item active" aria-current="page"><a routerLink="/"
+          routerLinkActive="router-link-active">Home</a></li>
+      <li class="breadcrumb-item"><a routerLink="/suppliers">Proveedores</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">Proveedor: {{supplier?.supBussinessName}}</li>
     </ol>
-</nav>
-       
-        <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
-          <h6 class="m-0 font-weight-bold text-primary">Detalle del Proveedor</h6>
-          <button routerLink='../'   class="btn btn-outline-primary">Volver</button>
-      </div>
-      
-        <div class="card">
-          <div class="card-body">
-      
-            <p class="card-text"><strong>Código:</strong> {{ supplier?.supCode}}</p>
-            <p class="card-text"><strong>Razón Social:</strong> {{ supplier?.supBussinessName }}</p>
-            <p class="card-text"><strong>Rubro:</strong> {{ supplier?.field?.fieldName}}</p>
-            <p class="card-text"><strong>Sitio Web:</strong> {{ supplier?.supWebsite }}</p>
-            <p class="card-text"><strong>Email:</strong> {{ supplier?.supEmail }}</p>
-            <p class="card-text"><strong>Teléfono:</strong> {{ supplier?.supTelephone}}</p>
-      
-            <div>
-              <h4 class="mt-4">Dirección</h4>
-              <p><strong>Calle y Número:</strong> {{ supplier?.address?.addrStreet+', ' + supplier?.address?.addrNumber }}</p>
-              <p><strong>CP:</strong> {{ supplier?.address?.addrPostcode }}</p>
-              <p><strong>Localidad:</strong> {{ supplier?.address?.cityName }}</p>
-              <p><strong>Provincia:</strong> {{ supplier?.address?.state?.stateName}}</p>
-              <p><strong>País:</strong> {{ supplier?.address?.state?.country?.counName }}</p>
-            </div>
-      
-            <div>
-              <h4 class="mt-4">Datos Fiscales</h4>
-              <p><strong>CUIT:</strong> {{ supplier?.supCuit }}</p>
-              <p><strong>Condición IVA:</strong> {{ supplier?.taxCond?.taxCondTitle}}
-      
-            <div>
-              <h4 class="mt-4">Datos de Contacto</h4>
-              <p><strong>Nombre:</strong> {{ supplier?.supContact?.supContactName }}</p>
-              <p><strong>Apellido:</strong> {{ supplier?.supContact?.supContactLastname }}</p>
-              <p><strong>Teléfono de Contacto:</strong> {{ supplier?.supContact?.supContactTelephone }}</p>
-              <p><strong>Email de Contacto:</strong> {{ supplier?.supContact?.supContactEmail }}</p>
-              <p><strong>Rol:</strong> {{ supplier?.supContact?.supContactRole }}</p>
-            </div>
-            <p class="mt-4"><strong>Activo:</strong> {{ supplier?.isActive ? 'Sí' : 'No' }}</p>
-            <button class="btn btn-warning" [routerLink]="['../edit/'+supplier?.supCode]">Editar</button>
-          </div>
+  </nav>
+
+  <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
+    <h3 class="m-0 font-weight-bold text-primary">Detalle del Proveedor</h3>
+    <button routerLink='../' class="btn btn-outline-primary">Volver</button>
+  </div>
+  <div class="row d-flex justify-content-between mb-2">
+
+
+    <div class="col-12 col-md-6 ">
+      <div class="card">
+        <div class="card-body">
+          <h4>Info</h4>
+          <p class="card-text"><strong>Código:</strong> {{ supplier?.supCode}}</p>
+          <p class="card-text"><strong>Razón Social:</strong> {{ supplier?.supBussinessName }}</p>
+          <p class="card-text"><strong>Rubro:</strong> {{ supplier?.field?.fieldName}}</p>
+          <p class="card-text"><strong>Sitio Web:</strong> {{ supplier?.supWebsite }}</p>
+          <p class="card-text"><strong>Email:</strong> {{ supplier?.supEmail }}</p>
+          <p class="card-text"><strong>Teléfono:</strong> {{ supplier?.supTelephone}}</p>
         </div>
+      </div>
+    </div>
+
+    <div class="col-12 col-md-6 ">
+      <div class="card">
+        <div class="card-body">
+          <h4>Dirección</h4>
+          <p><strong>Calle y Número:</strong> {{ supplier?.address?.addrStreet+', ' + supplier?.address?.addrNumber }}
+          </p>
+          <p><strong>CP:</strong> {{ supplier?.address?.addrPostcode }}</p>
+          <p><strong>Localidad:</strong> {{ supplier?.address?.cityName }}</p>
+          <p><strong>Provincia:</strong> {{ supplier?.address?.state?.stateName}}</p>
+          <p><strong>País:</strong> {{ supplier?.address?.state?.country?.counName }}</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-12 col-md-6 ">
+      <div class="card">
+        <div class="card-body">
+          <h4>Datos Fiscales</h4>
+          <p><strong>CUIT:</strong> {{ supplier?.supCuit }}</p>
+          <p><strong>Condición IVA:</strong> {{ supplier?.taxCond?.taxCondTitle}}
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-md-6 ">
+      <div class="card">
+        <div class="card-body">
+          <h4>Datos de Contacto</h4>
+          <p><strong>Nombre:</strong> {{ supplier?.supContact?.supContactName }}</p>
+          <p><strong>Apellido:</strong> {{ supplier?.supContact?.supContactLastname }}</p>
+          <p><strong>Teléfono de Contacto:</strong> {{ supplier?.supContact?.supContactTelephone }}</p>
+          <p><strong>Email de Contacto:</strong> {{ supplier?.supContact?.supContactEmail }}</p>
+          <p><strong>Rol:</strong> {{ supplier?.supContact?.supContactRole }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
+    <p class="mt-4"><strong>Activo:</strong> {{ supplier?.isActive ? 'Sí' : 'No' }}</p>
+    <button class="btn btn-warning" [routerLink]="['/suppliers/form/'+supplier?.supId]">Editar</button>
+  </div>
 </div>
