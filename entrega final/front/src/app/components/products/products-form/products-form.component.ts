@@ -8,6 +8,7 @@ import { Supplier } from 'src/app/models/supplier';
 import { HttpResponse } from '@angular/common/http';
 import { Product } from 'src/app/models/product';
 import { CategoriesService } from 'src/app/services/categories.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-products-form',
@@ -34,7 +35,7 @@ export class ProductsFormComponent implements OnInit {
     "prodName": "",
     "prodDescription": "",
     "prodPrice": '',
-    "prodAvailable": true
+    "prodAvailable":true
   };
 
   constructor(
@@ -53,13 +54,6 @@ export class ProductsFormComponent implements OnInit {
       }
       )
 
-    this.categoryService.getCategories().subscribe(
-      {
-        next: (data: HttpResponse<Category[]>) => { this.categories = data.body! },
-        error: (error: any) => console.log(error)
-      }
-    )
-
     //---------------------
     if (this.isEditSession) {
       this.productsService.getProductById(this.idParam!).subscribe(
@@ -71,14 +65,84 @@ export class ProductsFormComponent implements OnInit {
     }
   }
 
+  getCategoriesOfSupplier(supplier:number){
+  this.categoryService.getCategoriesBySupplier(supplier).subscribe(
+    {
+      next: (data) => { this.categories = data.body! },
+      error: (error) => {
+            console.log(error.error)
+            Swal.fire({
+              position: "center",
+              icon: "error",
+              title: error.error,
+  
+              showConfirmButton: false,
+              timer: 1500
+            })
+          }
+    }
+  )
+  }
+
   createProduct(form: NgForm) {
 
     if(this.isEditSession){
-      this.productsService.editProduct(this.product).subscribe(data => console.log(data))
+      this.productsService.editProduct(this.product).subscribe(
+        {
+          next: (data) => {
+
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: `Producto ${this.product.prodName} creado exitosamente`,
+  
+              showConfirmButton: false,
+              timer: 1500
+            })
+            setTimeout(() => this.router.navigateByUrl('/products'), 1000)
+          },
+          error: (error) => {
+            console.log(error.error)
+            Swal.fire({
+              position: "center",
+              icon: "error",
+              title: error.error,
+  
+              showConfirmButton: false,
+              timer: 1500
+            })
+          }
+        }
+      )
     }
     else{
 
-      this.productsService.addProduct(this.product).subscribe(data => console.log(data))
+      this.productsService.addProduct(this.product).subscribe(
+        {
+          next: (data) => {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: `Producto ${this.product.prodName} creado exitosamente`,
+  
+              showConfirmButton: false,
+              timer: 1500
+            })
+            setTimeout(() => this.router.navigateByUrl('/products'), 1000)
+          },
+          error: (error) => {
+            console.log(error.error)
+            Swal.fire({
+              position: "center",
+              icon: "error",
+              title: error.error,
+  
+              showConfirmButton: false,
+              timer: 1500
+            })
+          }
+        }
+      )
     }
     // setTimeout(()=>this.router.navigateByUrl('/productos'),1000)
   }

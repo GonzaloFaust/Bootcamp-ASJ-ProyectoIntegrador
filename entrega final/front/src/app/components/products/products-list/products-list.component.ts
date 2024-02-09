@@ -8,6 +8,7 @@ import { HttpResponse } from '@angular/common/http';
 import { Product } from 'src/app/models/product';
 import Swal from 'sweetalert2'
 
+
 @Component({
   selector: 'app-products-list',
   templateUrl: './products-list.component.html',
@@ -29,8 +30,19 @@ export class ProductsListComponent implements OnInit {
   getAllProducts(){
     this.productsService.getProducts().subscribe(
       {
-        next: (data: HttpResponse<Product[]>) => { this.products = data.body! },
-        error: (error) => console.log(error)
+        next: (data: HttpResponse<Product[]>) => {
+           this.products = data.body!
+          
+          },
+        error: (error) => {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Error al obtener informacion",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
       }
     )
   }
@@ -39,7 +51,15 @@ export class ProductsListComponent implements OnInit {
     this.categoryService.getCategories().subscribe({
 
       next: (data: HttpResponse<Category[]>) => { this.categories = data.body! },
-      error: (error) => console.log(error)
+      error: (error) => {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Error al obtener informacion",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
     })
   }
 
@@ -80,14 +100,34 @@ export class ProductsListComponent implements OnInit {
       allowOutsideClick: false,
       allowEscapeKey: false,
       confirmButtonText: 'Eliminar',
+      confirmButtonColor: "#b11",
       cancelButtonText: 'Cancelar',
     })
       .then(res => {
         if (res.isConfirmed) {
           this.productsService.deleteProduct(prod).subscribe(
             {
-              next: (data: HttpResponse<String>) => { console.log(data.statusText);this.search() },
-              error: (error) => console.error(error.message)
+              next: (data: HttpResponse<String>) => { 
+  
+                  Swal.fire({
+                    position: "center",
+                    icon: "success",
+                    title: `producto ${prod.prodName} eliminado correctamente`,
+                    showConfirmButton: false,
+                    timer: 1500
+                  });
+                 
+                this.search() 
+              },
+              error: (error) => {
+                Swal.fire({
+                  position: "center",
+                  icon: "success",
+                  title: `Error al eliminar`,
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+              }
             }
           )
         }
@@ -102,21 +142,45 @@ export class ProductsListComponent implements OnInit {
   undeleteProduct(prod: Product) {
     this.productsService.undeleteProduct(prod.prodId).subscribe(
       {
-        next: (data: HttpResponse<String>) => { console.log(data);this.search(); },
-        error: (error) => console.error(error.message)
+        next: (data: HttpResponse<String>) => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title:  `producto ${prod.prodName} recuperado correctamente`,
+            showConfirmButton: false,
+            timer: 1500
+          });
+          this.search(); },
+        error: (error) => {
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: "Error al intentar recuperar el producto",
+            showConfirmButton: false,
+            timer: 1500
+          });
+        }
       }
     )
   }
 
 
   search() {
-    console.log("!antes: ",this.filters)
+
     this.productsService.getProductBySearch(this.filters).subscribe({
       next: (data: HttpResponse<Product[]>) => {
         this.products = data.body!;
       
       },
-      error: (error) => console.error(error.message)
+      error: (error) => {
+        Swal.fire({
+          position: "center",
+          icon: "error",
+          title: "Error al obtener informacion",
+          showConfirmButton: false,
+          timer: 1500
+        });
+      }
     })
   }
 }

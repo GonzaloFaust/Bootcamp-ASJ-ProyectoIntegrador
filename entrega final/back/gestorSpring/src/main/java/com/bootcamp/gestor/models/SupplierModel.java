@@ -3,6 +3,7 @@ package com.bootcamp.gestor.models;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.validator.constraints.URL;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -34,8 +35,8 @@ public class SupplierModel {
 
     @NotNull(message="Supplier code can't be null")
     @NotBlank(message="Supplier code can't be empty")
-    @Size(max = 5)
-    @Column(name = "sup_code", nullable = false, length = 5, unique = true)
+    @Size(min= 4,max = 11)
+    @Column(name = "sup_code", nullable = false, length = 11, unique = true)
     private String supCode;
 
     @NotNull(message="Bussiness name can't be null")
@@ -51,12 +52,13 @@ public class SupplierModel {
     @JoinColumn(name = "field_id")
     private FieldModel field;
 
-    
+    @URL(regexp = "^(http|ftp).*",message="not a valid url for image")
     @NotNull(message="Image can't be null")
     @NotBlank(message="Image can't be empty")
     @Column(name = "sup_image")
     private String supImage;
 
+    @URL(regexp = "^(http|ftp).*",message="not a valid url for website")
     @NotNull(message="Website url can't be null")
     @NotBlank(message="Website url can't be empty")
     @Size(max = 40)
@@ -65,13 +67,13 @@ public class SupplierModel {
 
     @NotNull(message="E-mail address can't be null")
     @NotBlank(message="E-mail address can't be empty")
-    @Size(max = 40)
+    @Size(min= 7,max = 40)
     @Column(name = "sup_email", nullable = false, length = 40)
     private String supEmail;
 
     @NotNull(message="Telephone number can't be null")
     @NotBlank(message="Telephone number can't be empty")
-    @Size(max = 11)
+    @Size(min=9,max = 11)
     @Column(name = "sup_telephone", nullable = false, length = 11)
     private String supTelephone;
 
@@ -93,7 +95,7 @@ public class SupplierModel {
 
     @NotNull(message="Taxpayer Id Number can't be null")
     @NotBlank(message="Taxpayer Id Number can't be empty")
-    @Size(max = 11)
+    @Size(min=10,max = 11)
     @Column(name = "sup_cuit", length = 11)
     private String supCuit;
 
@@ -116,11 +118,9 @@ public class SupplierModel {
     @Column(name = "sup_isactive")
     private Boolean isActive;
     
-    @OneToMany(mappedBy="supplier",cascade= CascadeType.ALL)
-    private List<PurchaseOrderModel> supplierOrdersList;
     
 
- // @NotNull(message="Creation date can't be null")
+	// @NotNull(message="Creation date can't be null")
 //  @NotBlank(message="Creation date can't be empty")
 	@Column(name = "created_at")
 	@Temporal(TemporalType.TIMESTAMP)

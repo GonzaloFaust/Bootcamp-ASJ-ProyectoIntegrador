@@ -4,6 +4,7 @@ import { environment } from 'src/environments/environment.development';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { CategoriesService } from './categories.service';
+import { Supplier } from '../models/supplier';
 
 @Injectable({
   providedIn: 'root'
@@ -33,7 +34,7 @@ export class ProductsService {
 
   public addProduct(product: Product): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
-    return this.http.post<Product>(this.API_URL, product, { headers });
+    return this.http.post<any>(this.API_URL, product, { headers });
   }
 
   public editProduct(product: Product): Observable<any> {
@@ -54,7 +55,6 @@ export class ProductsService {
   }
 
   public getProductBySearch(filters: any): Observable<any> {
-    console.log(filters)
     let params = new HttpParams();
     const keys = Object.keys(filters)
 
@@ -64,6 +64,10 @@ export class ProductsService {
     }
 
     return this.http.get(this.API_URL + '/q?', { params: params, observe: "response" })
+  }
+
+  public getProductBySupplier(sup:Supplier):Observable<any>{
+    return this.http.get(this.API_URL+'/by?supplier='+sup.supId, { observe: "response" })
   }
 }
 

@@ -30,6 +30,7 @@
                 <select [class.input-valid]="supplier.valid && supplier.touched"
                     [class.input-invalid]="supplier.touched &&supplier.invalid" [disabled]="isEditSession"
                     class="form-select" id="supplierCode" name="supplier" required
+                    (change)="getCategoriesOfSupplier(supplier.value)"
                     [(ngModel)]="product!.supplier.supId" #supplier="ngModel">
                     <option value="" disabled selected>Elige una Proveedor</option>
                     <option *ngFor="let sup of suppliers" [value]="sup.supId">{{sup.supBussinessName}}</option>
@@ -80,9 +81,8 @@
                 <label for="productImage" class="form-label">Imagen:</label>
                 <input type="text" class="form-control" id="productImage" name="prodImage" placeholder="URL de la imagen"
                     [(ngModel)]="product!.prodImage" #productImage="ngModel">
-                     <div *ngIf="productName?.errors?.['required'] && (productName.touched)">
-                    
-                </div>
+    
+
             </div>
         </div>
 
@@ -127,9 +127,6 @@
             <button type="submit" [disabled]="!product_form.valid" *ngIf="isEditSession" class="btn btn-primary"
             id="editar-producto">Editar Producto</button>
             
-        </div>
-        <div [hidden]="!product_form.submitted" class="alert alert-success position-absolute align-content-around ">
-            <h2>Producto {{isEditSession?'Modificado':'Agregado'}} con exito!</h2>
         </div>
     </form>
 

@@ -6,11 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import com.bootcamp.gestor.models.CategoryModel;
 import com.bootcamp.gestor.models.FieldModel;
+import com.bootcamp.gestor.models.SupplierModel;
 import com.bootcamp.gestor.repositories.CategoryRepository;
 import com.bootcamp.gestor.repositories.FieldRepository;
+import com.bootcamp.gestor.repositories.SupplierRepository;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
@@ -22,6 +23,9 @@ public class CategoryService {
 	CategoryRepository categoryRepo;
 	@Autowired
 	FieldRepository fieldRepo;
+	@Autowired
+	SupplierRepository supplierRepo;
+	
 
 	public List<CategoryModel> getCategories() {
 		return categoryRepo.findAll();
@@ -30,6 +34,16 @@ public class CategoryService {
 	public CategoryModel getCategoryById(int id) {
 		return categoryRepo.findById(id)
 				.orElseThrow(() -> new EntityNotFoundException("Couldn´t find a category with the id " + id));
+	}
+	
+	public List<CategoryModel> getCategoryBySupplier(int id){
+		Optional<SupplierModel> sup = supplierRepo.findById(id);
+		if(sup.isPresent()) {
+			return this.categoryRepo.getCategoriesBySupplier(id);
+		}
+		else {
+			throw new EntityNotFoundException("No se encontró el proveedor");
+		}
 	}
 
 	public List<CategoryModel> createCategory(CategoryModel category) {

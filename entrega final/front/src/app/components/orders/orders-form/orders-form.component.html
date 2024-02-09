@@ -9,7 +9,7 @@
         </ol>
     </nav>
 
-    
+
 
 </div>
 
@@ -21,134 +21,180 @@
         <h5 class="m-0 font-weight-bold text-primary">{{isEditSession?"Edición":"Registro"}} Orden de Compra</h5>
         <button routerLink='../' class="btn btn-outline-primary">Volver</button>
     </div>
-    <form #order_form="ngForm" (ngSubmit)="createOrden(order_form)">
+    <form #order_form="ngForm" (ngSubmit)="createOrden()">
 
         <div class="row gy-4 mb-4 ">
 
-        
-        <div class="form-group col-12 col-md-6">
-            <label class="form-label" for="issue_date">Fecha de Emisión:</label>
 
-            <input [disabled]="isEditSession" type="date" class="form-control" id="issue_date" name="issue_date"
-                required [(ngModel)]="this.service.orderTemplate.fecha_emision"
-                #issueDate="ngModel" [min]="minFechaEmision">
-    
-            <div class="position-absolute">
-                <span *ngIf="issueDate?.errors?.['required'] && (issueDate.dirty || issueDate.touched)" class="font-weight-light warning-txt">La Fecha de Emisión es obligatoria.</span>
-                <span *ngIf="issueDate?.errors?.['min'] && (issueDate.dirty || issueDate.touched)" class="font-weight-light warning-txt">La fecha debe estar entre 1/1/2000 y la fecha actual.</span>
+            <div class="form-group col-12 col-md-6">
+                <label class="form-label" for="issue_date">Fecha de Emisión:</label>
+
+                <input [class.input-valid]="issueDate.valid && issueDate.touched"
+                    [class.input-invalid]="issueDate.touched && issueDate.invalid" [disabled]="isEditSession"
+                    type="date" class="form-control" id="issue_date" name="ordIssueDate" required
+                    [(ngModel)]="order.ordIssueDate" #issueDate="ngModel" [min]="minFechaEmision">
+
+                <div class="position-absolute">
+                    <span *ngIf="issueDate?.errors?.['required'] && (issueDate.dirty || issueDate.touched)"
+                        class="font-weight-light warning-txt">La Fecha de Emisión es obligatoria.</span>
+                    <span *ngIf="issueDate?.errors?.['min'] && (issueDate.dirty || issueDate.touched)"
+                        class="font-weight-light warning-txt">La fecha debe estar entre 1/1/2000 y la fecha
+                        actual.</span>
+                </div>
+            </div>
+
+            <div class="form-group col-12 col-md-6">
+                <label class="form-label" for="Exp_delivery_date">Fecha de Entrega Esperada:</label>
+                <input [class.input-valid]="expDeliveryDate.valid && expDeliveryDate.touched"
+                    [class.input-invalid]="expDeliveryDate.touched && expDeliveryDate.invalid" type="date"
+                    class="form-control" id="Exp_delivery_date" name="ordExpDeliveryDate" required
+                    [(ngModel)]="order.ordExpDeliverDate" #expDeliveryDate="ngModel" [min]="order.ordIssueDate">
+
+                <div class="position-absolute ">
+                    <span
+                        *ngIf="expDeliveryDate?.errors?.['required'] && (expDeliveryDate.dirty || expDeliveryDate.touched)"
+                        class="font-weight-light warning-txt">La Fecha de Entrega Esperada es obligatoria.</span>
+                    <span *ngIf="expDeliveryDate?.errors?.['min'] && (expDeliveryDate.dirty || expDeliveryDate.touched)"
+                        class="font-weight-light warning-txt">La fecha no puede ser menor que la Fecha de
+                        Emisión.</span>
+                </div>
+            </div>
+
+        </div>
+        <div class="row gy-4 mb-4 ">
+
+            <div class="form-group col-12 col-md-8">
+                <label class="form-label" for="supplier_code">Proveedor:</label>
+                <select [class.input-valid]="supplierCode.valid && supplierCode.touched"
+                    [class.input-invalid]="supplierCode.touched && supplierCode.invalid"
+                    (change)="getProductosBySupplier()" [disabled]="isEditSession || orderDetail.length>0"
+                    class="form-select" id="supplier_code" name="supplier" required [(ngModel)]="order.supplier.supId"
+                    required #supplierCode="ngModel">
+                <option value="" disabled selected>Elija un proveedor</option>
+                    <option *ngFor="let sup of suppliers" value={{sup.supId}}>{{sup.supBussinessName}}</option>
+                </select>
+                <div class="position-absolute ">
+                    <span *ngIf="supplierCode?.errors?.['required'] && (supplierCode.dirty || supplierCode.touched)"
+                        class="font-weight-light warning-txt">El proveedor es obligatorio</span>
+                </div>
+            </div>
+
+            <div class="form-group col-12 col-md-4">
+                <label class="form-label" for="order_state">Estado:</label>
+                <select [class.input-valid]="orderState.valid && orderState.touched"
+                    [class.input-invalid]="orderState.touched && orderState.invalid"
+                    [disabled]="order.ordStatus.ordstId===10" class="form-select" id="order_state" name="ordstId"
+                    required [(ngModel)]="order.ordStatus.ordstId" required #orderState="ngModel">
+                    <ng-container *ngFor="let status of orderStatus">
+                        <option *ngIf="status.ordstId!==10" value="{{status.ordstId}}">{{status.ordstName}}</option>
+                    </ng-container>
+                </select>
+                <div class="position-absolute ">
+                    <span *ngIf="orderState?.errors?.['required'] && (orderState.dirty || orderState.touched)"
+                        class="font-weight-light warning-txt">El estado de la orden es obligatorio</span>
+                </div>
             </div>
         </div>
-    
-        <div class="form-group col-12 col-md-6">
-            <label class="form-label" for="Exp_delivery_date">Fecha de Entrega Esperada:</label>
-            <input  type="date" class="form-control" id="Exp_delivery_date"
-                name="exp_delivery_date" required [(ngModel)]="this.service.orderTemplate.fecha_entrega_esperada"
-                #expDeliveryDate="ngModel" [min]="this.service.orderTemplate.fecha_emision">
-    
-            <div *ngIf="expDeliveryDate.invalid && (expDeliveryDate.dirty || expDeliveryDate.touched)">
-                <div *ngIf="expDeliveryDate?.errors?.['required'] && (expDeliveryDate.dirty || expDeliveryDate.touched)" class="text-danger">La Fecha de Entrega Esperada es obligatoria.</div>
-                <div *ngIf="expDeliveryDate?.errors?.['min'] && (expDeliveryDate.dirty || expDeliveryDate.touched)" class="text-danger">La fecha no puede ser menor que la Fecha de Emisión.</div>
+
+        <div class="row mb-4">
+
+            <div class="form-group col-sm-12">
+                <label for="description" class="form-label">Informacion de entrega: <span *ngIf="deliveryInfo.invalid"
+                        class="warning-txt">✱</span></label>
+                <textarea [class.input-valid]="deliveryInfo.valid && deliveryInfo.touched"
+                    [class.input-invalid]="deliveryInfo.touched && deliveryInfo.invalid" class="form-control"
+                    id="description" name="prodDescription" rows="3" required
+                    placeholder="Ingrese informacion para la entrega" [(ngModel)]="order.ordDeliveryInfo"
+                    #deliveryInfo="ngModel"></textarea>
+                <div class="position-absolute">
+                    <span *ngIf="deliveryInfo?.errors?.['required'] && (deliveryInfo.touched)"
+                        class="font-weight-light warning-txt">Descripción es obligatoria.</span>
+                </div>
             </div>
         </div>
-
-    </div>
-    <div class="row gy-4 mb-4 ">
-
-        <div class="form-group col-12 col-md-8">
-            <label class="form-label" for="supplier_code">Proveedor:</label>
-            <select (change)="getProductosProveedor()" [disabled]="isEditSession" class="form-select" id="supplier_code"
-                name="supplier_code" required [(ngModel)]="this.service.orderTemplate.cod_proveedor" #supplierCode="ngModel">
-                
-                <!-- <option *ngFor="let prov of proveedores" value={{prov.cod_proveedor}}>{{prov.razon_social}}</option> -->
-            </select>
-        </div>
-
-        <div class="form-group col-12 col-md-4">
-            <label class="form-label" for="order_state">Estado:</label>
-            <select [disabled]="this.service.orderTemplate.state==='cancelado'"class="form-select" id="order_state" name="order_state" required
-                [(ngModel)]="this.service.orderTemplate.state" required>
-                <ng-container *ngFor="let est of estadosOrden">
-                    <option *ngIf="est!=='cancelado'" value="{{est}}">{{est}}</option>
-                </ng-container>
-            </select>
-        </div>
-        </div>
-
-        <div  id="productosContainer" >
+        <div id="productosContainer">
             <div *ngIf="!isEditSession">
 
-                <hr class="text-muted mt-5"/>
+                <hr class="text-muted mt-5" />
                 <h6 class="mb-3 mt-5 font-weight-bold text-primary">Productos</h6>
                 <div class="row gy-4 mb-4 producto-agregado">
                     <div class=" form-group col-12 col-md-8">
                         <label class="form-label" for="selected_item">Producto:</label>
-                        <select #selectedItem="ngModel" [(ngModel)]="this.service.orderTemplate" [disabled]="isEditSession" class="form-select" id="selected_item" [disabled]="supplierCode.invalid!">
-                            <option *ngFor="let item of productosDisponibles" value="{{item.codigo_SKU}}" >
-                                {{item.nombre_producto}}</option>
+                        <select [class.input-valid]="selectedItem.valid && selectedItem.touched"
+                        [class.input-invalid]="selectedItem.touched && selectedItem.invalid && supplierCode.enabled "
+                        #selectedItem="ngModel" [(ngModel)]="orderDetailProduct.product"
+                            [disabled]="isEditSession" class="form-select" id="selected_item" name="prodId"
+                            [disabled]="supplierCode.invalid!" required>
+                            <option *ngFor="let prod of products" value="{{prod}}">
+                                {{prod.prodName}}</option>
                         </select>
-                        <div *ngIf="selectedItem.invalid && (selectedItem.dirty || selectedItem.touched)">
-                            <div *ngIf="selectedItem.errors?.['required']" class="text-danger">Debe elegir un producto.</div>
+                        <div class="position-absolute">
+                            <span *ngIf="selectedItem.errors?.['required'] && supplierCode.enabled" class="text-danger">Debe elegir un producto.
+                            </span>
                         </div>
                     </div>
 
-                    <div class="form-grou´p col-12 col-md-4">
+                    <div class="form-group col-12 col-md-4">
                         <label class="form-label" for="quantity">Cantidad:</label>
-                        <input #selected_quantity [disabled]="isEditSession" type="number" id="quantity" class="form-control" [disabled]="supplierCode.value=='' && selectedItem.valid">
+                        <input #selected_quantity type="number" id="quantity" name="prodQuantity" class="form-control"
+                            [(ngModel)]="orderDetailProduct.prodQuantity"
+                            [disabled]="supplierCode.value=='' || selectedItem.value==''">
                     </div>
 
                     <div class="row">
                         <div class="form-group col-md-6 mt-4">
-                            <button [disabled]="isEditSession" type="button" class="btn btn-success"
-                                (click)="agregarProducto(selectedItem.value, selected_quantity.value)"
+                            <button [disabled]="selectedItem.value=='' || selected_quantity.value==''" type="button"
+                                class="btn btn-success"
+                                (click)="agregarProducto(selectedItem.value-1, selected_quantity.value)"
                                 id="btn-agregar-producto">Agregar Producto</button>
                         </div>
                     </div>
                 </div>
             </div>
-            </div>
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Producto</th>
-                        <th>Cantidad</th>
-                        <th>Precio unitario</th>
-                        <th>Precio total</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let prod of productosAgregados">
-                        <td>{{prod.nombre_producto}}</td>
-                        <td>{{prod.cantidad}}</td>
-                        <td>{{prod.precio | currency:"USD"}}</td>
-                        <td>{{prod.precio*prod.cantidad | currency:"USD"}}</td>
-                        <td>
-                            <button (click)="deleteProduct(prod.codigo_SKU)" [disabled]="isEditSession"
-                                class="btn btn-danger">Borrar</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="row mb-5">
-                <div class="col-12 text-muted text-end ">
-                    <p class="mt-5"><span class="warning-txt" style="font-size:1em">✱   </span> El campo es obligatorio</p>
- 
+        </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Cantidad</th>
+                    <th>Precio unitario</th>
+                    <th>Precio total</th>
+                    <th *ngIf="!isEditSession">Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let ordDet of orderDetail">
+                    <td>{{ordDet.product.prodName}}</td>
+                    <td>{{ordDet.prodQuantity}}</td>
+                    <td>{{ordDet.product.prodPrice | currency:"USD"}}</td>
+                    <td>{{ordDet.prodQuantity*ordDet.product.prodPrice | currency:"USD"}}</td>
+                    <td *ngIf="!isEditSession">
+                        <button class="btn btn-danger btn-sm text-light " (click)="deleteProduct(ordDet.product)"
+                            *ngIf="!isEditSession"><fa-icon [icon]="faDelete"></fa-icon></button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <div class="row mb-5">
+            <div class="col-12 text-muted text-end ">
+                <p class="mt-5"><span class="warning-txt" style="font-size:1em">✱ </span> El campo es obligatorio</p>
+
             </div>
         </div>
-            <div class="form-group">
+        <div class="form-group">
 
-                <button type="submit" [disabled]="!order_form.valid || this.service.orderTemplate.productos.length<1" *ngIf="!isEditSession" class="btn btn-primary"
-                id="guardar-orden">Crear Orden de
+            <button type="submit" [disabled]="!order_form.valid || orderDetail.length<1" *ngIf="!isEditSession"
+                class="btn btn-primary" id="guardar-orden">Crear Orden de
                 Compra</button>
-                <button type="submit" [disabled]="!order_form.valid || this.service.orderTemplate.state=='cancelado'"
-                *ngIf="isEditSession" class="btn btn-primary" id="editar-orden">Editar Orden de
+            <button type="submit" [disabled]="!order_form.valid || order.ordStatus.ordstId==10" *ngIf="isEditSession"
+                class="btn btn-primary" id="editar-orden">Editar Orden de
                 Compra</button>
-                <button *ngIf="this.service.orderTemplate.state!=='cancelado' && isEditSession" class=" btn btn-danger"
+            <button *ngIf="order.ordStatus.ordstId!==10 && isEditSession" class=" btn btn-danger"
                 (click)="cancelarOrden()">Cancelar Orden</button>
-            </div>
-                <div [hidden]="!order_form.submitted" class="alert alert-success position-absolute bottom-0 end-0">
-                    <h2>Orden {{isEditSession?'Modificada':'Agregada'}} con exito!</h2>
-                </div>
+        </div>
+        <div [hidden]="!order_form.submitted" class="alert alert-success position-absolute bottom-0 end-0">
+            <h2>Orden {{isEditSession?'Modificada':'Agregada'}} con exito!</h2>
+        </div>
     </form>
 
 </div>

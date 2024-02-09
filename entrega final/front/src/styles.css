@@ -6,7 +6,7 @@
     --font-small: 0.8em;
 
     ::placeholder {
-        color: #ccc;
+        color: var(--clr-disabled);
     }
 }
 
@@ -29,6 +29,9 @@ option[disabled] {
     color:var(--clr-disabled)
 }
 
+option[value=""]{
+    color:var(--clr-disabled);
+}
 
 
 .input-valid {

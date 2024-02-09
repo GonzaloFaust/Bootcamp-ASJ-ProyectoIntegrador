@@ -36,20 +36,21 @@ export class SuppliersService {
     return this.http.post<Supplier>(this.API_URL, sup, { headers });
 
   }
-
-  public editSupplier(sup:Supplier): Observable<any> {
-    const headers = { 'Content-Type': 'application/json' };
-    return this.http.put<Supplier>(this.API_URL + '/' + sup.supId, sup, { headers})
-  }
-
+  
   public deleteSupplier(sup:Supplier): Observable<any> {
     return this.http.delete(this.API_URL + '/' + sup.supId, { responseType: 'text' })
     
   }
 
+  public editSupplier(sup:Supplier): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.put<Supplier>(this.API_URL + '/' + sup.supId, sup, { headers, responseType: 'text' as 'json'})
+  }
+
+
   public undeleteProduct(sup:Supplier): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
-    return this.http.put(this.API_URL + '/undelete/' + sup.supId, { headers})
+    return this.http.put<Supplier>(this.API_URL + '/undelete/' + sup.supId, {},{ headers, responseType: 'text' as 'json'})
   }
 
   public getSupplierBySearch(filters: any): Observable<any> {

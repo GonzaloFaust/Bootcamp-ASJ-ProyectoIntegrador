@@ -21,7 +21,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
 @Entity
@@ -40,13 +40,13 @@ public class PurchaseOrderModel {
 	@JoinColumn(name = "ord_status_id")
 	private OrderStatusModel ordStatus;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@NotNull(message = "Order creation date can't be null")
    // @NotBlank(message="Order creation date can't be empty")
 	@Column(name = "ord_issue_date", nullable = false)
 	private Date ordIssueDate;
 
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	@NotNull(message = "Expect delivery date can't be null")
    // @NotBlank(message="Expect delivery date can't be empty")
 	@Column(name = "ord_exp_deliver_date", nullable = false)
@@ -55,11 +55,10 @@ public class PurchaseOrderModel {
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<PurchaseOrderProductModel> orderDetail;
 	
-	@NotNull(message = "Address id can't be null")
-//    @NotBlank(message="Address id can't be empty")
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "addr_id")
-	private AddressModel address;
+	@NotNull(message = "Delivery info can't be null")
+    @NotBlank(message="Address id can't be empty")
+	@Column(name = "ord_delivery_info")
+	private String ordDeliveryInfo;
 
 	
 	@NotNull(message = "Supplier id can't be null")
@@ -71,7 +70,7 @@ public class PurchaseOrderModel {
 	// @NotNull(message="Creation date can't be null")
 //  @NotBlank(message="Creation date can't be empty")
 	@Column(name = "created_at")
-	//@Temporal(TemporalType.TIMESTAMP)
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdAt;
 
 //  @NotNull(message="Updating date can't be null")
@@ -112,10 +111,7 @@ public class PurchaseOrderModel {
 		this.ordIssueDate = ordIssueDate;
 	}
 
-	public void setAddress(AddressModel address) {
-		this.address = address;
-	}
-
+	
 	public void setSupplier(SupplierModel supplier) {
 		this.supplier = supplier;
 	}
@@ -140,9 +136,19 @@ public class PurchaseOrderModel {
 		return ordIssueDate;
 	}
 
-	public AddressModel getAddress() {
-		return address;
+
+
+	public String getOrdDeliveryInfo() {
+		return ordDeliveryInfo;
 	}
+
+	public void setOrdDeliveryInfo(String ordDeliveryInfo) {
+		this.ordDeliveryInfo = ordDeliveryInfo;
+	}
+
+//	public List<PurchaseOrderProductModel> getOrderDetail() {
+//		return orderDetail;
+//	}
 
 	public SupplierModel getSupplier() {
 		return supplier;

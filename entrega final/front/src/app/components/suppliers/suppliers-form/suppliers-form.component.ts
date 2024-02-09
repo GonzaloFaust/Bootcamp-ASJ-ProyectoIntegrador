@@ -12,6 +12,7 @@ import { State } from 'src/app/models/state';
 import { TaxConditionsService } from 'src/app/services/tax-conditions.service';
 import { Supplier } from 'src/app/models/supplier';
 import { FieldsService } from 'src/app/services/fields.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-suppliers-form',
@@ -60,7 +61,8 @@ export class SuppliersFormComponent implements OnInit {
         "supContactTelephone": '',
         "supContactEmail": "",
         "supContactRole": "",
-      }
+      },
+      "isActive":true
     }
 
 
@@ -78,7 +80,7 @@ export class SuppliersFormComponent implements OnInit {
   countries: Country[] = []
   states: State[] = []
   fields: Field[] = []
- 
+
 
 
   getBack() {
@@ -87,27 +89,26 @@ export class SuppliersFormComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCountries()
-  this.getFields();
-  this.getTaxConditions();
-  if (this.isEditSession) {
+    this.getFields();
+    this.getTaxConditions();
+    if (this.isEditSession) {
       this.getSuppliers();
-      
+
       this.supplierService.getSupplierById(this.idParam!).subscribe(
         {
-          next: (data: HttpResponse<Supplier[]>) => 
-          { 
+          next: (data: HttpResponse<Supplier[]>) => {
             this.supplier = data.body!;
             this.getStates(this.supplier.address.state.country.counId)
 
-           },
+          },
           error: (error: any) => console.log("error aca guachin")
         }
       )
     }
-    
+
   }
 
-  getSuppliers(){
+  getSuppliers() {
     this.supplierService.getSupplierById(this.idParam!).subscribe(
       {
         next: (data: HttpResponse<Supplier>) => { this.supplier = data.body! },
@@ -116,7 +117,7 @@ export class SuppliersFormComponent implements OnInit {
     )
   }
 
-  getFields(){
+  getFields() {
     this.fieldService.getFields().subscribe(
       {
         next: (data: HttpResponse<Field[]>) => { this.fields = data.body! },
@@ -125,7 +126,7 @@ export class SuppliersFormComponent implements OnInit {
     )
   }
 
-  getTaxConditions(){
+  getTaxConditions() {
     this.taxConditionService.getTaxConditions().subscribe(
       {
         next: (data: HttpResponse<TaxCondition[]>) => { this.taxConditions = data.body! },
@@ -137,13 +138,63 @@ export class SuppliersFormComponent implements OnInit {
   createProveedor(form: NgForm) {
     if (this.isEditSession) {
       this.supplierService.editSupplier(this.supplier).subscribe(
-        data => console.log(data)
+        {
+          next: (data) => {
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: data,
+  
+              showConfirmButton: false,
+              timer: 1500
+            })
+            setTimeout(() => this.router.navigateByUrl('/suppliers'), 1000)
+          },
+          error: (error) => {
+            console.log(error)
+            Swal.fire({
+              position: "center",
+              icon: "error",
+              title: error.error,
+  
+              showConfirmButton: false,
+              timer: 1500
+            })
+          }
+        }
       )
+
     }
+
+
+
     else this.supplierService.addSupplier(this.supplier).subscribe(
-      data => console.log(data)
+      {
+        next: (data) => {
+          Swal.fire({
+            position: "center",
+            icon: "success",
+            title: data,
+
+            showConfirmButton: false,
+            timer: 1500
+          })
+          setTimeout(() => this.router.navigateByUrl('/suppliers'), 1000)
+        },
+        error: (error) => {
+          console.log(error)
+          Swal.fire({
+            position: "center",
+            icon: "error",
+            title: error.error,
+
+            showConfirmButton: false,
+            timer: 1500
+          })
+        }
+      }
     )
-    setTimeout(()=>this.router.navigateByUrl('/suppliers'),1000)
+
   }
 
   getCountries() {

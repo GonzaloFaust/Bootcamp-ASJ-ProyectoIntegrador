@@ -5,19 +5,19 @@
                 routerLinkActive="router-link-active">Home</a></li>
         <li class="breadcrumb-item"><a routerLink="/orders">Ordenes de Compra</a>
         </li>
-        <li class="breadcrumb-item active" aria-current="page">Orden: {{order.numero_orden_compra}}</li>
+        <!-- <li class="breadcrumb-item active" aria-current="page">Orden: {{order.numero_orden_compra}}</li> -->
     </ol>
 </nav>
     
     <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
-      <h6 class="m-0 font-weight-bold text-primary">Detalles de la Orden {{order.numero_orden_compra}}</h6>
+      <!-- <h6 class="m-0 font-weight-bold text-primary">Detalles de la Orden {{order.numero_orden_compra}}</h6> -->
 
       <button routerLink='../'   class="btn btn-outline-primary">Volver</button>
   </div>
   
     <div class="card">
       <div class="card-body">
-        <p class="card-text"><strong>Número de Orden:</strong> {{ order.numero_orden_compra }}</p>
+        <!-- <p class="card-text"><strong>Número de Orden:</strong> {{ order.numero_orden_compra }}</p>
         <p class="card-text"><strong>Estado:</strong> {{ order.state }}</p>
         <p class="card-text"><strong>Fecha de Emisión:</strong> {{ order.fecha_emision }}</p>
         <p class="card-text"><strong>Fecha de Entrega Esperada:</strong> {{ order.fecha_entrega_esperada }}</p>
@@ -32,17 +32,17 @@
           <p><strong>País:</strong> {{ order.informacion_recepcion.direccion.pais }}</p>
         </div>
   
-        <p class="mt-4"><strong>Código del Proveedor:</strong> {{ order.cod_proveedor }}</p>
+        <p class="mt-4"><strong>Código del Proveedor:</strong> {{ order.cod_proveedor }}</p> -->
   
-        <div>
+        <!-- <div>
           <h3 class="mt-4">Productos</h3>
           <ul class="list-group">
             <li *ngFor="let producto of order.productos" class="list-group-item">
               <p><strong>Código SKU:</strong> {{ producto.codigo_SKU }}, <strong>Cantidad:</strong> {{ producto.cantidad }}</p>
             </li>
           </ul>
-        </div>
-        <button class="btn btn-warning" [routerLink]="['form/'+order.numero_orden_compra]">Editar</button>
+        </div> -->
+        <!-- <button class="btn btn-warning" [routerLink]="['form/'+order.numero_orden_compra]">Editar</button> -->
       </div>
     </div>
   </div>

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.gestor.models.CategoryModel;
@@ -40,6 +41,17 @@ public class CategoryController {
 	public ResponseEntity<Object> getCategoryById(@PathVariable int id ){
 		try {
 		return ResponseEntity.ok(categoryService.getCategoryById(id));
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
+	@GetMapping("/by")
+	public ResponseEntity<Object> getCategoryBySupplier(@RequestParam("supplier") int id ){
+		try {
+		return ResponseEntity.ok(categoryService.getCategoryBySupplier(id));
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (Exception e) {

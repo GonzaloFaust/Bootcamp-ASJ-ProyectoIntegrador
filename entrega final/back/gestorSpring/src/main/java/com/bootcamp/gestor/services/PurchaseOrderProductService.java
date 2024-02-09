@@ -30,10 +30,13 @@ public class PurchaseOrderProductService {
 	public List<PurchaseOrderProductModel> getAllPurchaseOrderProducts(){
 	    return purchOrdProdRepo.findAll();
 	}
-
+	public List<PurchaseOrderProductModel> getPurchaseOrderProductsByOrder(int id){
+	    return purchOrdProdRepo.findByOrder(id);
+	}
+	
 	public PurchaseOrderProductModel getPurchaseOrderProductById(long id) {
 		return purchOrdProdRepo.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("Couldn´t find a purchase order item with the id " + id));
+				.orElseThrow(() -> new EntityNotFoundException("No se pudo encontrar una orden de compra con el id " + id));
 	}
 
 	public PurchaseOrderProductModel createPurchaseOrderProduct(PurchaseOrderProductModel purchOrdProd){
@@ -49,12 +52,12 @@ public class PurchaseOrderProductService {
 				return purchOrdProdRepo.save(purchOrdProd);
 			}
 			else {
-				throw new EntityNotFoundException("Couldn't find order or product of this order item");
+				throw new EntityNotFoundException("No se pudo encontrar la orden o el producto para este detalle de orden");
 			}
 		}
 		else
 		{
-			throw new IllegalArgumentException("Product quantity must be greater than zero");
+			throw new IllegalArgumentException("La cantidad de producto debe ser mayor a cero");
 		}
 	}
 

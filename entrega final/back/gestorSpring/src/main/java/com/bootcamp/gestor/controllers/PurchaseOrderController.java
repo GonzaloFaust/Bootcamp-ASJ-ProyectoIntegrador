@@ -13,8 +13,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bootcamp.gestor.models.ProductModel;
 import com.bootcamp.gestor.models.PurchaseOrderModel;
 import com.bootcamp.gestor.services.PurchaseOrderService;
 
@@ -32,6 +34,12 @@ public class PurchaseOrderController {
 	@GetMapping()
 	public ResponseEntity<List<PurchaseOrderModel>> getPurchaseOrders() {
 		return ResponseEntity.ok(purchaseOrderService.getAllPurchaseOrders());
+	}
+	
+	@GetMapping("/by")
+	public ResponseEntity<List<PurchaseOrderModel>> getProductsBySupplier(@RequestParam("status") int id){
+
+		return ResponseEntity.ok(purchaseOrderService.getOrderByStatus(id));
 	}
 
 	@GetMapping("/{id}")
@@ -89,5 +97,7 @@ public class PurchaseOrderController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+	
+	
 
 }

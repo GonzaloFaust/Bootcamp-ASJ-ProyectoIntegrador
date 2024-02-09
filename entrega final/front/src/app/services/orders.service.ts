@@ -1,92 +1,68 @@
 import { Injectable } from '@angular/core';
 import { purchaseOrder } from '../../assets/data/orders';
 import { Order } from '../models/order';
-import { OrderState } from '../models/orderState';
+import { OrderStatus } from '../models/orderStatus';
+import { Observable } from 'rxjs';
+import { environment } from 'src/environments/environment.development';
+import { HttpClient } from '@angular/common/http';
+import { OrderDetail } from '../models/orderDetail';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrdersService {
 
-  PREFIX: string = "OC";
-  counter: number = 1;
 
-  ordersData: Array<Order> = []
-
-  orderTemplate: Order = structuredClone(blankOrder);
-
-  constructor() {
-    this.ordersData = JSON.parse(localStorage.getItem('orders')!) || [...purchaseOrder]
+  private API_URL = environment.API_URL + 'purchase-order';
+  private API_URL_ORDER_STATUS = environment.API_URL + 'order-status'
+  private API_URL_ORDER_DETAIL = this.API_URL + '-product'
+  constructor(private http: HttpClient
+  ) {
   }
 
-  public getOrders(): Order[] {
-    return this.ordersData;
+  public getOrders(): Observable<any> {
+    return this.http.get(this.API_URL, { observe: "response" });
   }
 
-  public getOrderById(id: string): Order {
-    const ord= this.ordersData.filter(o => o.numero_orden_compra == id)[0]
-    this.orderTemplate = ord;
-    console.log(this.orderTemplate)
-    return ord;
+  public getByStatus(status: string): Observable<any> {
+    return this.http.get(this.API_URL + '/by?status=' + status, { observe: "response" })
   }
 
-  public addOrder(): void {
-    let newId = this.PREFIX + this.counter;
-    while (this.ordersData.some(p => p.numero_orden_compra === newId)) {
-      this.counter++;
-      newId = this.PREFIX + this.counter;
-    }
-    this.ordersData.push({ ...this.orderTemplate, numero_orden_compra: this.PREFIX+this.counter++ });
-    this.orderTemplate = structuredClone(blankOrder)
-    this.saveData()
+  public getOrderById(id: string): Observable<any> {
+    return this.http.get(this.API_URL + '/' + id, { observe: "response" });
   }
 
-  public editOrder(id:string): void {
-  this.orderTemplate = { ...structuredClone(this.orderTemplate), numero_orden_compra:id }
-  this.saveData()
-  this.orderTemplate = structuredClone(blankOrder)
-}
+  public addOrder(order: Order): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post(this.API_URL, order, { headers })
+  }
 
-  public deleteOrder(id: string): void {
-    let ord= this.getOrderById(id);
-    ord.state= OrderState.cancelado
-    this.saveData()
+  public editOrder(order: Order): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.put(this.API_URL + "/" + order.ordId, order, { headers })
+  }
+  public addOrderDetail(detail: OrderDetail): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post(this.API_URL_ORDER_DETAIL, detail, { headers })
+  }
+
+  public deleteOrder(order: Order): Observable<any> {
+    return this.http.delete(this.API_URL + '/' + order.ordId, { responseType: 'text' })
   }
 
 
-  private saveData() {
-    localStorage.setItem('orders', JSON.stringify(this.ordersData))
+  public getAllOrderStatus(): Observable<any> {
+    return this.http.get(this.API_URL_ORDER_STATUS, { observe: "response" });
   }
-}
 
-export const blankOrder: Order = {
-  numero_orden_compra: "",
-  state: "pendiente" as OrderState,
-  fecha_emision: "",
-  fecha_entrega_esperada: "",
-  informacion_recepcion: {
-    direccion: {
-      calle_numero: "",
-      cp: "",
-      localidad: "",
-      provincia: "",
-      pais: ""
-    }
-  },
-  cod_proveedor: "",
-  productos: [
-    {
-      codigo_SKU: "",
-      cantidad: 0
-    }
-  ]
+  public getOrderDetail(order: Order): Observable<any> {
+    return this.http.get(this.API_URL + '-product/by?order=' + order.ordId, { observe: "response" });
+  }
+
 }
 
 
-//   public deleteProducto() {
-//   this.productosData = this.productosData.filter(p => p.id !== this.productTemplate.id)
-//   this.saveData()
-// }
+
 
 
 

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.gestor.models.ProductModel;
+
 import com.bootcamp.gestor.services.ProductService;
 
 import jakarta.persistence.EntityExistsException;
@@ -38,6 +39,12 @@ public class ProductController {
 	@GetMapping("/q")
 	public ResponseEntity<List<ProductModel>> getProductsSearch(@RequestParam(value="searchTerm", required=false) String searchTerm, @RequestParam(value="category", required=false) Integer category ) {
 		return ResponseEntity.ok(productService.getProductsSearch(searchTerm, category));
+	}
+	
+	@GetMapping("/by")
+	public ResponseEntity<List<ProductModel>> getProductsBySupplier(@RequestParam("supplier") int id){
+
+		return ResponseEntity.ok(productService.getProductsBySupplier(id));
 	}
 
 	@GetMapping("/{id}")
@@ -69,7 +76,7 @@ public class ProductController {
 	@PutMapping("/undelete/{id}")
 	public ResponseEntity<Object> makeAvailableProduct(@PathVariable int id) {
 		try {
-			return ResponseEntity.ok(productService.makeAvailable(id));
+			return new ResponseEntity<>(productService.makeAvailable(id), HttpStatus.OK);
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (EntityExistsException e) {

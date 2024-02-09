@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.bootcamp.gestor.models.CategoryModel;
 import com.bootcamp.gestor.models.ProductModel;
+
 import com.bootcamp.gestor.models.SupplierModel;
 import com.bootcamp.gestor.repositories.CategoryRepository;
 import com.bootcamp.gestor.repositories.ProductRepository;
@@ -41,15 +42,28 @@ public class ProductService {
 		}
 		return productRepo.findByTitleContainingAndCategory(searchTerm, category);
 	}
+	
+	public List<ProductModel> getProductsBySupplier(int id){
+		Optional<SupplierModel> sup= supplierRepo.findById(id);
+		if(sup.isPresent()) {
+			List<ProductModel> list= productRepo.findBysupplier(sup.get());
+
+		return list;
+		}
+		else {
+			throw new EntityNotFoundException("No se pudo encontrar el proveedor");
+		}
+	}
+
 	public ProductModel getProductById(int id) {
 		return productRepo.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("Couldn´t find a product with the id " + id));
+				.orElseThrow(() -> new EntityNotFoundException("No se pudo encontrar un producto con el id " + id));
 	}
 
 	public List<ProductModel> createProduct(ProductModel product) {
 		if (product.getProdName().isEmpty() || product.getProdDescription().isEmpty()
 				 || product.getProdPrice() <= 0 || product.getProdSku().isEmpty())
-			throw new IllegalArgumentException("There's missing data, can't create the product");
+			throw new IllegalArgumentException("Faltan datos, no se puede crear el producto");
 
 		Optional<SupplierModel> sup = supplierRepo.findById(product.getSupplier().getSupId());
 		Optional<CategoryModel> cat = categoryRepo.findById(product.getCategory().getCatId());
@@ -57,15 +71,16 @@ public class ProductService {
 		if (sup.isPresent() && cat.isPresent()) {
 			SupplierModel supplier = sup.get();
 			CategoryModel category = cat.get();
+			
 			for (ProductModel p : productRepo.findAll()) {
-				if (supplier.getSupId() == p.getSupplier().getSupId() && product.getProdSku().equals(p.getProdSku()))
-					throw new EntityExistsException("The supplier already offers this product");
+				if (supplier.getSupId() == p.getSupplier().getSupId() && product.getProdSku().equals(p.getProdSku()) && p.getProdId()!= product.getProdId())
+					throw new EntityExistsException("El proveedor ya ofrece este producto");
 			}
 			product.setCategory(category);
 			product.setSupplier(supplier);
 
 		} else {
-			throw new EntityNotFoundException("Couldn't find category or supplier of this product");
+			throw new EntityNotFoundException("No se pudo encontrar la categoría o el proveedor de este producto");
 		}
 		productRepo.save(product);
 		return productRepo.findAll();
@@ -79,20 +94,24 @@ public class ProductService {
 			if (product.getProdName().isEmpty() || product.getProdDescription().isEmpty()
 					|| product.getProdImage().isEmpty() || product.getProdPrice() == 0
 					|| product.getProdSku().isEmpty())
-				throw new IllegalArgumentException("There's missing data, can't create the product");
+				throw new IllegalArgumentException("Faltan datos, no se puede crear el producto");
 
 			Optional<SupplierModel> sup = supplierRepo.findById(product.getSupplier().getSupId());
 			Optional<CategoryModel> cat = categoryRepo.findById(product.getCategory().getCatId());
 
 			if (sup.isPresent() && cat.isPresent()) {
-//				SupplierModel supplier = sup.get();
-//				CategoryModel category = cat.get();
-//				for (ProductModel p : productRepo.findAll()) {
-//					if (supplier.getSupId() == p.getSupplier().getSupId() && product.getProdSku().equals(p.getProdSku()))
-//						throw new EntityExistsException("The supplier already offers this product");
-//				}
-//				prod.setCategory(category);
-//				prod.setSupplier(supplier);
+				SupplierModel supplier = sup.get();
+				CategoryModel category = cat.get();
+				
+				
+				for (ProductModel p : productRepo.findAll()) {
+					if (supplier.getSupId() == p.getSupplier().getSupId() && product.getProdSku().equals(p.getProdSku()) && p.getProdId()!= product.getProdId())
+						throw new EntityExistsException("El proveedor ya ofrece este producto");
+				}
+				
+				
+				prod.setCategory(category);
+				prod.setSupplier(supplier);
 				prod.setProdDescription(product.getProdDescription());
 				prod.setProdName(product.getProdName());
 				prod.setProdPrice(product.getProdPrice());
@@ -102,24 +121,24 @@ public class ProductService {
 				productRepo.save(prod);
 				return prod;
 			} else {
-				throw new EntityNotFoundException("Couldn't find category or supplier of this product");
+				throw new EntityNotFoundException("No se pudo encontrar la categoría o el proveedor de este producto");
 			}
 		} else {
-			throw new EntityNotFoundException("Couldn´t find a product with the id " + id);
+			throw new EntityNotFoundException("No se pudo encontrar un producto con el id " + id);
 		}
 	}
-	
+
 	public ProductModel makeAvailable(int id) {
 		Optional<ProductModel> productExists = productRepo.findById(id);
 		if (productExists.isPresent()) {
 			ProductModel prod = productExists.get();
 			if(prod.getProdAvailable()==true)
-				throw new EntityExistsException("The product is available already");
+				throw new EntityExistsException("El producto ya está disponible");
 			prod.setProdAvailable(true);
 			productRepo.save(prod);
 			return prod;
 		} else {
-			throw new EntityNotFoundException("Couldn´t find a product with the id " + id);
+			throw new EntityNotFoundException("No se pudo encontrar un producto con el id " + id);
 		}
 	}
 
@@ -130,9 +149,9 @@ public class ProductService {
 			
 			p.setProdAvailable(false);
 			productRepo.save(p);
-			return "Product " + p.getProdName() + " deleted succesfully";
+			return "Producto " + p.getProdName() + " eliminado exitosamente";
 		} else {
-			throw new EntityNotFoundException("Couldn´t find a product with the id " + id);
+			throw new EntityNotFoundException("No se pudo encontrar un producto con el id " + id);
 		}
 	}
 
