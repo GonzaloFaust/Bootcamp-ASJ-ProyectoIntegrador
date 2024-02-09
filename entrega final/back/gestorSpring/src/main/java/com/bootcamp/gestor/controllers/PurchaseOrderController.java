@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,12 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bootcamp.gestor.models.ProductModel;
+import com.bootcamp.gestor.ErrorHandler;
 import com.bootcamp.gestor.models.PurchaseOrderModel;
 import com.bootcamp.gestor.services.PurchaseOrderService;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/purchase-order")
@@ -57,9 +59,14 @@ public class PurchaseOrderController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<Object> createPurchaseOrder(@RequestBody PurchaseOrderModel purchaseOrder) {
+	public ResponseEntity<Object> createPurchaseOrder(@Valid @RequestBody PurchaseOrderModel purchaseOrder, BindingResult bindingResult) {
 		try {
-			return ResponseEntity.ok(purchaseOrderService.createPurchaseOrder(purchaseOrder));
+			if(bindingResult.hasErrors()){
+				String errors = new ErrorHandler().inputValidate(bindingResult);
+				return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+			} else {
+				return ResponseEntity.ok(purchaseOrderService.createPurchaseOrder(purchaseOrder));
+			}
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (IllegalArgumentException e) {
@@ -72,10 +79,14 @@ public class PurchaseOrderController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<String> updatePurchaseOrder(@PathVariable int id,
-			@RequestBody PurchaseOrderModel purchaseOrder) {
+	public ResponseEntity<String> updatePurchaseOrder(@PathVariable int id, @Valid @RequestBody PurchaseOrderModel purchaseOrder, BindingResult bindingResult) {
 		try {
-			return ResponseEntity.ok(purchaseOrderService.updatePurchaseOrder(id, purchaseOrder));
+			if(bindingResult.hasErrors()){
+				String errors = new ErrorHandler().inputValidate(bindingResult);
+				return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+			} else {
+				return ResponseEntity.ok(purchaseOrderService.updatePurchaseOrder(id, purchaseOrder));
+			}
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (IllegalArgumentException e) {
@@ -86,6 +97,7 @@ public class PurchaseOrderController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deletePurchaseOrder(@PathVariable int id) {

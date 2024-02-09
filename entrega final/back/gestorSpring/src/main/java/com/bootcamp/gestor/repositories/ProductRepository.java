@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.bootcamp.gestor.models.CategoryModel;
 import com.bootcamp.gestor.models.ProductModel;
 import com.bootcamp.gestor.models.SupplierModel;
 
@@ -17,5 +18,8 @@ public interface ProductRepository extends JpaRepository<ProductModel,Integer>{
 	
 	
 	List<ProductModel> findBysupplier(SupplierModel supplier);
+	
+	List<ProductModel> findBycategory(CategoryModel category);
+	
 }
 

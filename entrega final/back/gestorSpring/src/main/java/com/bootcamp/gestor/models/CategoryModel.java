@@ -18,6 +18,7 @@ import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
@@ -37,6 +38,7 @@ public class CategoryModel {
     private String catName;
 
     @NotNull(message="Category description can't be null")
+    @NotBlank(message="Creation date can't be empty")
     @Size(max = 200)
     @Column(name = "cat_detail", nullable = false, length = 200)
     private String catDetail;

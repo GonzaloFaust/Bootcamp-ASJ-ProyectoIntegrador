@@ -141,4 +141,13 @@ export class OrdersListComponent {
     }
    
   }
+
+  showTable():boolean{
+    let count=0
+    for(let ord of this.orders){
+      if(ord.ordStatus.ordstId== this.selectedOrderStatus)
+      count++;
+    }
+    return count>0;
+  }
 }

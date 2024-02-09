@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bootcamp.gestor.ErrorHandler;
 import com.bootcamp.gestor.models.CountryModel;
 import com.bootcamp.gestor.services.CountryService;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/country")
@@ -45,9 +48,14 @@ public class CountryController {
 	}
 	
 	@PostMapping()
-	public ResponseEntity<Object> createCountry(@RequestBody CountryModel country) {
+	public ResponseEntity<Object> createCountry(@Valid @RequestBody CountryModel country, BindingResult bindingResult) {
 		try {
-			return ResponseEntity.ok(countryService.createCountry(country));
+			if(bindingResult.hasErrors()){
+				String errors = new ErrorHandler().inputValidate(bindingResult);
+				return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+			} else {
+				return ResponseEntity.ok(countryService.createCountry(country));
+			}
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (IllegalArgumentException e) {
@@ -58,11 +66,16 @@ public class CountryController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> updateCountry(@PathVariable int id, @RequestBody CountryModel country) {
+	public ResponseEntity<Object> updateCountry(@PathVariable int id, @Valid @RequestBody CountryModel country, BindingResult bindingResult) {
 		try {
-			return ResponseEntity.ok(countryService.updateCountry(id, country));
+			if(bindingResult.hasErrors()){
+				String errors = new ErrorHandler().inputValidate(bindingResult);
+				return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+			} else {
+				return ResponseEntity.ok(countryService.updateCountry(id, country));
+			}
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (IllegalArgumentException e) {
@@ -73,6 +86,7 @@ public class CountryController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 	
 	
     @DeleteMapping("/{id}")

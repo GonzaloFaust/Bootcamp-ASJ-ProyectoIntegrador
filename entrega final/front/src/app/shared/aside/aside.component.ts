@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { faHome, faTruck, faBox, faMoneyBill, faGear } from '@fortawesome/free-solid-svg-icons'
 
 @Component({
   selector: 'app-aside',
@@ -7,7 +8,11 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrls: ['./aside.component.css']
 })
 export class AsideComponent {
-
+faSupplier=faTruck
+faProduct=faBox
+  faAdmin=faGear
+  faOrder=faMoneyBill
+  faHome=faHome
   constructor(private route: Router){}
 
   laRuta(word:string):boolean{

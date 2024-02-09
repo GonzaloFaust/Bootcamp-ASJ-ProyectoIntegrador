@@ -49,6 +49,7 @@ public class PurchaseOrderProductService {
 				ProductModel product= prod.get();
 				purchOrdProd.setOrder(purchOrder);
 				purchOrdProd.setProduct(product);
+				purchOrdProd.setPrice(product.getProdPrice());
 				return purchOrdProdRepo.save(purchOrdProd);
 			}
 			else {

@@ -1,7 +1,7 @@
 <div class="container mt-5">
     <div class="accordion" id="management">
         <!-- Categorías -->
-        <div class="accordion-item">
+        <section class="accordion-item">
             <h2 class="accordion-header" id="headingCategories">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCategories" aria-expanded="true" aria-controls="collapseCategories">
                     Categorías
@@ -12,46 +12,44 @@
                     <form>
                         <div class="row">
 
-                            <div class="form-group col">
+                            <div class="form-group col-2">
                                 <label class="form-label" for="categorySelect">Selecciona una categoría:</label>
-                                <select class="form-control" id="categorySelect">
-                                    <option value="opcion1">Opción 1</option>
-                                    <option value="opcion2">Opción 2</option>
-                                    <!-- Agrega más opciones aquí -->
+                                <select class="form-select" id="categorySelect" (change)="updateCategorias(field.value)" #field>
+                                    <option value="" disabled selected>Elija el rubro</option>
+                                    <option *ngFor="let f of fields" value="{{f.fieldId}}">{{f.fieldName}}</option>
+                                    
+
                                 </select>
                             </div>
-                            <div class="form-group col">
-                                <label class="form-label" for="nombreInput">Nombre:</label>
-                                <input type="text" class="form-control" id="nombreInput" placeholder="Ingresa tu nombre">
-                            </div>
-                            <div class="col position-relative  ">
+                            <div class="form-group col-2">
+                                <label class="form-label" for="categorySelect">Selecciona una categoría:</label>
+                                <select class="form-select" id="categorySelect" name="categoryId" [(ngModel)]="selectedCategory" #categoryId="ngModel">
+                                    <option value="" disabled selected>Elija la categoria</option>
+                                    <option *ngFor="let c of categories" value="{{c.catId}}">{{c.catName}}</option>
+                                    
 
-                                <button type="submit" class="btn btn-primary position-absolute bottom-0 ">Enviar</button>
+                                </select>
+                            </div>
+                            <div class="form-group col-2">
+                                <label class="form-label" for="nombreInput">Nombre:</label>
+                                <input type="text" class="form-control" id="nombreInput" placeholder="Ingresa tu nombre" #categoryName>
+                            </div>
+                            <div class="form-group col-2">
+                                <label class="form-label" for="nombreDesc">Descripcion:</label>
+                                <input type="text" class="form-control" id="nombreDesc" placeholder="Ingresa la descripcion" #categoryDesc>
+                            </div>
+                            <div class="col-2 align-text-bottom d-flex align-items-end ">
+
+                                <button type="submit" class="btn btn-warning bottom-0 me-2" (click)="categoryId.value==''?createCategory(categoryName.value,categoryDesc.value, field.value):editCategory(categoryName.value,categoryDesc.value)">{{categoryId.value==''?'Crear':'Editar'}}</button>
+                                <button type="submit" class="btn btn-outline-danger bottom-0 "[disabled]="categoryId.value==''" (click)="deleteCategory()">Eliminar</button>
                             </div>
                         </div>
                     </form>
-                    <table class="table mt-3">
-                        <thead>
-                            <tr>
-                                <th>Columna 1</th>
-                                <th>Columna 2</th>
-                                <th>Columna 3</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Dato 1</td>
-                                <td>Dato 2</td>
-                                <td>Dato 3</td>
-                            </tr>
-                            <!-- Agrega más filas aquí -->
-                        </tbody>
-                    </table>
                 </div>
             </div>
-        </div>
+        </section>
         <!-- Agrega más secciones de acordeón aquí -->
-        <div class="accordion-item">
+        <!-- <section class="accordion-item">
             <h2 class="accordion-header" id="headingOne">
                 <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                     Categorías
@@ -65,7 +63,7 @@
                             <select class="form-control" id="categoriaSelect">
                                 <option value="opcion1">Opción 1</option>
                                 <option value="opcion2">Opción 2</option>
-                                <!-- Agrega más opciones aquí -->
+  
                             </select>
                         </div>
                         <div class="form-group">
@@ -88,11 +86,11 @@
                                 <td>Dato 2</td>
                                 <td>Dato 3</td>
                             </tr>
-                            <!-- Agrega más filas aquí -->
+                           
                         </tbody>
                     </table>
                 </div>
             </div>
-        </div>
+        </section> -->
     </div>
 </div>

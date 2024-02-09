@@ -38,6 +38,20 @@ public class PurchaseOrderProductModel {
 //    @NotBlank(message="Product quantity can't be empty")
     @Column(name = "prod_quantity", nullable = false)
     private Integer prodQuantity;
+    
+    
+    
+    public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	@NotNull(message="Detail price can't be null")
+	@Column(name="pop_price")
+	private double price;
 
 	public PurchaseOrderProductModel() {
 		super();

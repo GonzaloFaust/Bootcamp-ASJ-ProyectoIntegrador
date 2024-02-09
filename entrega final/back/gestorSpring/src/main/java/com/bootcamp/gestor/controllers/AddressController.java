@@ -6,6 +6,7 @@ import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bootcamp.gestor.ErrorHandler;
 import com.bootcamp.gestor.models.AddressModel;
 import com.bootcamp.gestor.services.AddressService;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/address")
@@ -62,9 +65,14 @@ public class AddressController {
 //	}
 
 	@PostMapping()
-	public ResponseEntity<Object> createAddress(@RequestBody AddressModel address) {
+	public ResponseEntity<Object> createAddress(@Valid @RequestBody AddressModel address, BindingResult bindingResult) {
 		try {
-			return ResponseEntity.ok(addressService.createAddress(address));
+			if(bindingResult.hasErrors()){
+				String errors = new ErrorHandler().inputValidate(bindingResult);
+				return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+			} else {
+				return ResponseEntity.ok(addressService.createAddress(address));
+			}
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (IllegalArgumentException e) {
@@ -77,9 +85,14 @@ public class AddressController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> updateAddress(@PathVariable Long id, @RequestBody AddressModel address) {
+	public ResponseEntity<Object> updateAddress(@PathVariable Long id, @Valid @RequestBody AddressModel address, BindingResult bindingResult) {
 		try {
-			return ResponseEntity.ok(addressService.updateAddress(id, address));
+			if(bindingResult.hasErrors()){
+				String errors = new ErrorHandler().inputValidate(bindingResult);
+				return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+			} else {
+				return ResponseEntity.ok(addressService.updateAddress(id, address));
+			}
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (IllegalArgumentException e) {
@@ -90,6 +103,7 @@ public class AddressController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 
 	
 	@DeleteMapping("/{id}")

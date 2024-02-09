@@ -3,16 +3,24 @@
     <div class="sidebar-sticky">
         <ul class="nav nav-pills flex-column">
             <li class="nav-item">
-                <a class="nav-link" [routerLink]="['/home']" routerLinkActive="router-link-active" [ngClass]="laRuta('home')?'active':'link-dark'" >Inicio</a>
+                <a class="nav-link" [routerLink]="['/home']" routerLinkActive="router-link-active" [ngClass]="laRuta('home')?'active':'link-dark'" > <fa-icon class="me-1"
+                    [icon]="faHome"></fa-icon> Inicio</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link " [routerLink]="['/suppliers']" routerLinkActive="router-link-active" [ngClass]="laRuta('suppliers')?'active':'link-dark'">Proveedores</a>
+                <a class="nav-link " [routerLink]="['/suppliers']" routerLinkActive="router-link-active" [ngClass]="laRuta('suppliers')?'active':'link-dark'"> <fa-icon class="me-1"
+                    [icon]="faSupplier"></fa-icon>  Proveedores</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link " [routerLink]="['/products']" routerLinkActive="router-link-active" [ngClass]="laRuta('products')?'active':'link-dark'">Productos</a>
+                <a class="nav-link " [routerLink]="['/products']" routerLinkActive="router-link-active" [ngClass]="laRuta('products')?'active':'link-dark'"> <fa-icon class="me-1"
+                    [icon]="faProduct"></fa-icon>  Productos</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link " [routerLink]="['/orders']" routerLinkActive="router-link-active" [ngClass]="laRuta('orders')?'active':'link-dark'">Ordenes</a>
+                <a class="nav-link " [routerLink]="['/orders']" routerLinkActive="router-link-active" [ngClass]="laRuta('orders')?'active':'link-dark'"><fa-icon class="me-1"
+                    [icon]="faOrder"></fa-icon> Ordenes</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " [routerLink]="['/management']" routerLinkActive="router-link-active" [ngClass]="laRuta('management')?'active':'link-dark'"> <fa-icon class="me-1"
+                    [icon]="faAdmin"></fa-icon> Administración</a>
             </li>
         </ul>
     </div>

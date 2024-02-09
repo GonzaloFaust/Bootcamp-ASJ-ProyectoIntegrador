@@ -11,6 +11,9 @@ import { Product } from 'src/app/models/product';
 import { OrderDetail } from 'src/app/models/orderDetail';
 import { HttpResponse } from '@angular/common/http';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
+import Swal from 'sweetalert2';
+import { supplier } from 'src/assets/data/suppliers';
+import { environment } from 'src/environments/environment.development';
 
 
 @Component({
@@ -44,7 +47,8 @@ export class OrdersFormComponent implements OnInit {
     "product": {
       "prodId": ''
     },
-    "prodQuantity": ''
+    "prodQuantity": '',
+    "price":''
   }
 
   suppliers: Supplier[] = []
@@ -54,8 +58,8 @@ export class OrdersFormComponent implements OnInit {
   idParam = this.route.snapshot.paramMap.get("id-order");
   isEditSession: boolean = this.idParam !== null;
 
-  // proveedores = this.provService.getSuppliers().map(prov => { return { cod_proveedor: prov.codigo, razon_social: prov.razon_social } })
-
+  totalPrice:number=0;
+  
   minFechaEmision: string = new Date().toISOString().split('T')[0];
   maxFechaActual: string = new Date().toISOString();
 
@@ -81,9 +85,12 @@ export class OrdersFormComponent implements OnInit {
             // this.order.ordIssueDate= this.formatDate(data.body.ordIssueDate)
             this.orderService.getOrderDetail(this.order).subscribe(
               {
-                next: (data: HttpResponse<OrderDetail[]>) => { this.orderDetail = data.body! }
+                next: (data: HttpResponse<OrderDetail[]>) => {
+                   this.orderDetail = data.body! ;
+                   this.calculateTotalPrice();
+                  }
               });
-            this.getProductosBySupplier();
+            this.getProductsBySupplier();
           }
         })
 
@@ -95,8 +102,29 @@ export class OrdersFormComponent implements OnInit {
     if(this.isEditSession){
       this.orderService.editOrder(this.order).subscribe(
         {
-          next: (data) => { console.log( data.body!) },
-          error: (error) => console.log(error.error)
+          next: (data) => {
+
+            Swal.fire({
+              position: "center",
+              icon: "success",
+              title: `Orden  ${this.order.supplier.supBussinessName} modificada exitosamente`,
+  
+              showConfirmButton: false,
+              timer: 1500
+            })
+            setTimeout(() => this.router.navigateByUrl('/products'), 1000)
+          },
+          error: (error) => {
+
+            Swal.fire({
+              position: "center",
+              icon: "error",
+              title: error.error,
+  
+              showConfirmButton: false,
+              timer: 1500
+            })
+          }
         }
       )
     }
@@ -108,8 +136,29 @@ export class OrdersFormComponent implements OnInit {
               det.order=data;
               this.orderService.addOrderDetail(det).subscribe(
                 {
-                  next: (data: HttpResponse<Product>) => {console.log( data.body!); },
-                  error: (error: any) => console.log("falla en detalle ",error.error)
+                  next: (data) => {
+        
+                    Swal.fire({
+                      position: "center",
+                      icon: "success",
+                      title: `Orden  ${this.order.supplier.supBussinessName} creada exitosamente`,
+          
+                      showConfirmButton: false,
+                      timer: 1500
+                    })
+                    setTimeout(() => this.router.navigateByUrl('/products'), 1000)
+                  },
+                  error: (error) => {
+                    console.log(error.error)
+                    Swal.fire({
+                      position: "center",
+                      icon: "error",
+                      title: error.error,
+          
+                      showConfirmButton: false,
+                      timer: 1500
+                    })
+                  }
                 }
               )
             }
@@ -123,7 +172,7 @@ export class OrdersFormComponent implements OnInit {
     }
   }
 
-  cancelarOrden() {
+  cancelOrder() {
     this.orderService.deleteOrder(this.order).subscribe({
       next: (data: HttpResponse<Product[]>) => { this.products = data.body! }
     })
@@ -136,19 +185,36 @@ export class OrdersFormComponent implements OnInit {
     return `${year}-${month}-${day}`;
 }
 
-  getProductosBySupplier() {
+  getProductsBySupplier() {
     this.productService.getProductBySupplier(this.order.supplier).subscribe({
       next: (data: HttpResponse<Product[]>) => { this.products = data.body! }
     })
   }
 
-  agregarProducto(prod: number, quantity: string) {
-    console.log(this.orderDetailProduct.product)
-    this, this.orderDetail.push({
+  handleImage(sup:Supplier):string {
+    let supplier:Supplier = this.suppliers.filter((s:Supplier)=>s.supId==this.order.supplier.supId)[0]
+
+    return  supplier? supplier.supImage:"https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Blank_square.svg/2048px-Blank_square.svg.png"
+  }
+  handleImageError(image: HTMLImageElement) {
+    image.src = environment.SUP_IMAGE_MOCK
+  }
+
+  calculateTotalPrice(){
+    this.totalPrice=0;
+    for(let det of this.orderDetail){
+      this.totalPrice+=det.prodQuantity*det.price;
+    }
+  }
+
+  addProduct(quantity: string) {
+     this.orderDetail.push({
       "order": this.orderDetailProduct.order,
-      "product": this.orderDetailProduct.product,
-      "prodQuantity": parseInt(quantity)
+      "product":this.products.filter(p=>p.prodId== this.orderDetailProduct.product.prodId)[0],
+      "prodQuantity": parseInt(quantity),
+      "price":0
     })
+    this.calculateTotalPrice();
     this.orderDetailProduct.product={
       "prodId": ''
     };
@@ -158,5 +224,6 @@ export class OrdersFormComponent implements OnInit {
 
   deleteProduct(product:Product) {
     this.orderDetail= this.orderDetail.filter(o=>o.product.prodId!==product.prodId)
+    this.calculateTotalPrice();
   }
 }

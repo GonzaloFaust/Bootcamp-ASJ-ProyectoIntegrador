@@ -2,10 +2,10 @@ package com.bootcamp.gestor.controllers;
 
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bootcamp.gestor.ErrorHandler;
 import com.bootcamp.gestor.models.FieldModel;
 import com.bootcamp.gestor.services.FieldService;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/field")
@@ -47,25 +49,34 @@ public class FieldController {
 	}
 	
 	@PostMapping()
-	public ResponseEntity<Object> createField( @RequestBody FieldModel field){
+	public ResponseEntity<Object> createField(@Valid @RequestBody FieldModel field, BindingResult bindingResult){
 		try {
+			if(bindingResult.hasErrors()){
+				String errors = new ErrorHandler().inputValidate(bindingResult);
+				return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+			} else {
+				return ResponseEntity.ok(fieldService.createField(field));
+			}
+		} catch (EntityNotFoundException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+		} catch (EntityExistsException e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+		} catch (Exception e) {
+			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
 
-			return ResponseEntity.ok(fieldService.createField(field));
-		} catch (EntityNotFoundException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-		} catch (IllegalArgumentException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-		} catch (EntityExistsException e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
-		} catch (Exception e) {
-			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-		}
-	}
-	
 	@PutMapping("/{id}")
-	public ResponseEntity<String> updateField(@PathVariable int id, @RequestBody FieldModel field){
+	public ResponseEntity<String> updateField(@PathVariable int id, @Valid @RequestBody FieldModel field, BindingResult bindingResult){
 		try {
-			return ResponseEntity.ok(fieldService.updateField(id, field));
+			if(bindingResult.hasErrors()){
+				String errors = new ErrorHandler().inputValidate(bindingResult);
+				return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+			} else {
+				return ResponseEntity.ok(fieldService.updateField(id, field));
+			}
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (IllegalArgumentException e) {
@@ -76,6 +87,7 @@ public class FieldController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 	
 	
     @DeleteMapping("/{id}")

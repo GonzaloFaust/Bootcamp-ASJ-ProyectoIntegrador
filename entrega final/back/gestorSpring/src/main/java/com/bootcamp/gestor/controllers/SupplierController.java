@@ -2,10 +2,10 @@ package com.bootcamp.gestor.controllers;
 
 import java.util.List;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,11 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bootcamp.gestor.ErrorHandler;
 import com.bootcamp.gestor.models.SupplierModel;
 import com.bootcamp.gestor.services.SupplierService;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/supplier")
@@ -53,9 +55,14 @@ public class SupplierController {
 	}
 	
 	@PostMapping()
-	public ResponseEntity<Object> createSupplier( @RequestBody SupplierModel product){
+	public ResponseEntity<Object> createSupplier(@Valid @RequestBody SupplierModel product, BindingResult bindingResult){
 		try {
-		return ResponseEntity.ok(supplierService.createSupplier(product));
+			if(bindingResult.hasErrors()){
+				String errors = new ErrorHandler().inputValidate(bindingResult);
+				return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+			} else {
+				return ResponseEntity.ok(supplierService.createSupplier(product));
+			}
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (IllegalArgumentException e) {
@@ -66,22 +73,25 @@ public class SupplierController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	@PutMapping("/{id}")
-	public ResponseEntity<String> updateSupplier(@PathVariable int id, @RequestBody SupplierModel product){
+	public ResponseEntity<String> updateSupplier(@PathVariable int id, @Valid @RequestBody SupplierModel product, BindingResult bindingResult){
 		try {
-		return ResponseEntity.ok(supplierService.updateSupplier(id, product));
+			if(bindingResult.hasErrors()){
+				String errors = new ErrorHandler().inputValidate(bindingResult);
+				return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+			} else {
+				return ResponseEntity.ok(supplierService.updateSupplier(id, product));
+			}
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
-//		} catch (IllegalArgumentException e) {
-//			return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
 		} catch (EntityExistsException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
 		} catch (Exception e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
-	
+
 	
 	@PutMapping("/undelete/{id}")
 	public ResponseEntity<String> makeActiveSupplier(@PathVariable int id){

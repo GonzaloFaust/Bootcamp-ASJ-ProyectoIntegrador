@@ -19,7 +19,7 @@
 
     <div class="container card-header py-3 d-flex justify-content-between align-items-baseline ">
         <h5 class="m-0 font-weight-bold text-primary">{{isEditSession?"Edición":"Registro"}} Orden de Compra</h5>
-        <button routerLink='../' class="btn btn-outline-primary">Volver</button>
+        <button routerLink='/orders' class="btn btn-outline-primary">Volver</button>
     </div>
     <form #order_form="ngForm" (ngSubmit)="createOrden()">
 
@@ -63,20 +63,26 @@
         </div>
         <div class="row gy-4 mb-4 ">
 
-            <div class="form-group col-12 col-md-8">
+            <div class="form-group col-12 col-md-6">
                 <label class="form-label" for="supplier_code">Proveedor:</label>
                 <select [class.input-valid]="supplierCode.valid && supplierCode.touched"
                     [class.input-invalid]="supplierCode.touched && supplierCode.invalid"
-                    (change)="getProductosBySupplier()" [disabled]="isEditSession || orderDetail.length>0"
+                    (change)="getProductsBySupplier()" [disabled]="isEditSession || orderDetail.length>0"
                     class="form-select" id="supplier_code" name="supplier" required [(ngModel)]="order.supplier.supId"
                     required #supplierCode="ngModel">
-                <option value="" disabled selected>Elija un proveedor</option>
-                    <option *ngFor="let sup of suppliers" value={{sup.supId}}>{{sup.supBussinessName}}</option>
+                    <option value="" disabled selected>Elija un proveedor</option>
+                    <ng-container *ngFor="let sup of suppliers">
+                        <option *ngIf="sup.isActive" value={{sup.supId}}>{{sup.supBussinessName}}</option>
+                    </ng-container>
                 </select>
                 <div class="position-absolute ">
                     <span *ngIf="supplierCode?.errors?.['required'] && (supplierCode.dirty || supplierCode.touched)"
                         class="font-weight-light warning-txt">El proveedor es obligatorio</span>
                 </div>
+            </div>
+            <div class="col-12 col-md-2 position-relative ">
+                <img class="position-absolute bottom-0 mb-1" height="30" width="30"
+                    src="{{handleImage(supplierCode.value)}}" (error)="handleImageError(image)" #image>
             </div>
 
             <div class="form-group col-12 col-md-4">
@@ -121,31 +127,45 @@
                     <div class=" form-group col-12 col-md-8">
                         <label class="form-label" for="selected_item">Producto:</label>
                         <select [class.input-valid]="selectedItem.valid && selectedItem.touched"
-                        [class.input-invalid]="selectedItem.touched && selectedItem.invalid && supplierCode.enabled "
-                        #selectedItem="ngModel" [(ngModel)]="orderDetailProduct.product"
+                            [class.input-invalid]="selectedItem.touched && selectedItem.invalid && supplierCode.enabled "
+                            #selectedItem="ngModel" [(ngModel)]="orderDetailProduct.product.prodId"
                             [disabled]="isEditSession" class="form-select" id="selected_item" name="prodId"
                             [disabled]="supplierCode.invalid!" required>
-                            <option *ngFor="let prod of products" value="{{prod}}">
-                                {{prod.prodName}}</option>
+                            <option value="" disabled selected>Elija un producto</option>
+                            <ng-container *ngFor="let prod of products">
+
+                                <option *ngIf="prod.prodAvailable" value="{{prod.prodId}}">
+                                    {{prod.prodName}}</option>
+                            </ng-container>
                         </select>
                         <div class="position-absolute">
-                            <span *ngIf="selectedItem.errors?.['required'] && supplierCode.enabled" class="text-danger">Debe elegir un producto.
+                            <span *ngIf="selectedItem.errors?.['required'] && supplierCode.enabled"
+                                class="font-weight-light warning-txt">Debe elegir un producto.
                             </span>
                         </div>
                     </div>
 
                     <div class="form-group col-12 col-md-4">
                         <label class="form-label" for="quantity">Cantidad:</label>
-                        <input #selected_quantity type="number" id="quantity" name="prodQuantity" class="form-control"
-                            [(ngModel)]="orderDetailProduct.prodQuantity"
-                            [disabled]="supplierCode.value=='' || selectedItem.value==''">
+                        <input [class.input-valid]="selected_quantity.valid && selected_quantity.touched"
+                            [class.input-invalid]="selected_quantity.value < 1 && (selected_quantity.touched) && selectedItem.value!==''"
+                            #selected_quantity="ngModel" type="number" id="quantity" name="prodQuantity"
+                            class="form-control" [(ngModel)]="orderDetailProduct.prodQuantity" min="1"
+                            [disabled]="supplierCode.value=='' || selectedItem.value==''" placeholder="0">
+                        <div class="position-absolute" required>
+                            <span *ngIf="selected_quantity?.errors?.['required'] && selected_quantity.touched"
+                                class="font-weight-light warning-txt">Debe ingresar la cantidad </span>
+                            <span
+                                *ngIf=" !selected_quantity?.errors?.['required'] && selected_quantity?.value <= 0 && selected_quantity.touched && selectedItem.value!==''"
+                                class="font-weight-light warning-txt">Cantidad debe ser mayor que 0. </span>
+
+                        </div>
                     </div>
 
                     <div class="row">
                         <div class="form-group col-md-6 mt-4">
                             <button [disabled]="selectedItem.value=='' || selected_quantity.value==''" type="button"
-                                class="btn btn-success"
-                                (click)="agregarProducto(selectedItem.value-1, selected_quantity.value)"
+                                class="btn btn-success" (click)="addProduct(selected_quantity.value)"
                                 id="btn-agregar-producto">Agregar Producto</button>
                         </div>
                     </div>
@@ -166,8 +186,8 @@
                 <tr *ngFor="let ordDet of orderDetail">
                     <td>{{ordDet.product.prodName}}</td>
                     <td>{{ordDet.prodQuantity}}</td>
-                    <td>{{ordDet.product.prodPrice | currency:"USD"}}</td>
-                    <td>{{ordDet.prodQuantity*ordDet.product.prodPrice | currency:"USD"}}</td>
+                    <td>{{ordDet.price | currency:"USD"}}</td>
+                    <td>{{ordDet.prodQuantity*ordDet.price | currency:"USD"}}</td>
                     <td *ngIf="!isEditSession">
                         <button class="btn btn-danger btn-sm text-light " (click)="deleteProduct(ordDet.product)"
                             *ngIf="!isEditSession"><fa-icon [icon]="faDelete"></fa-icon></button>
@@ -175,6 +195,9 @@
                 </tr>
             </tbody>
         </table>
+        <p class="text-end lead">Total de la orden: <span class="h3 ms-2"> {{totalPrice | currency:'USD'}}</span></p>
+
+
         <div class="row mb-5">
             <div class="col-12 text-muted text-end ">
                 <p class="mt-5"><span class="warning-txt" style="font-size:1em">✱ </span> El campo es obligatorio</p>
@@ -190,11 +213,9 @@
                 class="btn btn-primary" id="editar-orden">Editar Orden de
                 Compra</button>
             <button *ngIf="order.ordStatus.ordstId!==10 && isEditSession" class=" btn btn-danger"
-                (click)="cancelarOrden()">Cancelar Orden</button>
+                (click)="cancelOrder()">Cancelar Orden</button>
         </div>
-        <div [hidden]="!order_form.submitted" class="alert alert-success position-absolute bottom-0 end-0">
-            <h2>Orden {{isEditSession?'Modificada':'Agregada'}} con exito!</h2>
-        </div>
+        
     </form>
 
 </div>

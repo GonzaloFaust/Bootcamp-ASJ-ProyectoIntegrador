@@ -15,7 +15,7 @@
                 <form >
                     <div class="form-group  d-flex gap-2 ">
                         <select [(ngModel)]="selectedOrderStatus" (change)="search()" class="form-select form-select-sm"
-                            name="category" id="category">
+                            name="category" id="category" #filter>
                             <option value="" disabled selected>Filtrar por estado</option>
                             <option value="all" >Todos</option>
                             <option *ngFor="let ordSt of orderStatus" [value]="ordSt.ordstId">{{ordSt.ordstName}}
@@ -24,8 +24,6 @@
             
                     </div>
                 </form>
-
-
 
 
             </div>
@@ -41,6 +39,7 @@
 
         </div>
         <div class="card-body">
+            <ng-container *ngIf="showTable() || filter.value=='all' || filter.value==''">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
@@ -89,6 +88,21 @@
                     </tbody>
                 </table>
             </div>
+        </ng-container>
+        <ng-container *ngIf="!showTable() && filter.value!='all' && filter.value!=''">
+                <div class="container mt-5">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <section class="alert text-center" role="alert">
+                                <h4 class="alert-heading">No hay ordenes con este estado</h4>
+                                <p>Prueba cambiando los criterios de busqueda o puedes agregar una orden.</p>
+
+                                <button class="btn btn-primary" routerLink="form" type="button">Crear orden</button>
+                            </section>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
         </div>
     </div>
 </div>

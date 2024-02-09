@@ -8,9 +8,11 @@ import org.springframework.stereotype.Service;
 
 import com.bootcamp.gestor.models.CategoryModel;
 import com.bootcamp.gestor.models.FieldModel;
+import com.bootcamp.gestor.models.ProductModel;
 import com.bootcamp.gestor.models.SupplierModel;
 import com.bootcamp.gestor.repositories.CategoryRepository;
 import com.bootcamp.gestor.repositories.FieldRepository;
+import com.bootcamp.gestor.repositories.ProductRepository;
 import com.bootcamp.gestor.repositories.SupplierRepository;
 
 import jakarta.persistence.EntityExistsException;
@@ -25,7 +27,8 @@ public class CategoryService {
 	FieldRepository fieldRepo;
 	@Autowired
 	SupplierRepository supplierRepo;
-	
+	@Autowired
+	ProductRepository productRepo;
 
 	public List<CategoryModel> getCategories() {
 		return categoryRepo.findAll();
@@ -33,86 +36,90 @@ public class CategoryService {
 
 	public CategoryModel getCategoryById(int id) {
 		return categoryRepo.findById(id)
-				.orElseThrow(() -> new EntityNotFoundException("Couldn´t find a category with the id " + id));
+				.orElseThrow(() -> new EntityNotFoundException("No se pudo encontrar una categoría con el id " + id));
 	}
-	
-	public List<CategoryModel> getCategoryBySupplier(int id){
+
+	public List<CategoryModel> getCategoryBySupplier(int id) {
 		Optional<SupplierModel> sup = supplierRepo.findById(id);
-		if(sup.isPresent()) {
+		if (sup.isPresent()) {
 			return this.categoryRepo.getCategoriesBySupplier(id);
-		}
-		else {
+		} else {
 			throw new EntityNotFoundException("No se encontró el proveedor");
 		}
 	}
 
 	public List<CategoryModel> createCategory(CategoryModel category) {
 		if (category.getCatName().isEmpty())
-			throw new IllegalArgumentException("Name of category is empty");
+			throw new IllegalArgumentException("El nombre de la categoría está vacío");
 		Optional<FieldModel> f = fieldRepo.findById(category.getField().getFieldId());
 		if (f.isPresent()) {
 			FieldModel field = f.get();
 
 			for (CategoryModel c : categoryRepo.findAll()) {
 				if (c.getCatName().toLowerCase().equals(category.getCatName().toLowerCase())
-						&& c.getField().getFieldId()== field.getFieldId())
-					throw new EntityExistsException("The value already exists");
+						&& c.getField().getFieldId() == field.getFieldId())
+					throw new EntityExistsException("El rubro ya posee esta categoría");
 			}
 			category.setField(field);
 		} else {
-			throw new EntityNotFoundException("Couldn't find the state of this address");
+			throw new EntityNotFoundException("No se pudo encontrar el rubro");
 		}
 		categoryRepo.save(category);
 		return categoryRepo.findAll();
 
 	}
-	
-	
+
 	public String updateCategory(int id, CategoryModel category) {
 		Optional<CategoryModel> categoryExists = categoryRepo.findById(id);
-		if(categoryExists.isPresent()) {
-			if (category.getCatName().isEmpty() )
-				throw new IllegalArgumentException("There's missing data");
-			
+		if (categoryExists.isPresent()) {
+			if (category.getCatName().isEmpty())
+				throw new IllegalArgumentException("El nombre de la categoría está vacío");
+
 			Optional<FieldModel> f = fieldRepo.findById(category.getField().getFieldId());
-			if(f.isPresent()) {
-				for(CategoryModel c : categoryRepo.findAll()) {
-					if(c.getCatName().toLowerCase().equals(category.getCatName().toLowerCase()))
-						throw new EntityExistsException("The value already exists");
-				}
-				
-				CategoryModel c= categoryExists.get();
+			if (f.isPresent()) {
 				FieldModel field = f.get();
-				
-				c.setCatName(category.getCatName());
-				c.setCatDetail(category.getCatDetail());
-				c.setField(field);
-				
-				categoryRepo.save(c);
-				
-				return "Category " + c.getCatId() + " updated succesfully";
+				CategoryModel cat = categoryExists.get();
+				for (CategoryModel c : categoryRepo.findAll()) {
+					if (c.getCatName().toLowerCase().equals(category.getCatName().toLowerCase())
+							&& c.getField().getFieldId() == field.getFieldId() && c.getCatId() != cat.getCatId())
+						throw new EntityExistsException("El rubro ya posee esta categoría");
+				}
+
+				cat.setCatName(category.getCatName());
+				cat.setCatDetail(category.getCatDetail());
+				cat.setField(field);
+
+				categoryRepo.save(cat);
+
+				return "Categoría " + cat.getCatName() + "modificada exitosamente";
+			} else {
+				throw new EntityNotFoundException("No se pudo encontrar el rubro");
 			}
-			else {
-				throw new EntityNotFoundException("Couldn´t find a field for this category");
-			}
-		}
-		else
-		{
-			throw new EntityNotFoundException("Couldn´t find a category with the id " + id);
+		} else {
+			throw new EntityNotFoundException("No se pudo encontrar una categoría con el id " + id);
 		}
 	}
-	
 
 	public String deleteCategory(int id) {
+		System.out.println("entra al servicio");
 		Optional<CategoryModel> categoryExists = categoryRepo.findById(id);
+
 		if (categoryExists.isPresent()) {
 			CategoryModel c = categoryExists.get();
-			categoryRepo.deleteById(id);
-			return "Category " + c.getCatId() + " deleted succesfully";
+			List<ProductModel> products = productRepo.findBycategory(c);
+			if (products.size() > 0) {
+				throw new EntityExistsException(
+						"La categoría posee productos, antes de eliminarla debe estar vacía");
+			} else {
+
+				categoryRepo.deleteById(id);
+				return "Categoría " + c.getCatName() + " eliminada exitosamente";
+
+			}
+
 		} else {
-			throw new EntityNotFoundException("Couldn´t find a catgeory with the id " + id);
+			throw new EntityNotFoundException("No se pudo encontrar una categoría con el id " + id);
 		}
 	}
 
-	
 }

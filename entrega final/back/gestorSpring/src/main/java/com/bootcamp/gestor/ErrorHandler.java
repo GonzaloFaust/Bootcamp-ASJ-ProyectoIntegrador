@@ -4,22 +4,18 @@ package com.bootcamp.gestor;
 import org.springframework.validation.BindingResult;
 
 public class ErrorHandler {
-    
-    public String validacionInputs(BindingResult bindingResult) {
-        
-        //creo una variable (key, value) para guardar los errores
-        String errors = "";
-        
-        //recorro todos los errores y los guardo en mi variable
+	public String inputValidate(BindingResult bindingResult){
+        StringBuilder errors = new StringBuilder(); // Usamos un StringBuilder para mayor eficiencia
+
+        // recorremos todos los errores y los guardamos en nuestra variable
         bindingResult.getFieldErrors().forEach((error) -> {
-            String campo = error.getField();
-            String errMsj = error.getDefaultMessage();
-            errors.concat(campo+": "+errMsj+"\n");
+            String campo = error.getField().toString();
+            String errMsj = error.getDefaultMessage().toString();
+            errors.append(campo).append(": ").append(errMsj).append("\n"); // Usamos append para concatenar al StringBuilder
         });
-        
-        //retorno los errores (campo:mensaje)
-        return errors;
-        
+
+        // retornamos los errores (campo:mensaje)
+        return errors.toString();
     }
 
 }

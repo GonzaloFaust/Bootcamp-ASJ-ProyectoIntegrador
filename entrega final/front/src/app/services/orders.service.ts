@@ -39,7 +39,7 @@ export class OrdersService {
 
   public editOrder(order: Order): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };
-    return this.http.put(this.API_URL + "/" + order.ordId, order, { headers })
+    return this.http.put(this.API_URL + "/" + order.ordId, order, { headers , responseType: 'text' as 'json' })
   }
   public addOrderDetail(detail: OrderDetail): Observable<any> {
     const headers = { 'Content-Type': 'application/json' };

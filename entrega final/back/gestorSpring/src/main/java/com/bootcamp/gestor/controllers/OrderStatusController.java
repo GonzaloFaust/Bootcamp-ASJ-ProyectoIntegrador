@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +16,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.bootcamp.gestor.ErrorHandler;
 import com.bootcamp.gestor.models.OrderStatusModel;
 import com.bootcamp.gestor.services.OrderStatusService;
 
 import jakarta.persistence.EntityExistsException;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/order-status")
@@ -45,9 +48,14 @@ public class OrderStatusController {
 	}
 
 	@PostMapping()
-	public ResponseEntity<Object> createOrderStatus(@RequestBody OrderStatusModel orderStatus) {
+	public ResponseEntity<Object> createOrderStatus(@Valid @RequestBody OrderStatusModel orderStatus, BindingResult bindingResult) {
 		try {
-			return ResponseEntity.ok(orderStatusService.createOrderStatus(orderStatus));
+			if(bindingResult.hasErrors()){
+				String errors = new ErrorHandler().inputValidate(bindingResult);
+				return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+			} else {
+				return ResponseEntity.ok(orderStatusService.createOrderStatus(orderStatus));
+			}
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (IllegalArgumentException e) {
@@ -60,9 +68,14 @@ public class OrderStatusController {
 	}
 
 	@PutMapping("/{id}")
-	public ResponseEntity<Object> updateOrderStatus(@PathVariable int id, @RequestBody OrderStatusModel orderStatus) {
+	public ResponseEntity<Object> updateOrderStatus(@PathVariable int id, @Valid @RequestBody OrderStatusModel orderStatus, BindingResult bindingResult) {
 		try {
-			return ResponseEntity.ok(orderStatusService.updateOrderStatus(id, orderStatus));
+			if(bindingResult.hasErrors()){
+				String errors = new ErrorHandler().inputValidate(bindingResult);
+				return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
+			} else {
+				return ResponseEntity.ok(orderStatusService.updateOrderStatus(id, orderStatus));
+			}
 		} catch (EntityNotFoundException e) {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
 		} catch (IllegalArgumentException e) {
@@ -73,6 +86,7 @@ public class OrderStatusController {
 			return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
+
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteOrderStatus(@PathVariable int id) {

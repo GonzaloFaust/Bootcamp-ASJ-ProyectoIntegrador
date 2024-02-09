@@ -94,7 +94,7 @@ export class ProductsFormComponent implements OnInit {
             Swal.fire({
               position: "center",
               icon: "success",
-              title: `Producto ${this.product.prodName} creado exitosamente`,
+              title: `Producto ${this.product.prodName} modificado exitosamente`,
   
               showConfirmButton: false,
               timer: 1500
